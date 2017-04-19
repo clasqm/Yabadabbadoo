@@ -1,0 +1,26 @@
+sub EnableMenu()
+// Enable parts and yab menus once a project has been opened
+//also use to indicate functions not yet enabled
+	Menu set "Project","Backup","enable", "MainWindow"
+	Menu set "Project","Stats","enable", "MainWindow"
+	Menu set "Parts", "Prologue","enable", "MainWindow"
+	Menu set "Parts", "Main Loop","enable", "MainWindow"
+	Menu set "Parts", "Data","enable", "MainWindow"
+	Menu set "Parts", "Icon","enable", "MainWindow"
+	Menu set "Parts", "README","enable", "MainWindow"
+	Menu set "Parts", "PackageInfo","enable", "MainWindow"
+	Menu set "yab", "Generate yab file","enable", "MainWindow"
+	Menu set "yab", "View yab file","enable", "MainWindow"
+	Menu set "yab", "Run","enable", "MainWindow"
+	Menu set "yab", "Run in Terminal","enable", "MainWindow"
+	Menu set "yab", "Run & display output","enable", "MainWindow"
+	Menu set "yab", "Bind","enable", "MainWindow"
+	menu set "yab", "Transfer to official IDE","enable", "MainWindow"
+	//Menu set "Utilities", "Yab Interface Builder", "enable", "MainWindow"
+	Menu set "Utilities", "Create new shortcut","enable","MainWindow"
+	Menu set "Help", "Help", "enable", "MainWindow"
+	Menu set "Help", "FAQ", "enable", "MainWindow"
+	Menu set "Help", "Tutorial", "enable", "MainWindow"
+	Menu set "Help", "Hard Copy", "enable", "MainWindow"
+end sub
+

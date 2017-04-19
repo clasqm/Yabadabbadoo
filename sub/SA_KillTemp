@@ -1,0 +1,6 @@
+sub SA_KillTemp()
+	local SA_dothis$
+	SA_dothis$ = "rm -f " + SA_tempfile$
+	system(SA_dothis$)
+end sub
+

@@ -1,0 +1,15 @@
+sub YECopy2Snippet()
+	local currentsel$
+	currentsel$= textedit get$ "YEEditBox", "Selection"
+	if len(currentsel$) > 80 then
+		alert "Too much text for a snippet!\nTry copying to the clipboard instead.", "OK", "none"
+		return
+	endif
+	if currentsel$ <> "" dropbox add "YESnippetDropBox", currentsel$
+	if dropbox count "YESnippetDropBox" = 1 YESnippet$ = currentsel$
+	if dropbox count "YESnippetDropBox" > 15 dropbox remove "YESnippetDropBox", 1
+	for f = 1 to dropbox count "YESnippetDropBox"
+		YESnippets$(f) = dropbox get$ "YESnippetDropBox", f
+	next f
+end sub
+

@@ -1,0 +1,11 @@
+#!/bin/sh
+cd /boot/home/projects/Yabadabbadoo/PackagingFolder
+package create -b Yabadabbadoo_0.3-5_any.hpkg
+sleep 0.5
+package add Yabadabbadoo_0.3-5_any.hpkg data apps bin
+sleep 0.5
+becopy Yabadabbadoo_0.3-5_any.hpkg "/Storage/Haiku/My ports"
+mv Yabadabbadoo_0.3-5_any.hpkg /boot/home/projects/repo
+addattr BeShare:Info "An alternative IDE for the yab programming language." /Storage/Haiku/My ports/Yabadabbadoo_0.3-5_any.hpkg
+
+sync

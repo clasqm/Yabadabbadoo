@@ -1,0 +1,34 @@
+sub MakeNewProject()
+	local makeshortcut
+	ProjectPath$=""
+	GetProjectDirectory("Create a directory in which to keep your project. This is really going to work better if the path to your project does not contain spaces or special characters.")
+	while(ProjectPath$ = "")
+		GetProjectDirectory("An error occurred. Please re-select your new directory")	
+	wend
+	if CheckForProjectFiles() = 1 then 
+		Alert "THAT IS AN EXISTING YABADABBADOO DIRECTORY YOU WERE GOING TO OVERWRITE!\nYOU ARE TOO TIRED TO BE PROGRAMMING.\n\n ABORTING PROGRAM.", "OK", "warning"
+		exit
+	endif
+	SetProjectPathnames()
+	system("mkdir -p " + ProjectSubPath$)
+	system("mkdir -p " + ProjectOtherPath$)
+	system("mkdir -p " + ProjectBinderPath$)
+	system("mkdir -p " + ProjectPackagingPath$ + "/apps")
+	system("mkdir -p " + ProjectPackagingPath$ + "/data/deskbar/menu/Applications")
+	system("mkdir -p " + ProjectPackagingPath$ + "/data/src")
+	system("touch " + ProjectData$)
+	system("touch " + ProjectIcon$)
+	system("settype -t application/x-vnd.Haiku-icon " + ProjectIcon$)
+	WriteNewPreface()
+	WriteNewSubroutine("OpenWindow", "\t//Setup the main window here\n\twindow open 100,100 to 600,500, \"MainWindow\", \"Main Window\"\n\tMakeMenu()")
+	WriteNewSubroutine("MakeMenu", "\t//Create menu in MainWindow\n\tmenu \"File\", \"Quit\", \"Q\", \"MainWindow\"\n\tmenu \"Help\", \"About\", \"\", \"MainWindow\"")
+	WriteNewSubroutine("CloseWindow", "\t//Close down the main window\n\twindow close \"MainWindow\"")
+	WriteNewReadme()
+	WriteNewMainloop()
+	WriteNewDatafile()
+	WriteNewPackageInfo()
+	makeshortcut=alert "Create a shortcut to this project?", "OK", "No", "", "none"
+	if makeshortcut = 1 CreateShortcut()
+	OpenProject("fromnew")
+end sub
+

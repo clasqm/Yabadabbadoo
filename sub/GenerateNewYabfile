@@ -1,0 +1,13 @@
+sub GenerateNewYabfile()
+	system("rm -f " + ProjectNewYabfile$) //delete old yabfile if it exists
+	system("touch " + ProjectNewYabfile$) //create a new one
+	system("cat " + ProjectPrologue$ + " > " + ProjectNewYabfile$)
+	system("cat " + ProjectMainloop$ + " >> " + ProjectNewYabfile$) 
+	system("cat " + ProjectSubPath$ + "/* >>"  + ProjectNewYabfile$) 
+	system("cat " + ProjectData$ + " >> " + ProjectNewYabfile$)
+	//Yes, I know I could do this in yab itself, laboriously reading files into memory
+	//and writing them out to the yab file. But why bother?
+	system("mimeset -F " + ProjectNewYabfile$)
+	system("chmod +x " + ProjectNewYabfile$)
+end sub
+

@@ -1,0 +1,11 @@
+sub YEDisableButtons()
+	Option set "YEUndoButton", "enabled", 0
+	Option set "YECutButton", "enabled", 0
+	Option set "YECopyButton", "enabled", 0
+	Option set "YEPasteButton", "enabled", 0
+	Option set "YEFindButton", "enabled", 0
+	Option set "YEFindAgainButton", "enabled", 0
+	//Option set "YEQuitButton", "enabled", 0
+	Option set "YEPasteSnippetButton", "enabled", 0
+end sub
+

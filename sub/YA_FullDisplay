@@ -1,0 +1,25 @@
+sub YA_FullDisplay(YA_entry)
+	local YA_WindowID$, YA_ButtonID$, YA_TextID$,YA_stamp$,YA_thestring$
+	if YA_displaywins=12 alert "Only twelve Assistant windows\nallowed. Please close one.","OK","Warning": return
+	YA_thestring$= YA_fulltextarr$(YA_entry)
+	YA_stamp$=system$("date +%s")
+	YA_WindowID$= "W" + YA_stamp$: YA_ButtonID$= "X8" + YA_stamp$: YA_TextID$= "T" + YA_stamp$
+	Window Open YA_dispx,YA_dispy to YA_dispx +500,YA_dispy + 425, YA_WindowID$,"Output of " + ListBox Get$ "YA_KeyWordList", YA_entry
+	Window Set YA_WindowID$, "Look","Floating"
+	Window Set YA_WindowID$, "Flags","Not-Resizable, Not-Zoomable, Not-Closable, Accept-First-Click"
+	Button 220,392 to 280, 420, YA_ButtonID$, "Close", YA_WindowID$
+	TextEdit 1,1 to 500,385, YA_TextID$, 1,YA_WindowID$
+	TextEdit set YA_TextID$, "editable", false
+	TextEdit Add YA_TextID$, YA_thestring$
+	YA_dispx=YA_dispx +20: YA_dispy=YA_dispy + 15
+	YA_displaywins=YA_displaywins + 1
+	if YA_displaywins=6 then
+		YA_dispx=210
+		YA_dispy=50
+	endif
+	if YA_dispx + 500 > peek("DesktopWidth") or YA_dispy + 417 > peek("DesktopHeight") then
+		YA_dispx=210
+		YA_dispy=50
+	endif
+end sub
+

@@ -1,0 +1,8 @@
+sub CloseProject()
+	if window get "YEMainWindow","exists" = 1 and YECurrentFile$ <> "" YESaveFile(YECurrentFile$)
+	if window get "YEMainWindow","exists" = 1 window close "YEMainWindow"
+	YECurrentFile$ = ""
+	listbox clear "SubBox"
+	ProjectIsOpen = 0
+end sub
+

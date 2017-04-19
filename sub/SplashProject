@@ -1,0 +1,11 @@
+sub SplashProject()
+	local SplashName$
+	draw flush "MainWindow"
+	If ProjectName$="" then
+		SplashName$= "None"
+	else
+		SplashName$=ProjectName$
+	endif
+	draw text 111,57, SplashName$,"MainWindow"
+end sub
+

@@ -1,0 +1,8 @@
+sub WriteNewReadme()
+	open ProjectREADME$ for writing as #1
+	Print #1, ProjectName$
+	Print #1, "by Author Name"
+	close #1
+	system("mimeset -F '" + ProjectREADME$ + "'")
+end sub
+

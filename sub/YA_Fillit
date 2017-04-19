@@ -1,0 +1,10 @@
+sub YA_Fillit(YA_arraysiz, YA_thecommand$, YA_description$, YA_fulltext$)
+	ListBox add "YA_KeyWordList", YA_thecommand$
+	dim YA_descriptionarr$(YA_arraysiz)
+	dim YA_fulltextarr$(YA_arraysiz)
+	YA_descriptionarr$(YA_arraysiz)= YA_description$
+	YA_fulltextarr$(YA_arraysiz)=YA_fulltext$
+	YA_arraysiz=YA_arraysiz + 1	
+	return YA_arraysiz
+end sub
+

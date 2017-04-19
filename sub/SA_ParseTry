@@ -1,0 +1,10 @@
+sub SA_ParseTry()
+	SA_action$ = trim$(SA_action$)
+	//trim off user-generated crud we don't need
+	if lower$(right$(SA_action$,7)) = " --help" SA_action$ = left$ (SA_action$, len(SA_action$) - 7):action$ = trim$(SA_action$)
+	if lower$(right$(SA_action$,3)) = " -h" SA_action$ = left$ (SA_action$, len(SA_action$) - 3):SA_action$ = trim$(SA_action$)
+	if lower$(right$(SA_action$,3)) = " /?" SA_action$ = left$ (SA_action$, len(SA_action$) - 3):SA_action$ = trim$(SA_action$)
+	//now add our own parameter
+	SA_action$ = "timeout 5 " + SA_action$ + " --help"
+end sub
+

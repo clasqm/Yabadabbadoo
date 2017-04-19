@@ -1,0 +1,134 @@
+sub SA_Generate(SA_label$)
+	local SA_counter,SA_clicom$
+	if SA_promode = 1 then
+		//restore label$ //that does not work so we go the long way round
+		Switch SA_label$
+			case "7"
+				restore Sevennorm: break
+			case "A"
+				restore A: break
+			case "B"
+				restore B: break
+			case "C"
+				restore C: break
+			case "D"
+				restore D: break
+			case "E"
+				restore E: break
+			case "F"
+				restore F: break
+			case "G"
+				restore G: break
+			case "H"
+				restore H: break
+			case "I"
+				restore I: break
+			case "J"
+				restore J: break
+			case "K"
+				restore K: break
+			case "L"
+				restore L: break
+			case "M"
+				restore M: break
+			case "N"
+				restore N: break
+			case "O"
+				restore O: break
+			case "P"
+				restore P: break
+			case "Q"
+				restore Q: break
+			case "R"
+				restore R: break
+			case "S"
+				restore S: break
+			case "T"
+				restore T: break
+			case "U"
+				restore U: break
+			case "V"
+				restore V: break
+			case "W"
+				restore W: break
+			case "X"
+				restore X: break
+			case "Y"
+				restore Y: break
+			case "Z"
+				restore Z: break
+			default
+				return
+		end switch
+	elseif SA_promode= 0
+		switch SA_label$
+			case "7"
+				restore Sevennorm: break
+			case "A"
+				restore Anorm: break
+			case "B"
+				restore Bnorm: break
+			case "C"
+				restore Cnorm: break
+			case "D"
+				restore Dnorm: break
+			case "E"
+				restore Enorm: break
+			case "F"
+				restore Fnorm: break
+			case "G"
+				restore Gnorm: break
+			case "H"
+				restore Hnorm: break
+			case "I"
+				restore Inorm: break
+			case "J"
+				restore Jnorm: break
+			case "K"
+				restore Knorm: break
+			case "L"
+				restore Lnorm: break
+			case "M"
+				restore Mnorm: break
+			case "N"
+				restore Nnorm: break
+			case "O"
+				restore Onorm: break
+			case "P"
+				restore Pnorm: break
+			case "Q"
+				restore Qnorm: break
+			case "R"
+				restore Rnorm: break
+			case "S"
+				restore Snorm: break
+			case "T"
+				restore Tnorm: break
+			case "U"
+				restore Unorm: break
+			case "V"
+				restore Vnorm: break
+			case "W"
+				restore Wnorm: break
+			case "X"
+				restore Xnorm: break
+			case "Y"
+				restore Ynorm: break
+			case "Z"
+				restore Znorm: break
+			default
+				return
+		end switch
+	endif
+	//Phew!
+	DropBox Clear "SA_CLI"
+	read SA_counter
+	if SA_counter=0 return //no entries starting with that letter - just a precaution
+	for f = 1 to SA_counter
+		read SA_clicom$
+		DropBox Add "SA_CLI", SA_clicom$
+	next f
+		DropBox Select "SA_CLI", 1
+	SA_action$= DropBox Get$ "SA_CLI", 1
+end sub
+

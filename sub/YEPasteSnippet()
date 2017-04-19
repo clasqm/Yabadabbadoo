@@ -1,0 +1,8 @@
+sub YEPasteSnippet()
+	local YEcurrentsel$
+	if YESnippet$ = "" return
+	YEcurrentsel$= textedit get$ "YEEditBox", "Selection"
+	if YEcurrentsel$ <> "" textedit set "YEEditBox", "clear"
+	textedit add "YEEditBox", YESnippet$
+end sub
+

@@ -1,0 +1,41 @@
+sub LaunchSA()
+// Setup the SA_main window here
+	window open SA_across,SA_updown to SA_acrossend, SA_updownend, "SA_MainWindow", "ScriptAssistant"
+	window set "SA_MainWindow", "Look", "modal"
+	window set "SA_MainWindow", "Flags", "Not-Resizable"
+	Window set "SA_MainWindow", "flags", "not-zoomable"
+	Draw Set "DejaVu Sans, Book, 12, regular, 0, 90.0", "SA_MainWindow"
+	//above prevents a mess caused by user changing his system fonts - my button labels barely fit, within a pixel!
+//Top row of widgets
+	view 1,1 to 120,39, "SA_Radio","SA_MainWindow"
+	Draw Set "DejaVu Sans, Book, 12, regular, 0, 90.0", "SA_Radio"
+	Tooltip "SA_Radio","Normal Mode: 165 common commands. \nPro Mode:\t Over 300 Commands.    "
+	Radiobutton 3,0,"SA_ProMode0","Normal Mode", SA_promode, "SA_Radio"
+	Radiobutton 3,18,"SA_ProMode1","Pro Mode", SA_promode, "SA_Radio"
+	if SA_promode = 1 then
+		RadioButton set "SA_ProMode0", 0: RadioButton Set "SA_ProMode1", 1
+	else
+		RadioButton set "SA_ProMode0", 1: RadioButton Set "SA_ProMode1", 0
+	endif
+	bitmap get "Icon$","Mime32", "text"
+	draw bitmap 133,2, "Icon$", "alpha", "SA_MainWindow"
+	bitmap remove "Icon$"
+//SA_Middle row of widgets
+	DropBox 0,40 to 39,65, "SA_ABC", "", "SA_MainWindow"
+	Tooltip "SA_ABC", "Select a command and press GO."
+	DropBox Add "SA_ABC", "7"
+	for f = 1 to 26
+		DropBox Add "SA_ABC", chr$(f+64)
+	next f
+	DropBox 40,40 to 162,65, "SA_CLI", "", "SA_MainWindow"
+	Tooltip "SA_CLI", "Select a command and press GO."
+	SA_Generate("7")
+	Button 163,40 to 199,65, "SA_GoButton","GO","SA_MainWindow"
+	Tooltip "SA_GoButton", "Select a command and press GO."	
+//SA_Bottom row of widgets
+	TextControl 0,70 to 162,97, "SA_TryText","","","SA_MainWindow"
+	Button 163,70 to 199,94, "SA_TryButton","TRY","SA_MainWindow"
+	ToolTip "SA_TryText", "Enter a non-standard command and ScriptAssistant\nwill try running it with the --help parameter when\nyou press the TRY button."
+	ToolTip "SA_TryButton", "Enter a non-standard command and ScriptAssistant\nwill try running it with the --help parameter when\nyou press the TRY button."
+end sub
+

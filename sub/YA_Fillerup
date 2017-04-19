@@ -1,0 +1,22 @@
+sub YA_Fillerup(YA_mode$)
+	local YA_arraysiz, YA_thecommand$, YA_yabtype$, YA_description$, YA_fulltext$, YA_findme$
+	restore yadata
+	YA_findme$=TextControl Get$ "YA_SearchTxt"
+	Listbox Clear "YA_KeyWordList": YA_arraysiz=1
+	while(YA_thecommand$ <> "endofdata")
+		read YA_thecommand$, YA_yabtype$, YA_description$,YA_fulltext$: if YA_thecommand$= "endofdata" break
+		if YA_mode$="yab" then
+			if YA_yabtype$="GUI" YA_arraysiz=YA_Fillit(YA_arraysiz, YA_thecommand$, YA_description$, YA_fulltext$)
+		elseif YA_mode$="yabasic" then
+			if YA_yabtype$ <> "GUI" YA_arraysiz=YA_Fillit(YA_arraysiz, YA_thecommand$, YA_description$, YA_fulltext$)
+		elseif YA_mode$="find" then
+			if YA_findme$="" return
+			if instr(lower$(YA_fulltext$), lower$(YA_findme$)) <> 0 YA_arraysiz=YA_Fillit(YA_arraysiz, YA_thecommand$, YA_description$, YA_fulltext$)
+		else			//   YA_mode$="all"
+			YA_arraysiz=YA_Fillit(YA_arraysiz, YA_thecommand$, YA_description$, YA_fulltext$)
+		end if
+	wend
+	Listbox Select "YA_KeyWordList", 1
+	YA_BriefDisplay(1)
+end sub
+

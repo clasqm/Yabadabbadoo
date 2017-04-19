@@ -1,0 +1,12 @@
+sub DisableButtons()
+	Option set "PrologueButton", "enabled", 0
+	Option set "MainLoopButton", "enabled", 0
+	Option set "DataEditButton", "enabled", 0
+	Option set "IconEditButton", "enabled", 0
+	Option set "ReadmeButton", "enabled", 0
+	Option set "PackageInfoEditButton", "enabled", 0
+	Option set "AddSubButton", "enabled", 0
+	Option set "EditSubButton", "enabled", 0
+	Option set "RefreshSubButton", "enabled", 0
+end sub
+

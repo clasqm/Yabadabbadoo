@@ -1,0 +1,25 @@
+sub DisableMenu()
+// disable parts and yab menus until a project has been opened
+	Menu set "Project","Backup","disable", "MainWindow"
+	Menu set "Project","Stats","disable", "MainWindow"
+	Menu set "Parts", "Prologue","disable", "MainWindow"
+	Menu set "Parts", "Main Loop","disable", "MainWindow"
+	Menu set "Parts", "Data","disable", "MainWindow"
+	Menu set "Parts", "Icon","disable", "MainWindow"
+	Menu set "Parts", "README","disable", "MainWindow"
+	Menu set "Parts", "PackageInfo","disable", "MainWindow"
+	Menu set "yab", "Generate yab file","disable", "MainWindow"
+	Menu set "yab", "View yab file","disable", "MainWindow"
+	Menu set "yab", "Run","disable", "MainWindow"
+	Menu set "yab", "Run in Terminal","disable", "MainWindow"
+	Menu set "yab", "Run & display output","disable", "MainWindow"
+	Menu set "yab", "Bind","disable", "MainWindow"
+	menu set "yab", "Transfer to official IDE","disable", "MainWindow"
+	Menu set "Help", "Help", "disable", "MainWindow"
+	Menu set "Help", "Tutorial", "disable", "MainWindow"
+	Menu set "Help", "FAQ", "disable", "MainWindow"
+	Menu set "Help", "Hard Copy", "disable", "MainWindow"
+	//Menu set "Utilities", "Yab Interface Builder", "disable", "MainWindow"
+	Menu set "Utilities", "Create new shortcut","disable","MainWindow"
+end sub
+

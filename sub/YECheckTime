@@ -1,0 +1,24 @@
+sub YECheckTime()
+	//Autosave every 60 seconds
+	//this needs more thought
+	//getting severe data loss when an autosave happens just when I am typing
+	local YEtheTime$,YEtheNewLineNumber$:static YEtheLineNumber$
+	if window get "YEMainWindow","exists" = 0 return	//no point in this if no file is open 
+	if YECurrentFile$="" return	//or if there is no file loaded
+	YEtheTime$=mid$(Time$,7,2)
+	//If YEtheTime$ = YEStartingTime$ then //i.e. 60 seconds later
+	//	YESaveFile(YECurrentFile$)
+	//Now refresh the line number every second IF it has changed
+	//1-second refresh delay, but it's the best we can do
+	//elseif 
+	if YEtheTime$ <> YECurrentTime$ then
+		YEtheNewLineNumber$=str$(textedit get "YEEditBox", "currentline") + " of " +   str$(textedit get "YEEditBox", "countlines")
+		if YEtheNewLineNumber$<>YETheLineNumber$ then
+			draw flush "YELineNumberField"
+			draw text 1,22, "Line " + YEtheNewLineNumber$, "YELineNumberField"
+			YETheLineNumber$=YETheNewLineNumber$
+		endif
+		YECurrentTime$ = YEtheTime$
+	endif
+end sub
+

@@ -1,0 +1,402 @@
+################################################
+################Main Message Loop###############
+################################################
+dim msg$(1)
+while(not leavingLoop)
+	nCommands = token(message$, msg$(), "|")
+	for everyCommand = 1 to nCommands
+		if(DEBUG and msg$(everyCommand)<>"") print msg$(everyCommand)
+		switch(msg$(everyCommand))
+			////////////FILE MENU////////
+			case "_QuitRequested":
+			case "MainWindow:_QuitRequested":
+			case "MainWindow:File:Quit"
+				leavingLoop = true
+				break
+			///////PROJECT MENU/////////	
+			case "MainWindow:Project:New":
+				MakeNewProject()
+				break
+			case "MainWindow:Project:Open":
+				OpenProject("")
+				break
+			case "MainWindow:Project:Backup":
+				BackupProject()
+				break
+			case "MainWindow:Project:Stats":
+				DisplayStats()
+				break
+			/////////YAB MENU////////////
+			case "MainWindow:yab:Generate yab file":
+				YESaveFile(YECurrentFile$)
+				GenerateNewYabfile()
+				alert "A new yab file has been created in the binder directory.", "OK", "info"
+				break
+			case "MainWindow:yab:View yab file":
+				YESaveFile(YECurrentFile$)
+				GenerateNewYabfile()
+				//first try the post Alpha4.1 location
+					if(open(9,"/boot/system/apps/Pe/Pe")) then
+						system("/boot/system/apps/Pe/Pe '"+ ProjectNewYabfile$  + "' &")
+						close #9
+					//now try the old location
+					elseif(open(9,"/boot/apps/Pe/Pe")) then
+						system("/boot/apps/Pe/Pe '" + ProjectNewYabfile$  + "' &")
+						close #9
+					//One last place where it might be
+					elseif(open(9,"/boot/apps/Pe")) then
+						system("/boot/apps/Pe '" + ProjectNewYabfile$  + "' &")
+						close #9
+					else
+						alert "Pe Not Found", "OK", "warning"
+					endif
+					break
+			case "MainWindow:yab:Run":
+				YESaveFile(YECurrentFile$)
+				GenerateNewYabfile()
+				system(yabLocation$ + " " + ProjectNewYabfile$ + " &")
+				break
+			case "MainWindow:yab:Run in Terminal":
+				YESaveFile(YECurrentFile$)
+				GenerateNewYabfile()
+				system("Terminal " + yabLocation$ + " " + ProjectNewYabfile$ + " 2>&1")
+				break
+			case "MainWindow:yab:Run & display output":
+				YESaveFile(YECurrentFile$)
+				GenerateNewYabfile()
+				RunAndDisplay(0)
+				break
+			case "MainWindow:yab:Bind":
+				YESaveFile(YECurrentFile$)
+				GenerateNewYabfile()
+				system(yabLocation$ + " -bind /boot/home/Desktop/" + ProjectName$ + " " + ProjectNewYabfile$)
+				system("chmod  +x /boot/home/Desktop/" + ProjectName$ + " &")
+				system("mimeset -f /boot/home/Desktop/" + ProjectName$ + " &")
+				system("settype -s application/x-vnd." +ProjectName$ + " " + "/boot/home/Desktop/" + ProjectName$ + " &")
+				alert "A new executable has been created on the Desktop.", "OK", "info"
+				break
+			case "MainWindow:yab:Transfer to official IDE"
+				YESaveFile(YECurrentFile$)
+				GenerateNewYabfile()
+				system ("/boot/system/apps/yab-IDE/yab-IDE &")
+				wait 1
+				system("/boot/system/Tracker " + ProjectBinderPath$ + " &")
+				system("alert 'Yab-IDE does not allow programmatic loading of data at this stage. Open a file from the Menu and drag the Yabadabbadoo file into the dialogue. Any changes you make from then on will NOT transfer back to Yabbbadabbadoo.' OK")
+				leavingLoop = true
+				break
+			/////////PARTS MENU//////////
+			case "PrologueButton":
+			case "MainWindow:Parts:Prologue":
+				YEOpenFile(ProjectPrologue$)
+				break
+			case "DataEditButton":
+			case "MainWindow:Parts:Data":
+				YEOpenFile(ProjectData$)
+				break
+			case "MainLoopButton":
+			case "MainWindow:Parts:Main Loop":
+				YEOpenFile(ProjectMainloop$)
+				break
+			case "ReadmeButton":
+			case "MainWindow:Parts:README":
+				system("/boot/system/apps/StyledEdit " + ProjectREADME$ + " &")
+				break
+			case "IconEditButton"
+			case "MainWindow:Parts:Icon":
+				//first try the post Alpha4.1 location
+				if(open(9,"/boot/system/apps/Icon-O-Matic")) then
+					system("/boot/system/apps/Icon-O-Matic '" + ProjectIcon$  + "' &")
+					close #9
+				//now try the old location
+				elseif(open(9,"/boot/apps/Icon-O-Matic")) then
+					system("/boot/apps/Icon-O-Matic '" + ProjectIcon$  + "' &")
+					close #9
+				else
+					alert "Icon-O-Matic Not Found", "OK", "warning"
+				endif
+				break
+			case "PackageInfoEditButton"
+				YEOpenFile(ProjectPackagingPath$ + "/.PackageInfo")
+				break
+			///////UTILITIES MENU////////
+			case "MainWindow:Utilities:Open a Terminal"
+				system("/boot/system/apps/Terminal &")
+				break
+			case "MainWindow:Utilities:Open Tracker"
+				if ProjectPath$ = "" then
+					system("/boot/system/Tracker /boot/home &")
+				else
+					system("/boot/system/Tracker " + ProjectPath$ + " &")
+				endif
+				break
+			case "MainWindow:Utilities:System Prefs"
+				system("/boot/system/Tracker /boot/system/preferences &")
+				break
+			case "MainWindow:Utilities:Calculator"
+				system("open application/x-vnd.Haiku-DeskCalc &")
+				break
+			case"MainWindow:Utilities:ScriptAssistant":
+				if ScriptAssistant=0 then
+					window set "SA_MainWindow", "minimize"
+					Menu set "Utilities", "ScriptAssistant","Mark","MainWindow"
+					ScriptAssistant=1
+				else
+					window set "SA_MainWindow", "minimize" 
+					Menu set "Utilities", "ScriptAssistant","Plain","MainWindow"
+					ScriptAssistant=0
+				endif
+				break
+			case"MainWindow:Utilities:yabAssistant":
+				if yabAssistant=0 then
+					window set "YA_MainWindow", "minimize"
+					Menu set "Utilities", "yabAssistant","Mark","MainWindow"
+					yabAssistant=1
+				else
+					window set "YA_MainWindow", "minimize"
+					Menu set "Utilities", "yabAssistant","Plain","MainWindow"
+					yabAssistant=0
+				endif
+				break
+			case "MainWindow:Utilities:Restart Tracker"
+				system("/boot/system/Tracker &")
+				break
+			case "MainWindow:Utilities:Restart Deskbar"
+				system("/boot/system/Deskbar &")
+				break
+			case "MainWindow:Utilities:Create new shortcut"
+				CreateShortcut()
+				break
+			////////HELP MENU////////////
+			case "MainWindow:Help:Help":
+				ShowHelp("Help", "Display")
+				break
+			case "MainWindow:Help:FAQ":
+				ShowHelp("FAQ", "Display")
+				break
+			case "MainWindow:Help:Tutorial":
+				ShowHelp("Tutorial", "Display")
+				break
+			case "MainWindow:Help:Hard Copy":
+				ShowHelp("Tutorial", "HardCopy")
+				ShowHelp("FAQ", "HardCopy")
+				ShowHelp("Help", "HardCopy")
+				alert "Help files have been generated to your Desktop", "OK", "info"
+				break
+				case "MainWindow:Help:Updates":
+				DisableMenu()
+				DisableButtons()
+				FindUpdates()
+				EnableButtons()
+				EnableMenu()
+				break
+			case "MainWindow:Help:About"
+				alert ProgramName$ + " " + ProgramVersion$ + "\n\n" + ProgramBriefDescription$ + "\n\nLicense: " + ProgramLicense$ + "\n\n" + ProgramAcknowledgements$, "OK", "info"
+				break
+			///////SUBROUTINE BUTTONS///////
+			case "EditSubButton":
+				YEOpenFile(ProjectSubPath$ + "/" + listbox get$ "SubBox", val(SelectedRoutine$))
+				break
+			case "RefreshSubButton"
+				FillSubBox()
+				break
+			case "AddSubButton"
+				CreateNewSub()
+				break
+			//#####ScriptAssistant commands####
+			case "SA_ProMode0":
+			case "SA_ProMode1":
+				SA_promode = val(right$(msg$(everyCommand),1))
+			 	DropBox Select "SA_ABC", 1
+				SA_Generate("7")
+				break
+			case "SA_GoButton":
+				SA_Preview()
+				break
+			case "SA_TryButton":
+				SA_action$= TextControl Get$ "SA_TryText"
+				SA_ParseTry()
+				SA_Preview()
+				break
+			//######YabAssistant commands######
+			case "YA_yabasicButton"
+				YA_Fillerup("yabasic")
+				break
+			case "YA_yabButton"
+				YA_Fillerup("yab")
+				break
+			case "YA_AllButton"
+				YA_Fillerup("all")
+				break
+			case "YA_FindButton"
+				YA_Fillerup("find")
+			//#########yabEditor Commands#########
+			case "YEMenuView:File:Save":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+				endif
+				break
+			case "YEMenuView:File:Transfer...:to Pe":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					//first try the post Alpha4.1 location
+					if(open(9,"/boot/system/apps/Pe/Pe")) then
+						system("/boot/system/apps/Pe/Pe '" + YECurrentFile$ + "' &")
+						close #9
+						Window Close "YEMainWindow"
+					//now try the old location
+					elseif(open(9,"/boot/apps/Pe/Pe")) then
+						system("/boot/apps/Pe/Pe '" + YECurrentFile$ + "' &")
+						close #9
+						Window Close "YEMainWindow"
+					//One last place where it might be
+					elseif(open(9,"/boot/apps/Pe")) then
+						system("/boot/apps/Pe '" + YECurrentFile$ + "' &")
+						close #9
+						Window Close "YEMainWindow"
+					else
+						alert "Pe Not Found", "OK", "warning"
+					endif
+				endif
+				break
+			case "YEMenuView:File:Transfer...:to StyledEdit":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					//first try the post Alpha4.1 location
+					if(open(9,"/boot/system/apps/StyledEdit")) then
+						system("/boot/system/apps/StyledEdit '" + YECurrentFile$ + "' &")
+						close #9
+						Window Close "YEMainWindow"
+					//now try the old location
+					elseif(open(9,"/boot/apps/StyledEdit")) then
+						system("/boot/apps/StyledEdit '" + YECurrentFile$ + "' &")
+						close #9
+						Window Close "YEMainWindow"
+					else
+						alert "StyledEdit Not Found", "OK", "warning"
+					endif
+				endif
+				break
+			case "YEMenuView:File:Close"
+			case "YEQuitButton":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					Window Close "YEMainWindow"
+					YECurrentFile$=""
+				endif
+				break
+			case "YEMenuView:Edit:Undo/Redo":
+			case "YEUndoButton"
+				if window get "YEMainWindow","exists" = 1 Textedit set "YEEditBox", "undo"
+					break
+				case "YEMenuView:Edit:Copy":
+				case "YECopyButton":
+					if window get "YEMainWindow","exists" = 1 Textedit set "YEEditBox", "copy"
+				break
+			case "YEMenuView:Edit:Cut":
+			case "YECutButton":
+				if window get "YEMainWindow","exists" = 1 Textedit set "YEEditBox", "cut"
+				break
+			case "YEMenuView:Edit:Paste":
+			case "YEPasteButton":
+				if window get "YEMainWindow","exists" = 1 Textedit set "YEEditBox", "paste"
+				break
+			case "YEMenuView:Edit:Copy to Snippet":
+				if window get "YEMainWindow","exists" = 1 YECopy2Snippet()
+				break
+			case "YEMenuView:Edit:Clear Selection":
+				if window get "YEMainWindow","exists" = 1 Textedit set "YEEditBox", "clear"
+				break
+			case "YEMenuView:Edit:Clear All":
+				if window get "YEMainWindow","exists" = 1 then
+					Textedit set "YEEditBox", "select-all"
+					Textedit set "YEEditBox", "clear"
+				endif
+				break
+			case "YEMenuView:Edit:Find":
+			case "YEFindButton"
+				if window get "YEMainWindow","exists" = 1 then
+					YEtempval$ = trim$(Textcontrol Get$ "YESearchField")
+					Textcontrol set "YESearchField", ""
+					if YEtempval$ <> "" then
+						YESearchText$ = YEtempval$
+						YEFindstring(SearchText$)
+						if window get "YEMainWindow","exists" = 1 then	
+							menu set "Edit", "Find Again", "Enable", "YEMenuView" //after initial find, find again becomes available
+							Option set "YEFindAgainButton", "enabled", 1 //the button too
+						endif
+					endif
+				endif
+				break
+			case "YEMenuView:Edit:Find Again":
+			case "YEFindAgainButton"
+				if YESearchText$ <>"" then
+					YEFindstring(YESearchText$)
+				end if
+				break
+			case "YEMenuView:Edit:Select All":
+				Textedit set "YEEditBox", "select-all"
+				break
+			case "YEPasteSnippetButton"
+				YEPasteSnippet()
+				break
+			//#########Run & Display Commands###########
+			case "RADSpinButton"
+				RunAndDisplay(spincontrol get "LineSelector")
+				break
+			case "RADWindow:_QuitRequested":
+				window close "RADWindow"
+				break
+			//#######end of switches#############
+			default:
+				break
+		end switch
+
+		//####Commands that don't fit well in the switch loop######
+		//#######################################
+		//##########more main window commands##########
+		if left$(msg$(everyCommand),15) ="SubBox:_Select:" SelectedRoutine$ = mid$(msg$(everyCommand),16)
+		if left$(msg$(everyCommand),15) ="SubBox:_Invoke:" then
+			SelectedRoutine$ = mid$(msg$(everyCommand),16)
+			YEOpenFile(ProjectSubPath$ + "/" + listbox get$ "SubBox", val(SelectedRoutine$))
+		endif
+		
+		//#####More ScriptAssistant commands####
+		if left$(msg$(everyCommand),7) ="SA_CLI:" SA_action$ = mid$(msg$(everyCommand),8)
+
+		if left$(msg$(everyCommand),7) = "SA_ABC:" SA_Generate(right$(msg$(everyCommand),1))
+
+		//if left$(msg$(everyCommand),11) ="SA_TryText:" SA_action$ = mid$(msg$(everyCommand),9): SA_ParseTry():SA_Preview()
+		//Would let the user type text then ENTER in the SA_CLI textbox
+		//but it also activates when the user switches to a different widget - 
+		//can't have windows opening when they feel like it
+		//try to fix it later
+
+		if left$(msg$(everyCommand),2) = "XB" Window Close "W" + mid$(msg$(everyCommand),3): SA_displaywins = SA_displaywins -1
+
+		//#####More YabAssistant commands####
+		if instr(msg$(everyCommand),"YA_KeyWordList:_Select") YA_BriefDisplay(val(mid$(msg$(everyCommand),24)))
+		if instr(msg$(everyCommand),"YA_KeyWordList:_Invoke") YA_FullDisplay(val(mid$(msg$(everyCommand),24)))
+		if left$(msg$(everyCommand),2)="X8" Window Close "W" + mid$(msg$(everyCommand),3): YA_displaywins=YA_displaywins -1
+		if (len(msg$(everyCommand))=10 and mid$(msg$(everyCommand),5)="Button") YA_Navigate(left$(msg$(everyCommand),1))
+		if left$(msg$(everyCommand),10)="YA_SearchTxt:" YA_Fillerup("find")
+
+		//#####More YabEditor Commands######
+		//Check if user pressed ENTER in the search field
+		if left$(msg$(everyCommand), 14) = "YESearchField:" then
+			YESearchText$ = trim$(mid$(msg$(everyCommand),15))
+			if YESearchText$ <>"" then
+				Textcontrol set "YESearchField", ""
+				YEFindstring(YESearchText$)
+				if window get "YEMainWindow","exists" = 1 then
+					menu set "Edit", "Find Again", "Enable", "YEMenuView" //after initial find, find again becomes available
+					Option set "YEFindAgainButton", "enabled", 1 //the button too
+				end if
+			end if
+		end if
+		//check if user selected a snippet
+		if left$(msg$(everyCommand), 17) = "YESnippetDropBox:" YESnippet$ = mid$(msg$(everyCommand), 18)
+	next everyCommand
+	YECheckTime()
+wend
+exit
+

@@ -1,0 +1,68 @@
+sub YEOpenWindow()
+	// Setup the main Editing window
+	local  YExorigin, YEyorigin, YExwidth, YEyheight, YEtempval$
+	YExorigin = 522: YEyorigin = 5: YExwidth = 494: YEyheight = 756
+	if peek("desktopwidth") < 1024  YExwidth = peek("screenwidth") - YExorigin
+	if peek("desktopheight") < 768 YEyheight = peek("desktopheight") -10
+	/////////MAIN WINDOW///////////
+	window open YExorigin,YEyorigin to YExorigin + YExwidth,YEyorigin + YEyheight, "YEMainWindow", "yab Editor"
+	Window set "YEMainWindow", "look", "modal"
+	Window set "YEMainWindow", "flags", "not-resizable"
+	Window set "YEMainWindow", "flags", "not-zoomable"
+	//////MENUS///////
+	layout "Top, Left, Right", "YEMainWindow"
+	view 0,0 to YExwidth,50, "YEMenuView", "YEMainWindow"
+	//////FILE MENU///////
+	Menu "File", "Save", "S", "YEMenuView"
+	Submenu "File", "Transfer...", "to Pe", "", "YEMenuView"
+	Submenu "File", "Transfer...", "to StyledEdit", "", "YEMenuView"
+	Menu "File", "Close", "W", "YEMenuView"
+	//////EDIT MENU//////
+	menu "Edit", "Undo/Redo", "Z", "YEMenuView"
+	menu "Edit", "Cut", "X", "YEMenuView"
+	menu "Edit", "Copy", "C", "YEMenuView"
+	menu "Edit", "Paste", "V", "YEMenuView"
+	menu "Edit", "Copy to Snippet", "", "YEMenuView"
+	menu "Edit", "Clear Selection", "", "YEMenuView"
+	menu "Edit", "Clear All", "", "YEMenuView"
+	menu "Edit", "Find", "F", "YEMenuView"
+	menu "Edit", "Find Again", "G", "YEMenuView"
+	menu "Edit", "Select All", "A", "YEMenuView"
+	YEDisableMenu()
+	/////BUTTONBAR/////
+	layout "Bottom, Left", "YEMainWindow"
+	Button 5,21 to 90,47, "YEUndoButton", "Undo/Redo", "YEMenuView"
+	Tooltip "YEUndoButton", "Undo/Redo the last change"
+	Button 95,21 to 160,47, "YECutButton", "Cut", "YEMenuView"
+	Tooltip "YECutButton", "Cut selection to clipboard"
+	Button 165,21 to 230,47, "YECopyButton", "Copy", "YEMenuView"
+	Tooltip "YECopyButton", "Copy selection to clipboard"
+	Button 235,21 to 295,47, "YEPasteButton", "Paste", "YEMenuView"
+	Tooltip "YEPasteButton", "Paste from clipboard"
+	Button 300,21 to 360,47, "YEFindButton", "Find", "YEMenuView"
+	Tooltip "YEFindButton", "Find text entered in the searchbox"
+	Button 365,21 to 425,47, "YEFindAgainButton", "Again", "YEMenuView"
+	Tooltip "YEFindAgainButton", "Repeat the last search"
+	Button 430,21 to 490,47, "YEQuitButton", "Close", "YEMenuView"
+	Tooltip "YEQuitButton", "Close this window"
+	/////STATUS BAR////////
+	view 0, YEyheight-30 to YExwidth, YEyheight, "YEStatusbarView", "YEMainWindow"
+	Textcontrol 142, 5 to 275, 25, "YESearchField", "", "Enter search term", "YEStatusbarView"
+	tooltip "YESearchField", "Enter the word or phrase to\nsearch for, then press ALT-F."
+	dropbox 277,5 to 387,25, "YESnippetDropBox", "", "YEStatusbarView"
+	tooltip "YESnippetDropBox","select a snippet here and press\nthe button to the right to insert it." 
+	button 392, 3 to 418,25, "YEPasteSnippetButton", "✔", "YEStatusbarView"
+	tooltip "YEPasteSnippetButton", "Press this button to insert\nthe currently selected snippet."
+	view 5, YEyheight-30 to 140,YEyheight, "YELineNumberField", "YEMainWindow"		
+	//////Text Area///////
+	layout "All", "YEMainWindow"
+	Textedit 0,50 to YExwidth, YEyheight -33, "YEEditBox", 3, "YEMainWindow"
+	textedit set "YEEditBox", "editable", false
+	textedit set "YEEditBox", "wordwrap", false 
+	textedit set "YEEditBox", "autoindent", true 
+	dropbox clear "YESnippetDropBox"
+	for f = 1 to 15
+		if YESnippets$ (f) <> "" dropbox add "YESnippetDropBox", YESnippets$(f)
+	next f
+end sub
+

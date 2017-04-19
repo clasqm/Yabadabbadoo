@@ -1,0 +1,13 @@
+sub WriteNewSubroutine(FileToOpen$, WNSText$)
+	local PathToOpen$
+	PathToOpen$ = ProjectSubPath$ + "/" + FileToOpen$
+	//system("touch " + PathToOpen$)
+	open PathToOpen$ for writing as #1
+	print #1, "sub " + FileToOpen$ + "()"
+	print #1, WNSText$
+	print #1, "end sub"
+	print #1, ""
+	close #1
+	system("mimeset -F '" + PathToOpen$ + "'")	
+end sub
+

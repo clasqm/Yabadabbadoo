@@ -1,0 +1,9 @@
+sub CheckScreenSize()
+	if peek("desktopwidth")<1024 or peek("desktopheight")<768 then
+		alert "For best results, Yabadabbadoo requires a minimum resolution of 1024x768.", "OK", "none"
+		MainYBottom = peek("desktopheight") - 5
+		YAYTop = peek("desktopheight") - 650
+		if YAYTop < 1 YAYTop=1
+	endif
+end sub
+

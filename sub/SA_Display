@@ -1,0 +1,17 @@
+sub SA_Display(SA_thestring$)
+	local SA_WindowID$, SA_ButtonID$, SA_TextID$,SA_stamp$, SA_startx, SA_starty
+	SA_stamp$=system$("date +%s")
+	SA_WindowID$= "W" + SA_stamp$: SA_ButtonID$= "XB" + SA_stamp$: SA_TextID$= "T" + SA_stamp$
+	if lower$(left$(SA_action$,10)) = "timeout 5 " SA_action$ = mid$ (SA_action$, len(SA_action$) - 10) //remove timeout from window title
+	Window Open SA_dispx,SA_dispy to SA_dispx +500,SA_dispy + 425, SA_WindowID$, "Output of " + SA_action$
+	Window Set SA_WindowID$, "Look","floating"
+	Window Set SA_WindowID$, "Flags","Not-Resizable, Not-Zoomable, Not-Closable, Accept-First-Click"
+	Button 220,392 to 280, 420, SA_ButtonID$, "Close", SA_WindowID$
+	TextEdit 1,1 to 500,385, SA_TextID$, 1,SA_WindowID$
+	TextEdit set SA_TextID$, "editable", false
+	TextEdit Add SA_TextID$, SA_thestring$
+	SA_dispx=SA_dispx +20: SA_dispy=SA_dispy + 15
+	SA_displaywins=SA_displaywins + 1
+	if SA_displaywins=6 SA_dispx=50: SA_dispy=50
+end sub
+

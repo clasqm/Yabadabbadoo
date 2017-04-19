@@ -1,0 +1,16 @@
+sub YEEnableMenu()
+	Menu set "File", "Save", "enable", "YEMenuView"
+	Submenu set "File", "Transfer...", "to Pe", "enable", "YEMenuView"
+	Submenu set "File", "Transfer...", "to StyledEdit", "enable", "YEMenuView"
+	//Menu set "File", "Close", "enable", "YEMenuView"
+	menu set "Edit", "Undo/Redo", "enable", "YEMenuView"
+	menu set "Edit", "Cut", "enable", "YEMenuView"
+	menu set "Edit", "Copy", "enable", "YEMenuView"
+	menu set "Edit", "Paste", "enable", "YEMenuView"
+	menu set "Edit", "Copy to Snippet", "enable", "YEMenuView"
+	menu set "Edit", "Clear Selection", "enable", "YEMenuView"
+	menu set "Edit", "Clear All", "enable", "YEMenuView"
+	menu set "Edit", "Find", "enable", "YEMenuView"
+	menu set "Edit", "Select All", "enable", "YEMenuView"
+end sub
+

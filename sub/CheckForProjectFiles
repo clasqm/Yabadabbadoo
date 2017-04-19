@@ -1,0 +1,14 @@
+sub CheckForProjectFiles()
+	if(not open(8,ProjectPath$ + "/mainloop")) then
+		close #8
+		return 0
+	elseif(not open(9,ProjectPath$ + "/prologue")) then
+		close #9
+		return 0
+	else
+		close #8
+		close #9
+		return 1
+	endif
+end sub
+

@@ -1,0 +1,18 @@
+sub CreateNewSub(displayme$)
+	local NameOfSub$, ShortNameOfSub$, w$(1), tokens
+	if TrainingMode = 1 alert displayme$, "OK", "Info"
+	while(NameOfSub$ = "") 
+		NameOfSub$ = filepanel "Save-file", "Name of the new subroutine?", ProjectSubPath$
+		if(open(9, NameOfSub$)) then
+			alert "A subroutine with that name already exists!", "OK", "warning"
+			NameOfSub$ = ""
+		endif
+	wend
+	close #9
+	tokens = split(NameOfSub$,w$(),"/")
+	ShortNameOfSub$=w$(tokens)
+	WriteNewSubroutine(ShortNameOfSub$, "\n\n" )
+	listbox add "SubBox", ShortNameOfSub$
+	Listbox select "SubBox", listbox count "SubBox"
+end sub
+

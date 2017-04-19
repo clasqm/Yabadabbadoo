@@ -1,0 +1,14 @@
+sub DisplayStats()
+	local totallines, klocs$, totalsubs$, tempval$
+	GenerateNewYabfile()
+	open ProjectNewYabfile$ for reading as #9
+	while(not EOF(9))
+		line input #9 tempval$
+		totallines = totallines + 1
+	wend
+	close #9
+	klocs$ = str$(totallines/1000)
+	totalsubs$ = str$(listbox count "SubBox")
+	alert "Using yab executable found at:\n" + yabLocation$ +"\n\nProject: " + ProjectName$ + "\n\n" + "Subroutines: " + totalsubs$ + "\n" + "Lines of code: " + str$(totallines) + "\n" + "(" + klocs$ + " KLOCS)", "OK", "info"
+end sub
+

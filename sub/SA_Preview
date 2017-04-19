@@ -1,0 +1,20 @@
+sub SA_Preview()
+	local SA_thestring$, SA_aline$
+	//Exceptions
+	if SA_action$ = "less --help" system("/boot/system/apps/Terminal less --help &"): return
+	//less presents its help in a man-like environment - does not come out correctly
+	if SA_action$ = "more --help" system("/boot/system/apps/Terminal more --help &"): return
+	//more is like less <g>
+	if SA_action$ = "timeout 5  --help" return //user pressed TRY on an empty string
+	if SA_displaywins=12 alert "Only twelve Assistant windows\nallowed. Please close one.","OK","Warning": return
+	system(SA_action$ +" &> " + SA_tempfile$)
+	open SA_tempfile$ for reading as #1
+	while(not EOF(1))
+		line input #1 SA_aline$
+		SA_thestring$= SA_thestring$ + SA_aline$ + "\n"
+	wend
+	close #1
+	SA_Display(SA_thestring$)
+	SA_KillTemp()
+end sub
+

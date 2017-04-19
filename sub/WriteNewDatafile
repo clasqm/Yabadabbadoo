@@ -1,0 +1,11 @@
+sub WriteNewDatafile()
+	open ProjectData$ for writing as #1
+	Print #1, "########################################"
+	Print #1, "###DATA statements, if any, come here###"
+	Print #1, "########################################"
+	Print #1, ""
+	Print #1, ""
+	close #1
+	system("mimeset -F '" + ProjectData$ + "'")
+end sub
+

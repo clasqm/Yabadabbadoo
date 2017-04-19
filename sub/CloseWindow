@@ -1,0 +1,5 @@
+sub CloseWindow()
+	//Close down the main window
+	window close "MainWindow"
+end sub
+

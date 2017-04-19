@@ -1,0 +1,119 @@
+#!env yab
+ 
+#########################################
+###########Prologue #####################
+#########################################
+ProgramName$ ="Yabadabbadoo"
+AuthorName$ = "Michel Clasquin-Johnson"
+ProgramVersion$ = "v0.3 beta"
+ProgramBriefDescription$ = "An alternative IDE for Jan Bungeroth's yab programming language."
+ProgramLicense$ = "Public Domain"
+ProgramAcknowledgements$ ="With thanks to Lelldorin for his help on the Find function, and to Rene Gollent, bbjimmy and Humdinger for help with identifying file types."
+ 
+// set DEBUG = 1 to print out all messages on the console
+DEBUG = 1
+ 
+ 
+###############################
+#####Global Variables for main window#######
+###############################
+PreferredScreen$ = "3" //i.e 4
+ProjectIsOpen=0
+ScriptAssistant=0
+yabAssistant=0
+yabLocation$=""
+ProjectPath$ = ""
+ProjectSubPath$ = ""
+ProjectOtherPath$ = ""
+ProjectBinderPath$ = ""
+ProjectPackagingPath$ = ""
+ProjectPrologue$ = ""
+ProjectMainloop$ = ""
+ProjectData$ = ""
+ProjectREADME$ = ""
+ProjectNewYabfile$ = ""
+ProjectName$=""
+ProjectIcon$ = ""
+SelectedRoutine$ = "1"
+MainXLeft = 217
+MainYTop = 5
+MainXRight = 510
+MainYBottom = 760
+UpdateFile$ = "http://mysite.mweb.co.za/residents/clasqm/haiku/yab-apps/yabadabbadooversion.txt"
+ 
+ 
+###############################
+####Global Variables for ScriptAssistant#####
+###############################
+SA_tempfile$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
+SA_tempfile$ = left$(SA_tempfile$, len(SA_tempfile$)-1) + "/ScriptAssistant.tmp"
+SA_displaywins=0
+SA_dispx=50: SA_dispy=50
+SA_promode = 0
+SA_across = 5
+SA_updown = 5
+SA_acrossend = SA_across + 200
+SA_updownend = SA_updown + 100
+SA_action$=""
+ 
+###############################
+####Global Variables for YabAssistant#####
+###############################
+dim YA_descriptionarr$(1)
+dim YA_fulltextarr$(1)
+YA_displaywins=0
+YA_dispx=210
+YA_dispy=50
+YAYTop=115
+ 
+###############################
+####Global Variables for YabEditor#####
+###############################
+YECurrentFile$=""
+YESearchText$=""
+YECurrentFile$ = ""
+YEtempval$ = ""
+YESnippet$ = ""
+YEStartingTime$=Mid$(Time$,7,2):wait 0.75
+YECurrentTime$=StartingTime$
+dim YESnippets$(15)
+ 
+###############################################
+#######Preliminary Commands####################
+###############################################
+ 
+//grab Workspace 4 for exclusive use
+
+tempval = alert "Yabbadabbadoo uses a lot of screen real estate. Open up in Workspace " + str$(val(PreferredScreen$) +1) + "?", "Yes", "", "No", "idea"
+if tempval = 1 system("/boot/system/apps/Workspaces " + PreferredScreen$)
+wait 0.25
+
+//1024 x 768 minimum screen resolution
+CheckScreenSize()
+
+//is there a working yab executable installed? Get its pathname
+yabLocation$ = CheckForYab$()
+
+OpenWindow()
+
+//YEOpenWindow():YEDisableButtons()
+LaunchSA(): window set "SA_MainWindow", "minimize"
+LaunchYA(): window set "YA_MainWindow", "minimize"
+if peek("argument") > 0 then
+	ProjectPath$=peek$("argument")
+	if ProjectPath$ = "--help" or ProjectPath$ = "-h" then
+		print "Yabadabbadoo " + ProgramVersion$
+		print " "
+		print "Usage: Yabadabbadoo <OPTIONS> <path_to_project_directory>/<path_to_.ybdproj_file>"
+		print " "
+		print "Options:\t--help \t-h\tthis help"
+		print " "
+		exit
+	else
+		SetProjectPathnames()
+		OpenProject("fromstart")
+	endif
+else
+	Wizard()
+endif
+

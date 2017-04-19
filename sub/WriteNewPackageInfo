@@ -1,0 +1,13 @@
+sub WriteNewPackageInfo()
+	local writethis$, PackInfo$
+	PackInfo$ = ProjectPackagingPath$ + "/.PackageInfo"
+	restore packageinfo
+	open PackInfo$ for writing as #1
+	for f = 1 to 14
+		read writethis$
+		print #1 writethis$
+	next f
+	close #1
+	system("mimeset -F " + "'" + PackInfo$+ "'")
+end sub
+

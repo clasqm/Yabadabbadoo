@@ -1,0 +1,26 @@
+Sub Wizard()
+	local whattodo, fileexist$
+	fileexist$=system$("if test -e /boot/home/config/settings/Yabadabbadoo.1st; then echo yes; else echo no;fi")
+	//if the file does not exist, program has not run before
+	if left$(fileexist$,2)= "no" then
+		whattodo = alert "Looks like this is the first time Yabadabbadoo has run on this Haiku installation. Would you like to view the Help and Tutorial?", "Yes", "No", "", "none" 
+		if whattodo = 1 then
+			ShowHelp("Tutorial", "Display")
+			ShowHelp("Help", "Display")
+		endif
+		system("touch /boot/home/config/settings/Yabadabbadoo.1st")
+	endif
+	whattodo = alert "What would you like Yabadabbadoo to do?", "Start a New Project", "Open an Existing Project", "Exit this program", "none" 
+	switch whattodo
+		case 1:
+			MakeNewProject()
+		break
+		case 2:
+			OpenProject("")
+		break
+		case 3:
+			exit
+		break
+	end switch
+end sub
+

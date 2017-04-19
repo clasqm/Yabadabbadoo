@@ -1,0 +1,27 @@
+sub YESaveFile(YESaveFile$)
+	local tempfilepath$, tempfile$
+	if YECurrentFile$ = "" return
+	tempfilepath$ = system$("finddir B_COMMON_TEMP_DIRECTORY")
+	tempfilepath$ = left$(tempfilepath$, len(tempfilepath$ )-1) // strip off trailing newline
+	tempfile$ = tempfilepath$ + "/YEtemp.txt"
+	system("touch " + tempfile$)
+	if window get "YEMainWindow","exists" = 1 then
+		YEDisableMenu()
+		YEDisableButtons()
+		textedit set "YEEditBox", "editable", false
+		draw text 430,22, "Saving ...", "YEStatusbarView"
+	endif
+	Open tempfile$ for writing as #1
+		print #1 textedit get$ "YEEditBox"
+	close #1
+	system("cat -s " + tempfile$ + " > " + YESaveFile$) //remove double blank lines
+	system("mimeset -F '" + YESaveFile$ + "'")
+	pause 0.5
+	if window get "YEMainWindow","exists" = 1 then
+		YEEnableMenu()
+		YEEnableButtons()
+		textedit set "YEEditBox", "editable", true
+		draw flush "YEStatusbarView"
+	endif
+end sub
+

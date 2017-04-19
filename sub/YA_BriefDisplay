@@ -1,0 +1,4 @@
+sub YA_BriefDisplay(YA_entry)
+	TextControl Set "YA_BriefInfo",YA_descriptionarr$(YA_entry)
+end sub
+

@@ -1,0 +1,11 @@
+sub FillSubBox()
+	local Routine$(1),GetMySubs$, a
+	listbox clear "SubBox"
+	GetMySubs$ = system$("ls " + ProjectSubPath$)
+	a = token(GetMySubs$, Routine$(),"\n")
+	for f = 1 to a
+		listbox add "SubBox", Routine$(f)
+	next f 
+	listbox select "SubBox", val(SelectedRoutine$)
+end sub
+

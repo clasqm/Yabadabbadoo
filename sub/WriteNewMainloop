@@ -1,0 +1,17 @@
+sub WriteNewMainloop()
+	local writethis$
+	restore mainloopdata
+	open ProjectMainloop$ for writing as #1
+		print #1, ""
+	print #1, "//Yabadabbadoo notification"
+	print #1, "########DO NOT RENAME THIS FILE!########"
+	print #1, "//Yabadabbadoo needs it to function."
+	print #1, ""
+	for f = 1 to 24
+		read writethis$
+		print #1 writethis$
+	next f
+	close #1
+	system("mimeset -F '" + ProjectMainloop$ + "'")
+end sub
+

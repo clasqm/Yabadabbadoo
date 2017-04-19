@@ -1,0 +1,16 @@
+sub BackupProject()
+	local ZipFile$
+	if ProjectName$ = "" return
+	DisableMenu()
+	DisableButtons()
+	if YECurrentFile$ <> "" YESaveFile(YECurrentFile$)
+	if window get "YEMainWindow","exists" = 1 draw text 430,22, "Zipping..", "YEStatusbarView"
+	ZipFile$ = "/boot/home/Desktop/" + ProjectName$ + "_" + right$(date$,18) + "_" + left$ (time$, 9) + ".zip"
+	ZipFile$ = "zip -9r " + ZipFile$ + " " + ProjectPath$
+	system(ZipFile$)
+	EnableMenu()
+	EnableButtons()
+	if window get "YEMainWindow","exists" = 1 draw flush "YEStatusbarView"
+	alert "A new time-stamped backup file has been paced on the Desktop.", "OK", "info"
+end sub
+

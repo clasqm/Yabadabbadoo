@@ -1,0 +1,27 @@
+sub LaunchYA()
+	local interval
+	interval = 23: if MainYBottom<760 interval =22 //This squeezes the alphabetical list onto a 576 pixel screen, Doesn't look good though.
+	// Setup the main window here
+	window open 5,YAYTop to 205,YAYTop + 645,"YA_MainWindow", "yabAssistant"
+	window set "YA_MainWindow", "Look", "modal"
+	window set "YA_MainWindow", "Flags", "Not-Resizable"
+	Window set "YA_MainWindow", "flags", "not-zoomable"
+	Draw Set "DejaVu Sans, Book, 12, regular, 0, 90.0", "YA_MainWindow"
+	//above prevents a mess caused by user changing his system fonts - my button labels barely fit, within a pixel!
+	// first button row
+	for f=0 to 25
+		Button 2, f * interval to 27, (f * interval)+18, chr$(f+65) + "YA_Button", chr$(f+65), "YA_MainWindow"
+	next f
+	// second button row
+	button 30, 0 to 200, 18, "YA_AllButton","Show All Commands", "YA_MainWindow"
+	button 30, 23 to 200, 41, "YA_yabasicButton","yabasic Commands Only", "YA_MainWindow"
+	button 30, 46 to 200, 64, "YA_yabButton","yab Extensions Only", "YA_MainWindow"
+	textcontrol 25,72 to 160,89, "YA_SearchTxt","","Insert search text","YA_MainWindow"
+	button 161, 72 to 199, 89, "YA_FindButton","Find", "YA_MainWindow"
+	///list of commands
+	ListBox 32,97 to 200,615, "YA_KeyWordList",1, "YA_MainWindow"
+	// brief description
+	Textcontrol 0,621 to 198,640, "YA_BriefInfo","","","YA_MainWindow"
+	YA_Fillerup("all")
+end sub
+

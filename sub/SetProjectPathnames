@@ -1,0 +1,22 @@
+sub SetProjectPathnames()
+	local w$(1),tokens
+	static trainingwheels
+	ProjectSubPath$ = ProjectPath$ + "/sub"
+	ProjectBinderPath$ = ProjectPath$ + "/binder"
+	ProjectOtherPath$ = ProjectPath$ + "/other"
+	ProjectPackagingPath$ = ProjectPath$ + "/PackagingFolder"
+	ProjectPrologue$ = ProjectPath$ + "/prologue"
+	ProjectMainloop$ = ProjectPath$ + "/mainloop"
+	ProjectData$ = ProjectPath$ + "/data"
+	ProjectREADME$ = ProjectPath$ + "/other/README"
+	tokens = split(ProjectPath$,w$(),"/")
+	ProjectName$=w$(tokens)
+	if w$(tokens-1) = "Desktop" and trainingwheels = 0 then 
+		alert "A project on the Desktop will not bind succesfully. Yabadabbadoo will create the project, but consider exiting, then moving it (use Tracker) and reloading it.", "OK", "warning"
+		trainingwheels = trainingwheels + 1
+	endif
+	ProjectNewYabfile$ = ProjectBinderPath$ + "/" + ProjectName$ + ".yab"
+	ProjectIcon$ = ProjectPath$ + "/other/" + ProjectName$ + ".icon"
+	SplashProject()	
+end sub
+

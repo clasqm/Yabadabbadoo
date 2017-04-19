@@ -1,0 +1,59 @@
+sub RunAndDisplay(repeater)
+	if window get "RADWindow","exists" = 1 window close "RADWindow"
+	local RADline$, w$(1), x$(1), totallines, RADtempfile$, RADtemplinefile$, wordsinerror, spinmin, spinmax, dothis$, spinsetter
+	RADtempfile$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
+	RADtempfile$ = left$(RADtempfile$, len(RADtempfile$) -1) + "/YBD_output.txt" //strip of trailing newline
+	if repeater = 0 system(yabLocation$ + " " + ProjectNewYabfile$ + " >& " + RADtempfile$)
+	window open 100,100 to 700, 700, "RADWindow", "Output of " + ProjectNewYabfile$
+	Window Set "RADWindow", "Look","floating"
+	Window Set "RADWindow", "Flags","Not-Resizable"
+	Window Set "RADWindow", "Flags","Not-Zoomable"
+	textedit 5,5 to 595,135, "RADOutput", 1, "RADWindow"
+	textedit set "RADOutput", "wordwrap", true
+	textedit set "RADOutput", "tabwidth", 2
+	textedit set "RADOutput", "editable", false
+	open RADtempfile$ for reading as #9
+		while(not(eof(9)))
+		line input #9 RADresult$
+		textedit add "RADOutput", RADresult$ + "\n"
+		wend
+		close #9
+	totallines = token(system$("wc -l " + ProjectNewYabfile$), w$())
+	totallines = val(w$(1))
+	if repeater = 0 then
+		RADOutput$ = textedit get$ "RADOutput"
+		wordsinerror = token (RADOutput$, x$())
+		for f = 1 to wordsinerror
+			if x$(f) = "line" then
+				spinsetter = f+ 1
+				break:break
+			endif
+		next f
+		if spinsetter <> 0 spinsetter = val(x$(spinsetter))
+	else
+		spinsetter = repeater
+	endif
+	spincontrol 20,142, "LineSelector", "View Line: ", 1, totallines, 1, "RADWindow"
+	button 165, 142 to 210,168, "RADSpinButton", "Go!", "RADWindow"
+	text 225, 150, "RADInfotext", "Program consists of " + str$(totallines) + " lines.", "RADWindow"
+	spincontrol set "LineSelector", spinsetter
+	spinmin = spinsetter - 13
+	if spinmin < 1 spinmin=1
+	spinmax = spinsetter + 13
+	if spinmax > totallines spinmax = totallines
+	RADtemplinefile$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
+	RADtemplinefile$ = left$(RADtemplinefile$, len(RADtemplinefile$) -1) + "/YBD_lines.txt" //strip of trailing newline
+	dothis$ = "cat -n " + ProjectNewYabfile$ + " | sed -n '" + str$(spinmin) + "," + str$(spinmax) + "p' > " + RADtemplinefile$
+	system(dothis$)
+	textedit 5,175 to 595,585, "RADLines", 2, "RADWindow"
+	textedit set "RADLines", "wordwrap", false
+	textedit set "RADLines", "tabwidth", 3
+	textedit set "RADLines", "editable", false
+	open RADtemplinefile$ for reading as #9
+		while(not(eof(9)))
+		line input #9 RADresult$
+		textedit add "RADLines", RADresult$	+ "\n"
+		wend
+		close #9
+end sub
+

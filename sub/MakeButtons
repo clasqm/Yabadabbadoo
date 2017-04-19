@@ -1,0 +1,28 @@
+sub MakeButtons()
+	//top buttons
+	Button 10,65 to 141,90, "PrologueButton", "Edit Prologue", "MainWindow"
+		Tooltip "PrologueButton", "The Prologue sets up important global variables that will be\nused to identify your program. It is also where\nyou enter commands to run before the main loop."
+	Button 151,65 to 282,90, "MainLoopButton", "Edit Main Loop", "MainWindow" 
+		Tooltip "MainLoopButton","Every yab program runs from a main loop.\nYabadabbadoo sets it up for you."
+	Button 10,95 to 141,120, "DataEditButton", "Edit data", "MainWindow"
+		Tooltip "DataEditButton","Not every yab program needs a DATA section,\nBut if yours does, here it is,"
+		//Originally just DataButton, but that was interfering with the YA listbox navigation
+	Button 151,95 to 282,120, "IconEditButton", "Edit Icon", "MainWindow"
+		Tooltip "IconEditButton","Give your program a spiffy icon." 
+		//Originally just IconButton, but that was interfering with the YA listbox navigation
+	Button 10,125 to 141,150, "ReadmeButton", "Edit README", "MainWindow"
+		Tooltip "ReadmeButton","The job's not over till the documentation is done.\nYabadabbadoo lets you write a README file with ease."
+	Button 151,125 to 282,150, "PackageInfoEditButton", "Edit .PackageInfo", "MainWindow" 
+		Tooltip "PackageInfoEditButton", "Edit this project's .PackageInfo file."
+	//bottom buttons
+	Button 10,MainYBottom-35 to 97,MainYBottom-10, "AddSubButton", "New Sub", "MainWindow"
+		Tooltip "AddSubButton", "Create a new subroutine."
+	Button 102,MainYBottom-35 to 190,MainYBottom-10, "EditSubButton", "Edit Sub", "MainWindow"
+		Tooltip "EditSubButton", "Edit the selected subroutine."
+	Button 195,MainYBottom-35 to 282,MainYBottom-10, "RefreshSubButton", "Refresh", "MainWindow"
+		Tooltip "RefreshSubButton", "Refresh the subroutine list.\nUseful if you have edited them from Tracker."
+	DisableButtons()
+	text 10,158, "logo4","Subroutines in this module:", "MainWindow"
+	Listbox 10,176 to 282,MainYBottom-43, "SubBox", 1, "MainWindow"
+end sub
+

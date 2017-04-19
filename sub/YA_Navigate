@@ -1,0 +1,11 @@
+sub YA_Navigate(YA_letter$)
+	local YA_headword$, YA_counter
+	for f=1 to listbox count "YA_KeyWordList"
+		YA_headword$=LISTBOX GET$ "YA_KeyWordList", f
+		YA_counter=f
+		if left$(YA_headword$,1) >= YA_letter$ break
+	next f
+	Listbox Select "YA_KeyWordList", YA_counter
+	YA_BriefDisplay(YA_counter)
+end sub
+

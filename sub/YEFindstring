@@ -1,0 +1,7 @@
+sub YEFindstring(FindThis$)
+	local linetogoto
+	if textedit get "YEEditBox", "currentline"=textedit get "YEEditBox", "countlines" Textedit set "YEEditBox", "gotoline",1 //wraparound
+	linetogoto = Textedit get "YEEditBox", "Find", FindThis$ // you don't actually DO anything with that numerical variable. Weird.
+	option set "YEEditBox", "focus", true
+end sub
+
