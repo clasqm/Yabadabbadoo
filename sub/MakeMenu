@@ -31,7 +31,9 @@ sub MakeMenu()
 	Menu "Help", "FAQ", "", "MainWindow"
 	Menu "Help", "Tutorial", "", "MainWindow"
 	Menu "Help", "Hard Copy", "", "MainWindow"
-	Menu "Help", "Updates", "", "MainWindow"
+	Menu "Help", "Get e-book - Programming with yab", "", "MainWindow"
+	Menu "Help", "Launch yab discussion forum", "", "MainWindow"
+	Menu "Help", "Launch BeSly help database", "", "MainWindow"
 	Menu "Help", "About", "", "MainWindow"
 	DisableMenu()
 end sub

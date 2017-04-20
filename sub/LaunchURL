@@ -1,0 +1,8 @@
+sub LaunchURL(url$)
+	DisableMenu()
+	DisableButtons()
+	launch url$
+	EnableButtons()
+	EnableMenu()
+end sub
+

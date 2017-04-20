@@ -29,7 +29,7 @@ provides {
 					yabadabbadoo = 0.3-5
 }
 requires {
-					yab >= 1.7.5.2
+					yab >= 1.7.5.3
 					yab_ide >= 2.2.5
 					haiku>=r1~alpha4_pm_hrev50032-1
 }

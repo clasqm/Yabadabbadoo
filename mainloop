@@ -182,12 +182,14 @@ while(not leavingLoop)
 				ShowHelp("Help", "HardCopy")
 				alert "Help files have been generated to your Desktop", "OK", "info"
 				break
-				case "MainWindow:Help:Updates":
-				DisableMenu()
-				DisableButtons()
-				FindUpdates()
-				EnableButtons()
-				EnableMenu()
+			case "MainWindow:Help:Get e-book - Programming with yab":
+				LaunchURL("https://www.smashwords.com/books/view/691720")
+				break
+			case "MainWindow:Help:Launch yab discussion forum":
+				LaunchURL("http://yab.orgfree.com/forum/")
+				break
+			case "MainWindow:Help:Launch BeSly help database":
+				LaunchURL("http://besly.de/")
 				break
 			case "MainWindow:Help:About"
 				alert ProgramName$ + " " + ProgramVersion$ + "\n\n" + ProgramBriefDescription$ + "\n\nLicense: " + ProgramLicense$ + "\n\n" + ProgramAcknowledgements$, "OK", "info"

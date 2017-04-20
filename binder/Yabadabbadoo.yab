@@ -301,12 +301,14 @@ while(not leavingLoop)
 				ShowHelp("Help", "HardCopy")
 				alert "Help files have been generated to your Desktop", "OK", "info"
 				break
-				case "MainWindow:Help:Updates":
-				DisableMenu()
-				DisableButtons()
-				FindUpdates()
-				EnableButtons()
-				EnableMenu()
+			case "MainWindow:Help:Get e-book - Programming with yab":
+				LaunchURL("https://www.smashwords.com/books/view/691720")
+				break
+			case "MainWindow:Help:Launch yab discussion forum":
+				LaunchURL("http://yab.orgfree.com/forum/")
+				break
+			case "MainWindow:Help:Launch BeSly help database":
+				LaunchURL("http://besly.de/")
 				break
 			case "MainWindow:Help:About"
 				alert ProgramName$ + " " + ProgramVersion$ + "\n\n" + ProgramBriefDescription$ + "\n\nLicense: " + ProgramLicense$ + "\n\n" + ProgramAcknowledgements$, "OK", "info"
@@ -719,22 +721,6 @@ sub FillSubBox()
 	listbox select "SubBox", val(SelectedRoutine$)
 end sub
 
-sub FindUpdates()
-	local version$,selector
-	version$ = system$("curl --connect-timeout 2 " + UpdateFile$)
-	if left$(version$,1)<>"v" then
-		alert "Unable to connect to update server!", "OK", "warning"
-		return
-	endif
-	if version$ = ProgramVersion$ then
-		alert "You have the latest version of this program.", "OK", "info"
-		return
-	else
-		selector = alert "A newer version of this program is available. Take  a look?", "Yes", "No", "", "info"
-		if selector = 1 launch "http://mysite.mweb.co.za/residents/clasqm/haiku/yab-apps/index.html"
-	endif
-end sub
-
 sub GenerateNewYabfile()
 	system("rm -f " + ProjectNewYabfile$) //delete old yabfile if it exists
 	system("touch " + ProjectNewYabfile$) //create a new one
@@ -794,6 +780,14 @@ sub LaunchSA()
 	Button 163,70 to 199,94, "SA_TryButton","TRY","SA_MainWindow"
 	ToolTip "SA_TryText", "Enter a non-standard command and ScriptAssistant\nwill try running it with the --help parameter when\nyou press the TRY button."
 	ToolTip "SA_TryButton", "Enter a non-standard command and ScriptAssistant\nwill try running it with the --help parameter when\nyou press the TRY button."
+end sub
+
+sub LaunchURL(url$)
+	DisableMenu()
+	DisableButtons()
+	launch url$
+	EnableButtons()
+	EnableMenu()
 end sub
 
 sub LaunchYA()
@@ -884,7 +878,9 @@ sub MakeMenu()
 	Menu "Help", "FAQ", "", "MainWindow"
 	Menu "Help", "Tutorial", "", "MainWindow"
 	Menu "Help", "Hard Copy", "", "MainWindow"
-	Menu "Help", "Updates", "", "MainWindow"
+	Menu "Help", "Get e-book - Programming with yab", "", "MainWindow"
+	Menu "Help", "Launch yab discussion forum", "", "MainWindow"
+	Menu "Help", "Launch BeSly help database", "", "MainWindow"
 	Menu "Help", "About", "", "MainWindow"
 	DisableMenu()
 end sub
