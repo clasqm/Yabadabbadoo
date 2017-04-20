@@ -1,13 +1,13 @@
 sub WriteNewPackageInfo()
-	local writethis$, PackInfo$
+	local streamhandle,  writethis$, PackInfo$
 	PackInfo$ = ProjectPackagingPath$ + "/.PackageInfo"
 	restore packageinfo
-	open PackInfo$ for writing as #1
+	streamhandle= open(PackInfo$, "w")
 	for f = 1 to 14
 		read writethis$
-		print #1 writethis$
+		print #streamhandle writethis$
 	next f
-	close #1
+	close #streamhandle
 	system("mimeset -F " + "'" + PackInfo$+ "'")
 end sub
 

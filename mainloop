@@ -35,22 +35,8 @@ while(not leavingLoop)
 			case "MainWindow:yab:View yab file":
 				YESaveFile(YECurrentFile$)
 				GenerateNewYabfile()
-				//first try the post Alpha4.1 location
-					if(open(9,"/boot/system/apps/Pe/Pe")) then
-						system("/boot/system/apps/Pe/Pe '"+ ProjectNewYabfile$  + "' &")
-						close #9
-					//now try the old location
-					elseif(open(9,"/boot/apps/Pe/Pe")) then
-						system("/boot/apps/Pe/Pe '" + ProjectNewYabfile$  + "' &")
-						close #9
-					//One last place where it might be
-					elseif(open(9,"/boot/apps/Pe")) then
-						system("/boot/apps/Pe '" + ProjectNewYabfile$  + "' &")
-						close #9
-					else
-						alert "Pe Not Found", "OK", "warning"
-					endif
-					break
+				system("/boot/system/apps/Pe/Pe '"+ ProjectNewYabfile$  + "' &")
+				break
 			case "MainWindow:yab:Run":
 				YESaveFile(YECurrentFile$)
 				GenerateNewYabfile()
@@ -103,17 +89,7 @@ while(not leavingLoop)
 				break
 			case "IconEditButton"
 			case "MainWindow:Parts:Icon":
-				//first try the post Alpha4.1 location
-				if(open(9,"/boot/system/apps/Icon-O-Matic")) then
-					system("/boot/system/apps/Icon-O-Matic '" + ProjectIcon$  + "' &")
-					close #9
-				//now try the old location
-				elseif(open(9,"/boot/apps/Icon-O-Matic")) then
-					system("/boot/apps/Icon-O-Matic '" + ProjectIcon$  + "' &")
-					close #9
-				else
-					alert "Icon-O-Matic Not Found", "OK", "warning"
-				endif
+				system("/boot/system/apps/Icon-O-Matic '" + ProjectIcon$  + "' &")
 				break
 			case "PackageInfoEditButton"
 				YEOpenFile(ProjectPackagingPath$ + "/.PackageInfo")
@@ -240,42 +216,22 @@ while(not leavingLoop)
 			case "YEMenuView:File:Transfer...:to Pe":
 				if window get "YEMainWindow","exists" = 1 then
 					YESaveFile(YECurrentFile$)
-					//first try the post Alpha4.1 location
-					if(open(9,"/boot/system/apps/Pe/Pe")) then
-						system("/boot/system/apps/Pe/Pe '" + YECurrentFile$ + "' &")
-						close #9
-						Window Close "YEMainWindow"
-					//now try the old location
-					elseif(open(9,"/boot/apps/Pe/Pe")) then
-						system("/boot/apps/Pe/Pe '" + YECurrentFile$ + "' &")
-						close #9
-						Window Close "YEMainWindow"
-					//One last place where it might be
-					elseif(open(9,"/boot/apps/Pe")) then
-						system("/boot/apps/Pe '" + YECurrentFile$ + "' &")
-						close #9
-						Window Close "YEMainWindow"
-					else
-						alert "Pe Not Found", "OK", "warning"
-					endif
+					system("/boot/system/apps/Pe/Pe '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
 				endif
 				break
 			case "YEMenuView:File:Transfer...:to StyledEdit":
 				if window get "YEMainWindow","exists" = 1 then
 					YESaveFile(YECurrentFile$)
-					//first try the post Alpha4.1 location
-					if(open(9,"/boot/system/apps/StyledEdit")) then
-						system("/boot/system/apps/StyledEdit '" + YECurrentFile$ + "' &")
-						close #9
-						Window Close "YEMainWindow"
-					//now try the old location
-					elseif(open(9,"/boot/apps/StyledEdit")) then
-						system("/boot/apps/StyledEdit '" + YECurrentFile$ + "' &")
-						close #9
-						Window Close "YEMainWindow"
-					else
-						alert "StyledEdit Not Found", "OK", "warning"
-					endif
+					system("/boot/system/apps/StyledEdit '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
+				endif
+				break
+			case "YEMenuView:File:Transfer...:to Trope":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					system("/boot/system/apps/Trope/Trope '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
 				endif
 				break
 			case "YEMenuView:File:Close"

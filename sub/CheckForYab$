@@ -3,14 +3,13 @@ sub CheckForYab$()
 	//should take care of it. But I'm a belt-and-suspenders kind of guy
 	local doesyabexist$,getpath$, doesyabexistmsg$
 	static trainingwheels
-	doesyabexist$=system$("which yab4ybd") //backwards compatibility
-	if doesyabexist$ = "" doesyabexist$=system$("which yab")
+	doesyabexist$=system$("which yab")
 	if doesyabexist$ = "" and trainingwheels = 0 then
 		doesyabexistmsg$ = "Although Yabadabbadoo will run on this system, you will need to install yab to run or compile your programs, Any of the following directories will do:\n" + system$("echo $PATH")
 		Alert doesyabexistmsg$, "OK", "warning"
 	endif
 	trainingwheels = trainingwheels + 1
-	doesyabexist$ = left$(doesyabexist$,len(doesyabexist$)-1) //strip trailing newline
+	doesyabexist$ = StripLFoffSysCmd$(doesyabexist$) //strip trailing newline
 	return doesyabexist$
 end sub
 

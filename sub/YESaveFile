@@ -1,5 +1,5 @@
 sub YESaveFile(YESaveFile$)
-	local tempfilepath$, tempfile$
+	local tempfilepath$, tempfile$, streamhandle
 	if YECurrentFile$ = "" return
 	tempfilepath$ = system$("finddir B_COMMON_TEMP_DIRECTORY")
 	tempfilepath$ = left$(tempfilepath$, len(tempfilepath$ )-1) // strip off trailing newline
@@ -11,9 +11,9 @@ sub YESaveFile(YESaveFile$)
 		textedit set "YEEditBox", "editable", false
 		draw text 430,22, "Saving ...", "YEStatusbarView"
 	endif
-	Open tempfile$ for writing as #1
-		print #1 textedit get$ "YEEditBox"
-	close #1
+	streamhandle = Open(tempfile$, "w")
+		print #streamhandle textedit get$ "YEEditBox"
+	close streamhandle
 	system("cat -s " + tempfile$ + " > " + YESaveFile$) //remove double blank lines
 	system("mimeset -F '" + YESaveFile$ + "'")
 	pause 0.5

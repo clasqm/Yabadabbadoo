@@ -6,8 +6,6 @@ sub LaunchYA()
 	window set "YA_MainWindow", "Look", "modal"
 	window set "YA_MainWindow", "Flags", "Not-Resizable"
 	Window set "YA_MainWindow", "flags", "not-zoomable"
-	Draw Set "DejaVu Sans, Book, 12, regular, 0, 90.0", "YA_MainWindow"
-	//above prevents a mess caused by user changing his system fonts - my button labels barely fit, within a pixel!
 	// first button row
 	for f=0 to 25
 		Button 2, f * interval to 27, (f * interval)+18, chr$(f+65) + "YA_Button", chr$(f+65), "YA_MainWindow"

@@ -1,13 +1,10 @@
 sub YEOpenFile(YEFileToOpen$)
-	local YEtempval$,YEtempval
+	local YEtempval$,YEtempval, streamhandle
 	if window get "YEMainWindow","exists" = 0 YEOpenWindow()
 	//check if file exists
-	if(not open(9,YEFileToOpen$)) then
+	if FileExists(YEFileToOpen$) = 0 then
 		Alert "File Not found!\nIt may have been deleted.", "OK", "Stop"
-		close #9
 		return
-	else
-		close #9
 	end if
 	if YETextFileCheck(YEFileToOpen$) = 1 return
 	if textedit get$ "YEEditBox" <> "" then
@@ -15,12 +12,12 @@ sub YEOpenFile(YEFileToOpen$)
 		textedit clear "YEEditBox"
 	endif
 	draw text 430,22, "Loading ...", "YEStatusbarView"
-	open YEFileToOpen$ for reading as #1
-	While (not eof(1))
-		line input #1 YEtempval$
+	streamhandle = open(YEFileToOpen$, "r")
+	While (not eof(streamhandle))
+		line input #streamhandle YEtempval$
 		textedit add "YEEditBox", YEtempval$ + "\n"
 	wend
-	close #1
+	close streamhandle
 	YECurrentFile$ = YEFileToOpen$
 	textedit set "YEEditBox", "gotoline", 1
 	wait 1 // prevents an immediate Auto-Save

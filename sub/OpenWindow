@@ -3,8 +3,6 @@ sub OpenWindow()
 	Window set "MainWindow", "look", "modal"
 	Window set "MainWindow", "flags", "not-resizable"
 	Window set "MainWindow", "flags", "zoomable"
-	Draw Set "DejaVu Sans, Book, 12, regular, 0, 90.0", "MainWindow"
-	//above prevents a mess caused by user changing his system fonts - my button labels barely fit, within a pixel!
 	text 90,25, "Logo1","Yabadabbadoo!", "MainWindow"
 	text 90,35, "Logo2","==========", "MainWindow"
 	text 10,48, "Logo3","Current Project:", "MainWindow"

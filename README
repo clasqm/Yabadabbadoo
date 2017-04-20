@@ -1,11 +1,22 @@
 Yabadabbadoo
 by Michel Clasquin-Johnson
 
-Public domain software, written for Haiku in yab using Yabadabbadoo itself.
+Public domain software, written for Haiku in yab using Yabadabbadoo itself (!).
 
 Yabadabbadoo is an alternative IDE for the yab programming language. It structures your subroutines into separate files, which are combined at run/compile time. This makes it easier to write longer programs - for short programs, you might as well use the official yab IDE. In a way, I tried to recreate the UI I recall from my days with QuickBasic.
 
-Please REMOVE any existing Yabadabbadoo package older than 0.3.2 before installing this one. It does not remove old installations cleanly. Entirely my fault (the package architecture descriptor was changed from 'x86_gcc2' to 'any'), shouldn't happen in the future.
+Beta 4 brings in the following features:
+
+* Links to yab resources in the Help menu.
+* Removed obsolete Update feature. We have package management now.
+* Limited Github integration - Yabadabbadoo will autodetect if you have installed the separate package 'yabadabbadoo_github_integration'. This is limited to initialising, pushing new changes to and pulling changes from Github. No merges or branching, this is just a way to backup your files, really. To create a new Github project you will have to launch the website.
+* Direct access to the yab BuildFactory (won't work on x86_64 for now, sorry)
+* the libclasqm library is now a dependency. The packaging system should take care of that for you.
+* A fond goodbye to the yab4ybd link.
+* Updates to the YabAssistant help data, shameslessly stolen from the Official yab IDE
+* Integration with the vstm-gui todo manager (if installed) to let you keep track of your Yabadabbadoo projects.
+* Integration with more text editors (if installed) in the Send 'to ...'. menus.
+* Integration with the Snapshot backup utlity (if installed)
 
 Beta 3 brings in the following features:
 

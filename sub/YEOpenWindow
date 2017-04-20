@@ -16,6 +16,7 @@ sub YEOpenWindow()
 	Menu "File", "Save", "S", "YEMenuView"
 	Submenu "File", "Transfer...", "to Pe", "", "YEMenuView"
 	Submenu "File", "Transfer...", "to StyledEdit", "", "YEMenuView"
+	if FileExists("/boot/system/apps/Trope/Trope") Submenu "File", "Transfer...", "to Trope", "", "YEMenuView"
 	Menu "File", "Close", "W", "YEMenuView"
 	//////EDIT MENU//////
 	menu "Edit", "Undo/Redo", "Z", "YEMenuView"

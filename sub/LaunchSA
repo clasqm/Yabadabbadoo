@@ -4,11 +4,8 @@ sub LaunchSA()
 	window set "SA_MainWindow", "Look", "modal"
 	window set "SA_MainWindow", "Flags", "Not-Resizable"
 	Window set "SA_MainWindow", "flags", "not-zoomable"
-	Draw Set "DejaVu Sans, Book, 12, regular, 0, 90.0", "SA_MainWindow"
-	//above prevents a mess caused by user changing his system fonts - my button labels barely fit, within a pixel!
 //Top row of widgets
 	view 1,1 to 120,39, "SA_Radio","SA_MainWindow"
-	Draw Set "DejaVu Sans, Book, 12, regular, 0, 90.0", "SA_Radio"
 	Tooltip "SA_Radio","Normal Mode: 165 common commands. \nPro Mode:\t Over 300 Commands.    "
 	Radiobutton 3,0,"SA_ProMode0","Normal Mode", SA_promode, "SA_Radio"
 	Radiobutton 3,18,"SA_ProMode1","Pro Mode", SA_promode, "SA_Radio"

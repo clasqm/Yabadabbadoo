@@ -1,8 +1,9 @@
 sub WriteNewReadme()
-	open ProjectREADME$ for writing as #1
-	Print #1, ProjectName$
-	Print #1, "by Author Name"
-	close #1
+	local streamhandle
+	streamhandle= open(ProjectREADME$, "w")
+	Print #streamhandle, ProjectName$
+	Print #streamhandle, "by: Author Name"
+	close #streamhandle
 	system("mimeset -F '" + ProjectREADME$ + "'")
 end sub
 

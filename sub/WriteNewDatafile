@@ -1,11 +1,12 @@
 sub WriteNewDatafile()
-	open ProjectData$ for writing as #1
-	Print #1, "########################################"
-	Print #1, "###DATA statements, if any, come here###"
-	Print #1, "########################################"
-	Print #1, ""
-	Print #1, ""
-	close #1
+	local streamhandle
+	streamhandle= open(ProjectData$, "w")
+	Print #streamhandle, "########################################"
+	Print #streamhandle, "###DATA statements, if any, come here###"
+	Print #streamhandle, "########################################"
+	Print #streamhandle, ""
+	Print #streamhandle, ""
+	close #streamhandle
 	system("mimeset -F '" + ProjectData$ + "'")
 end sub
 

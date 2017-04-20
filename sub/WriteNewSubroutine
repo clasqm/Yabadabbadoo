@@ -1,13 +1,13 @@
 sub WriteNewSubroutine(FileToOpen$, WNSText$)
-	local PathToOpen$
+	local streamhandle, PathToOpen$
 	PathToOpen$ = ProjectSubPath$ + "/" + FileToOpen$
 	//system("touch " + PathToOpen$)
-	open PathToOpen$ for writing as #1
-	print #1, "sub " + FileToOpen$ + "()"
-	print #1, WNSText$
-	print #1, "end sub"
-	print #1, ""
-	close #1
+	streamhandle= open(PathToOpen$, "w")
+	print #streamhandle, "sub " + FileToOpen$ + "()"
+	print #streamhandle, WNSText$
+	print #streamhandle, "end sub"
+	print #streamhandle, ""
+	close #streamhandle
 	system("mimeset -F '" + PathToOpen$ + "'")	
 end sub
 

@@ -3,12 +3,11 @@ sub CreateNewSub(displayme$)
 	if TrainingMode = 1 alert displayme$, "OK", "Info"
 	while(NameOfSub$ = "") 
 		NameOfSub$ = filepanel "Save-file", "Name of the new subroutine?", ProjectSubPath$
-		if(open(9, NameOfSub$)) then
+		if FileExists(NameOfSub$) then
 			alert "A subroutine with that name already exists!", "OK", "warning"
 			NameOfSub$ = ""
 		endif
 	wend
-	close #9
 	tokens = split(NameOfSub$,w$(),"/")
 	ShortNameOfSub$=w$(tokens)
 	WriteNewSubroutine(ShortNameOfSub$, "\n\n" )

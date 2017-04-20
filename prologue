@@ -11,9 +11,12 @@ ProgramLicense$ = "Public Domain"
 ProgramAcknowledgements$ ="With thanks to Lelldorin for his help on the Find function, and to Rene Gollent, bbjimmy and Humdinger for help with identifying file types."
  
 // set DEBUG = 1 to print out all messages on the console
-DEBUG = 1
- 
- 
+DEBUG = 0
+//change this to DEBUG = 0 when you are ready to bind the program for distribution
+
+//Yabadabbadoo now requires the libclasqm package to be installed. 
+import libclasqm_main 
+
 ###############################
 #####Global Variables for main window#######
 ###############################
@@ -39,8 +42,7 @@ MainXLeft = 217
 MainYTop = 5
 MainXRight = 510
 MainYBottom = 760
-UpdateFile$ = "http://mysite.mweb.co.za/residents/clasqm/haiku/yab-apps/yabadabbadooversion.txt"
- 
+
  
 ###############################
 ####Global Variables for ScriptAssistant#####

@@ -11,9 +11,12 @@ ProgramLicense$ = "Public Domain"
 ProgramAcknowledgements$ ="With thanks to Lelldorin for his help on the Find function, and to Rene Gollent, bbjimmy and Humdinger for help with identifying file types."
  
 // set DEBUG = 1 to print out all messages on the console
-DEBUG = 1
- 
- 
+DEBUG = 0
+//change this to DEBUG = 0 when you are ready to bind the program for distribution
+
+//Yabadabbadoo now requires the libclasqm package to be installed. 
+import libclasqm_main 
+
 ###############################
 #####Global Variables for main window#######
 ###############################
@@ -39,8 +42,7 @@ MainXLeft = 217
 MainYTop = 5
 MainXRight = 510
 MainYBottom = 760
-UpdateFile$ = "http://mysite.mweb.co.za/residents/clasqm/haiku/yab-apps/yabadabbadooversion.txt"
- 
+
  
 ###############################
 ####Global Variables for ScriptAssistant#####
@@ -154,22 +156,8 @@ while(not leavingLoop)
 			case "MainWindow:yab:View yab file":
 				YESaveFile(YECurrentFile$)
 				GenerateNewYabfile()
-				//first try the post Alpha4.1 location
-					if(open(9,"/boot/system/apps/Pe/Pe")) then
-						system("/boot/system/apps/Pe/Pe '"+ ProjectNewYabfile$  + "' &")
-						close #9
-					//now try the old location
-					elseif(open(9,"/boot/apps/Pe/Pe")) then
-						system("/boot/apps/Pe/Pe '" + ProjectNewYabfile$  + "' &")
-						close #9
-					//One last place where it might be
-					elseif(open(9,"/boot/apps/Pe")) then
-						system("/boot/apps/Pe '" + ProjectNewYabfile$  + "' &")
-						close #9
-					else
-						alert "Pe Not Found", "OK", "warning"
-					endif
-					break
+				system("/boot/system/apps/Pe/Pe '"+ ProjectNewYabfile$  + "' &")
+				break
 			case "MainWindow:yab:Run":
 				YESaveFile(YECurrentFile$)
 				GenerateNewYabfile()
@@ -222,17 +210,7 @@ while(not leavingLoop)
 				break
 			case "IconEditButton"
 			case "MainWindow:Parts:Icon":
-				//first try the post Alpha4.1 location
-				if(open(9,"/boot/system/apps/Icon-O-Matic")) then
-					system("/boot/system/apps/Icon-O-Matic '" + ProjectIcon$  + "' &")
-					close #9
-				//now try the old location
-				elseif(open(9,"/boot/apps/Icon-O-Matic")) then
-					system("/boot/apps/Icon-O-Matic '" + ProjectIcon$  + "' &")
-					close #9
-				else
-					alert "Icon-O-Matic Not Found", "OK", "warning"
-				endif
+				system("/boot/system/apps/Icon-O-Matic '" + ProjectIcon$  + "' &")
 				break
 			case "PackageInfoEditButton"
 				YEOpenFile(ProjectPackagingPath$ + "/.PackageInfo")
@@ -359,42 +337,22 @@ while(not leavingLoop)
 			case "YEMenuView:File:Transfer...:to Pe":
 				if window get "YEMainWindow","exists" = 1 then
 					YESaveFile(YECurrentFile$)
-					//first try the post Alpha4.1 location
-					if(open(9,"/boot/system/apps/Pe/Pe")) then
-						system("/boot/system/apps/Pe/Pe '" + YECurrentFile$ + "' &")
-						close #9
-						Window Close "YEMainWindow"
-					//now try the old location
-					elseif(open(9,"/boot/apps/Pe/Pe")) then
-						system("/boot/apps/Pe/Pe '" + YECurrentFile$ + "' &")
-						close #9
-						Window Close "YEMainWindow"
-					//One last place where it might be
-					elseif(open(9,"/boot/apps/Pe")) then
-						system("/boot/apps/Pe '" + YECurrentFile$ + "' &")
-						close #9
-						Window Close "YEMainWindow"
-					else
-						alert "Pe Not Found", "OK", "warning"
-					endif
+					system("/boot/system/apps/Pe/Pe '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
 				endif
 				break
 			case "YEMenuView:File:Transfer...:to StyledEdit":
 				if window get "YEMainWindow","exists" = 1 then
 					YESaveFile(YECurrentFile$)
-					//first try the post Alpha4.1 location
-					if(open(9,"/boot/system/apps/StyledEdit")) then
-						system("/boot/system/apps/StyledEdit '" + YECurrentFile$ + "' &")
-						close #9
-						Window Close "YEMainWindow"
-					//now try the old location
-					elseif(open(9,"/boot/apps/StyledEdit")) then
-						system("/boot/apps/StyledEdit '" + YECurrentFile$ + "' &")
-						close #9
-						Window Close "YEMainWindow"
-					else
-						alert "StyledEdit Not Found", "OK", "warning"
-					endif
+					system("/boot/system/apps/StyledEdit '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
+				endif
+				break
+			case "YEMenuView:File:Transfer...:to Trope":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					system("/boot/system/apps/Trope/Trope '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
 				endif
 				break
 			case "YEMenuView:File:Close"
@@ -538,15 +496,11 @@ sub BackupProject()
 end sub
 
 sub CheckForProjectFiles()
-	if(not open(8,ProjectPath$ + "/mainloop")) then
-		close #8
+	if FileExists(ProjectPath$ + "/mainloop") = 0 then
 		return 0
-	elseif(not open(9,ProjectPath$ + "/prologue")) then
-		close #9
+	elseif FileExists(ProjectPath$ + "/prologue") = 0 then
 		return 0
 	else
-		close #8
-		close #9
 		return 1
 	endif
 end sub
@@ -556,14 +510,13 @@ sub CheckForYab$()
 	//should take care of it. But I'm a belt-and-suspenders kind of guy
 	local doesyabexist$,getpath$, doesyabexistmsg$
 	static trainingwheels
-	doesyabexist$=system$("which yab4ybd") //backwards compatibility
-	if doesyabexist$ = "" doesyabexist$=system$("which yab")
+	doesyabexist$=system$("which yab")
 	if doesyabexist$ = "" and trainingwheels = 0 then
 		doesyabexistmsg$ = "Although Yabadabbadoo will run on this system, you will need to install yab to run or compile your programs, Any of the following directories will do:\n" + system$("echo $PATH")
 		Alert doesyabexistmsg$, "OK", "warning"
 	endif
 	trainingwheels = trainingwheels + 1
-	doesyabexist$ = left$(doesyabexist$,len(doesyabexist$)-1) //strip trailing newline
+	doesyabexist$ = StripLFoffSysCmd$(doesyabexist$) //strip trailing newline
 	return doesyabexist$
 end sub
 
@@ -594,12 +547,11 @@ sub CreateNewSub(displayme$)
 	if TrainingMode = 1 alert displayme$, "OK", "Info"
 	while(NameOfSub$ = "") 
 		NameOfSub$ = filepanel "Save-file", "Name of the new subroutine?", ProjectSubPath$
-		if(open(9, NameOfSub$)) then
+		if FileExists(NameOfSub$) then
 			alert "A subroutine with that name already exists!", "OK", "warning"
 			NameOfSub$ = ""
 		endif
 	wend
-	close #9
 	tokens = split(NameOfSub$,w$(),"/")
 	ShortNameOfSub$=w$(tokens)
 	WriteNewSubroutine(ShortNameOfSub$, "\n\n" )
@@ -747,11 +699,8 @@ sub LaunchSA()
 	window set "SA_MainWindow", "Look", "modal"
 	window set "SA_MainWindow", "Flags", "Not-Resizable"
 	Window set "SA_MainWindow", "flags", "not-zoomable"
-	Draw Set "DejaVu Sans, Book, 12, regular, 0, 90.0", "SA_MainWindow"
-	//above prevents a mess caused by user changing his system fonts - my button labels barely fit, within a pixel!
 //Top row of widgets
 	view 1,1 to 120,39, "SA_Radio","SA_MainWindow"
-	Draw Set "DejaVu Sans, Book, 12, regular, 0, 90.0", "SA_Radio"
 	Tooltip "SA_Radio","Normal Mode: 165 common commands. \nPro Mode:\t Over 300 Commands.    "
 	Radiobutton 3,0,"SA_ProMode0","Normal Mode", SA_promode, "SA_Radio"
 	Radiobutton 3,18,"SA_ProMode1","Pro Mode", SA_promode, "SA_Radio"
@@ -798,8 +747,6 @@ sub LaunchYA()
 	window set "YA_MainWindow", "Look", "modal"
 	window set "YA_MainWindow", "Flags", "Not-Resizable"
 	Window set "YA_MainWindow", "flags", "not-zoomable"
-	Draw Set "DejaVu Sans, Book, 12, regular, 0, 90.0", "YA_MainWindow"
-	//above prevents a mess caused by user changing his system fonts - my button labels barely fit, within a pixel!
 	// first button row
 	for f=0 to 25
 		Button 2, f * interval to 27, (f * interval)+18, chr$(f+65) + "YA_Button", chr$(f+65), "YA_MainWindow"
@@ -943,8 +890,6 @@ sub OpenWindow()
 	Window set "MainWindow", "look", "modal"
 	Window set "MainWindow", "flags", "not-resizable"
 	Window set "MainWindow", "flags", "zoomable"
-	Draw Set "DejaVu Sans, Book, 12, regular, 0, 90.0", "MainWindow"
-	//above prevents a mess caused by user changing his system fonts - my button labels barely fit, within a pixel!
 	text 90,25, "Logo1","Yabadabbadoo!", "MainWindow"
 	text 90,35, "Logo2","==========", "MainWindow"
 	text 10,48, "Logo3","Current Project:", "MainWindow"
@@ -1279,119 +1224,122 @@ Sub Wizard()
 end sub
 
 sub WriteNewDatafile()
-	open ProjectData$ for writing as #1
-	Print #1, "########################################"
-	Print #1, "###DATA statements, if any, come here###"
-	Print #1, "########################################"
-	Print #1, ""
-	Print #1, ""
-	close #1
+	local streamhandle
+	streamhandle= open(ProjectData$, "w")
+	Print #streamhandle, "########################################"
+	Print #streamhandle, "###DATA statements, if any, come here###"
+	Print #streamhandle, "########################################"
+	Print #streamhandle, ""
+	Print #streamhandle, ""
+	close #streamhandle
 	system("mimeset -F '" + ProjectData$ + "'")
 end sub
 
 sub WriteNewMainloop()
-	local writethis$
+	local streamhandle,  writethis$
 	restore mainloopdata
-	open ProjectMainloop$ for writing as #1
-		print #1, ""
-	print #1, "//Yabadabbadoo notification"
-	print #1, "########DO NOT RENAME THIS FILE!########"
-	print #1, "//Yabadabbadoo needs it to function."
-	print #1, ""
+	streamhandle= open(ProjectMainloop$, "w")
+	print #streamhandle, ""
+	print #streamhandle, "//Yabadabbadoo notification"
+	print #streamhandle, "########DO NOT RENAME THIS FILE!########"
+	print #streamhandle, "//Yabadabbadoo needs it to function."
+	print #streamhandle, ""
 	for f = 1 to 24
 		read writethis$
-		print #1 writethis$
+		print #streamhandle writethis$
 	next f
-	close #1
+	close #streamhandle
 	system("mimeset -F '" + ProjectMainloop$ + "'")
 end sub
 
 sub WriteNewPackageInfo()
-	local writethis$, PackInfo$
+	local streamhandle,  writethis$, PackInfo$
 	PackInfo$ = ProjectPackagingPath$ + "/.PackageInfo"
 	restore packageinfo
-	open PackInfo$ for writing as #1
+	streamhandle= open(PackInfo$, "w")
 	for f = 1 to 14
 		read writethis$
-		print #1 writethis$
+		print #streamhandle writethis$
 	next f
-	close #1
+	close #streamhandle
 	system("mimeset -F " + "'" + PackInfo$+ "'")
 end sub
 
 sub WriteNewPreface()
-	Open ProjectPrologue$ for writing as #1
-	print #1, "#!/bin/env yab"
-	print #1, "################################"
-	print #1, "############# Prologue #############"
-	print #1, "################################"
-	print #1, ""
-	print #1, "//Yabadabbadoo notification"
-	print #1, "########DO NOT RENAME THIS FILE!########"
-	print #1, "//Yabadabbadoo needs it to function."
-	print #1, " "
-	print #1, "##Fill in these fields with your own particulars."
-	print #1, "##The variables will be used in the About Box and in naming the program."
-	print #1, " "
-	print #1, "ProgramName$ = \"" + ProjectName$ +"\""
-	print #1, "AuthorName$ = \"Name of Author\""
-	print #1, "ProgramVersion$ = \"V0.1\""
-	print #1, "ProgramBriefDescription$ = \"Brief Description of your program.\""
-	print #1, "ProgramLicense$ = \"Public Domain/Freeware/GPL/Artistic License/Commercial\""
-	print #1, "ProgramAcknowledgements$ =\"With thanks to .......\""
-	print #1, " "
-	print #1, "//*************************"
-	print #1, "//*****Global Variables****"
-	print #1, "//*************************"
-	print #1, " "
-	Print #1, "## Technically, yab does not require you to declare global variables,"
-	print #1, "##It just is a really, really good idea to do it anyway." 
-	print #1, "// set DEBUG = 1 to print out all messages on the console"
-	print #1, "DEBUG = 1"
-	print #1, "//change this to DEBUG = 0 when you are ready to bind the program for distribution"
-	print #1, " "
-	print #1, " "
-	print #1, " "
-	print #1, " "
-	print #1, " "
-	print #1, "##########################"
-	print #1, "######Preliminary Commands#####"
-	print #1, "##########################"
-	print #1, ""
-	print #1, "## Commands to run before the Main Loop come here."
-	print #1, "## e.g. setting up a window with a menu."
-	print #1, " "
-	print #1, " "
-	print #1, " "
-	print #1, "OpenWindow()"
-	print #1, ""
-	print #1, " "
-	print #1, " "
-	print #1, " "
-	print #1, "#######End of Prologue#######"
-	print #1, ""
-	close #1
+	local streamhandle
+	streamhandle= open(ProjectPrologue$, "w")
+	print #streamhandle, "#!/bin/env yab"
+	print #streamhandle, "################################"
+	print #streamhandle, "############# Prologue #############"
+	print #streamhandle, "################################"
+	print #streamhandle, ""
+	print #streamhandle, "//Yabadabbadoo notification"
+	print #streamhandle, "########DO NOT RENAME THIS FILE!########"
+	print #streamhandle, "//Yabadabbadoo needs it to function."
+	print #streamhandle, " "
+	print #streamhandle, "##Fill in these fields with your own particulars."
+	print #streamhandle, "##The variables will be used in the About Box and in naming the program."
+	print #streamhandle, " "
+	print #streamhandle, "ProgramName$ = \"" + ProjectName$ +"\""
+	print #streamhandle, "AuthorName$ = \"Name of Author\""
+	print #streamhandle, "ProgramVersion$ = \"V0.1\""
+	print #streamhandle, "ProgramBriefDescription$ = \"Brief Description of your program.\""
+	print #streamhandle, "ProgramLicense$ = \"Public Domain/Freeware/GPL/Artistic License/Commercial\""
+	print #streamhandle, "ProgramAcknowledgements$ =\"With thanks to .......\""
+	print #streamhandle, " "
+	print #streamhandle, "//*************************"
+	print #streamhandle, "//*****Global Variables****"
+	print #streamhandle, "//*************************"
+	print #streamhandle, " "
+	Print #streamhandle, "## Technically, yab does not require you to declare global variables,"
+	print #streamhandle, "##It just is a really, really good idea to do it anyway." 
+	print #streamhandle, "// set DEBUG = 1 to print out all messages on the console"
+	print #streamhandle, "DEBUG = 1"
+	print #streamhandle, "//change this to DEBUG = 0 when you are ready to bind the program for distribution"
+	print #streamhandle, " "
+	print #streamhandle, " "
+	print #streamhandle, " "
+	print #streamhandle, " "
+	print #streamhandle, " "
+	print #streamhandle, "##########################"
+	print #streamhandle, "######Preliminary Commands#####"
+	print #streamhandle, "##########################"
+	print #streamhandle, ""
+	print #streamhandle, "## Commands to run before the Main Loop come here."
+	print #streamhandle, "## e.g. setting up a window with a menu."
+	print #streamhandle, " "
+	print #streamhandle, " "
+	print #streamhandle, " "
+	print #streamhandle, "OpenWindow()"
+	print #streamhandle, ""
+	print #streamhandle, " "
+	print #streamhandle, " "
+	print #streamhandle, " "
+	print #streamhandle, "#######End of Prologue#######"
+	print #streamhandle, ""
+	close #streamhandle
 	system("mimeset -F '" + ProjectPrologue$ + "'")
 end sub
 
 sub WriteNewReadme()
-	open ProjectREADME$ for writing as #1
-	Print #1, ProjectName$
-	Print #1, "by Author Name"
-	close #1
+	local streamhandle
+	streamhandle= open(ProjectREADME$, "w")
+	Print #streamhandle, ProjectName$
+	Print #streamhandle, "by: Author Name"
+	close #streamhandle
 	system("mimeset -F '" + ProjectREADME$ + "'")
 end sub
 
 sub WriteNewSubroutine(FileToOpen$, WNSText$)
-	local PathToOpen$
+	local streamhandle, PathToOpen$
 	PathToOpen$ = ProjectSubPath$ + "/" + FileToOpen$
 	//system("touch " + PathToOpen$)
-	open PathToOpen$ for writing as #1
-	print #1, "sub " + FileToOpen$ + "()"
-	print #1, WNSText$
-	print #1, "end sub"
-	print #1, ""
-	close #1
+	streamhandle= open(PathToOpen$, "w")
+	print #streamhandle, "sub " + FileToOpen$ + "()"
+	print #streamhandle, WNSText$
+	print #streamhandle, "end sub"
+	print #streamhandle, ""
+	close #streamhandle
 	system("mimeset -F '" + PathToOpen$ + "'")	
 end sub
 
@@ -1569,15 +1517,12 @@ sub YEFindstring(FindThis$)
 end sub
 
 sub YEOpenFile(YEFileToOpen$)
-	local YEtempval$,YEtempval
+	local YEtempval$,YEtempval, streamhandle
 	if window get "YEMainWindow","exists" = 0 YEOpenWindow()
 	//check if file exists
-	if(not open(9,YEFileToOpen$)) then
+	if FileExists(YEFileToOpen$) = 0 then
 		Alert "File Not found!\nIt may have been deleted.", "OK", "Stop"
-		close #9
 		return
-	else
-		close #9
 	end if
 	if YETextFileCheck(YEFileToOpen$) = 1 return
 	if textedit get$ "YEEditBox" <> "" then
@@ -1585,12 +1530,12 @@ sub YEOpenFile(YEFileToOpen$)
 		textedit clear "YEEditBox"
 	endif
 	draw text 430,22, "Loading ...", "YEStatusbarView"
-	open YEFileToOpen$ for reading as #1
-	While (not eof(1))
-		line input #1 YEtempval$
+	streamhandle = open(YEFileToOpen$, "r")
+	While (not eof(streamhandle))
+		line input #streamhandle YEtempval$
 		textedit add "YEEditBox", YEtempval$ + "\n"
 	wend
-	close #1
+	close streamhandle
 	YECurrentFile$ = YEFileToOpen$
 	textedit set "YEEditBox", "gotoline", 1
 	wait 1 // prevents an immediate Auto-Save
@@ -1618,6 +1563,7 @@ sub YEOpenWindow()
 	Menu "File", "Save", "S", "YEMenuView"
 	Submenu "File", "Transfer...", "to Pe", "", "YEMenuView"
 	Submenu "File", "Transfer...", "to StyledEdit", "", "YEMenuView"
+	if FileExists("/boot/system/apps/Trope/Trope") Submenu "File", "Transfer...", "to Trope", "", "YEMenuView"
 	Menu "File", "Close", "W", "YEMenuView"
 	//////EDIT MENU//////
 	menu "Edit", "Undo/Redo", "Z", "YEMenuView"
@@ -1677,7 +1623,7 @@ sub YEPasteSnippet()
 end sub
 
 sub YESaveFile(YESaveFile$)
-	local tempfilepath$, tempfile$
+	local tempfilepath$, tempfile$, streamhandle
 	if YECurrentFile$ = "" return
 	tempfilepath$ = system$("finddir B_COMMON_TEMP_DIRECTORY")
 	tempfilepath$ = left$(tempfilepath$, len(tempfilepath$ )-1) // strip off trailing newline
@@ -1689,9 +1635,9 @@ sub YESaveFile(YESaveFile$)
 		textedit set "YEEditBox", "editable", false
 		draw text 430,22, "Saving ...", "YEStatusbarView"
 	endif
-	Open tempfile$ for writing as #1
-		print #1 textedit get$ "YEEditBox"
-	close #1
+	streamhandle = Open(tempfile$, "w")
+		print #streamhandle textedit get$ "YEEditBox"
+	close streamhandle
 	system("cat -s " + tempfile$ + " > " + YESaveFile$) //remove double blank lines
 	system("mimeset -F '" + YESaveFile$ + "'")
 	pause 0.5
