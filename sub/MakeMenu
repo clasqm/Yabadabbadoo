@@ -24,6 +24,7 @@ sub MakeMenu()
 	Menu "Utilities", "yabAssistant","CY","MainWindow": Menu set "Utilities", "yabAssistant","plain","MainWindow"
 	//Menu "Utilities", "Yab Interface Builder","","MainWindow"
 	Menu "Utilities", "System Prefs","CP","MainWindow"
+	if FileExists("/boot/system/apps/vstm_GUI") Menu "Utilities", "To-do Manager","","MainWindow"
 	Menu "Utilities", "Restart Tracker","","MainWindow"
 	Menu "Utilities", "Restart Deskbar","","MainWindow"
 	Menu "Utilities", "Create new shortcut","","MainWindow"

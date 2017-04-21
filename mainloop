@@ -108,6 +108,9 @@ while(not leavingLoop)
 			case "MainWindow:Utilities:System Prefs"
 				system("/boot/system/Tracker /boot/system/preferences &")
 				break
+			case "MainWindow:Utilities:To-do Manager" 
+				system("/boot/system/apps/vstm_GUI &")
+				break
 			case "MainWindow:Utilities:Calculator"
 				system("open application/x-vnd.Haiku-DeskCalc &")
 				break
