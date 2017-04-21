@@ -3,6 +3,7 @@ sub MakeMenu()
 	Menu "Project","New","N", "MainWindow"
 	Menu "Project","Open","O", "MainWindow"
 	Menu "Project","Backup","B", "MainWindow"
+	Menu "Project","Search","S", "MainWindow"
 	Menu "Project","Stats","", "MainWindow"
 	Menu "Parts", "Prologue","SP", "MainWindow"
 	Menu "Parts", "Main Loop","SM", "MainWindow"
