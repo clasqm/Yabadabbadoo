@@ -234,6 +234,61 @@ while(not leavingLoop)
 					Window Close "YEMainWindow"
 				endif
 				break
+			case "YEMenuView:File:Transfer...:to CodeWalker":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					system("/boot/system/apps/codewalker/CodeWalker '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
+				endif
+				break
+			case "YEMenuView:File:Transfer...:to Koder":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					system("/boot/system/apps/Koder '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
+				endif
+				break
+			case "YEMenuView:File:Transfer...:to VIM":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					system("/boot/system/bin/gvim '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
+				endif
+				break
+			case "YEMenuView:File:Transfer...:to Eddie":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					system("/boot/system/apps/Eddie/Eddie '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
+				endif
+				break
+			case "YEMenuView:File:Transfer...:to JuffEd":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					system("/boot/system/apps/JuffEd/juffed '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
+				endif
+				break
+			case "YEMenuView:File:Transfer...:to Sintegrial":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					system("/boot/system/apps/STE/ste '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
+				endif
+				break
+			case "YEMenuView:File:Transfer...:to Tea":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					system("/boot/system/apps/Tea/tea '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
+				endif
+				break
+			case "YEMenuView:File:Transfer...:to YATE":
+				if window get "YEMainWindow","exists" = 1 then
+					YESaveFile(YECurrentFile$)
+					system("/boot/system/apps/yate/Yate97X86 '" + YECurrentFile$ + "' &")
+					Window Close "YEMainWindow"
+				endif
 			case "YEMenuView:File:Close"
 			case "YEQuitButton":
 				if window get "YEMainWindow","exists" = 1 then

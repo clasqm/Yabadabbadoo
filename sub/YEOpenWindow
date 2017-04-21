@@ -14,9 +14,18 @@ sub YEOpenWindow()
 	view 0,0 to YExwidth,50, "YEMenuView", "YEMainWindow"
 	//////FILE MENU///////
 	Menu "File", "Save", "S", "YEMenuView"
+
+	if FileExists("/boot/system/apps/codewalker/CodeWalker") Submenu "File", "Transfer...", "to CodeWalker", "", "YEMenuView"
+	if FileExists("/boot/system/apps/Eddie/Eddie") Submenu "File", "Transfer...", "to Eddie", "", "YEMenuView"
+	if FileExists("/boot/system/apps/JuffEd/juffed") Submenu "File", "Transfer...", "to JuffEd", "", "YEMenuView"
+	if FileExists("/boot/system/apps/Koder") Submenu "File", "Transfer...", "to Koder", "", "YEMenuView"
 	Submenu "File", "Transfer...", "to Pe", "", "YEMenuView"
+	if FileExists("/boot/system/apps/STE/ste") Submenu "File", "Transfer...", "to Sintegrial", "", "YEMenuView"
 	Submenu "File", "Transfer...", "to StyledEdit", "", "YEMenuView"
+	if FileExists("/boot/system/apps/Tea/tea") Submenu "File", "Transfer...", "to Tea", "", "YEMenuView"
 	if FileExists("/boot/system/apps/Trope/Trope") Submenu "File", "Transfer...", "to Trope", "", "YEMenuView"
+	if FileExists("/boot/system/bin/gvim") Submenu "File", "Transfer...", "to VIM", "", "YEMenuView"
+	if FileExists("/boot/system/apps/yate/Yate97X86") Submenu "File", "Transfer...", "to YATE", "", "YEMenuView"
 	Menu "File", "Close", "W", "YEMenuView"
 	//////EDIT MENU//////
 	menu "Edit", "Undo/Redo", "Z", "YEMenuView"
