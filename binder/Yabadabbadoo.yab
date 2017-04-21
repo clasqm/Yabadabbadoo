@@ -751,6 +751,12 @@ sub GetProjectDirectory(displayme$)
 	trainingwheels = trainingwheels + 1
 end sub
 
+sub Has_yab4ybd()
+	if instr(system$("head -n 1 " + ProjectPrologue$), "#!yab4ybd") then
+		alert "Your project's first line may contain a llink to the deprecated #!yab4ybd.\n\nPlease change it to #!yab", "OK", "warning" 
+	endif
+end sub
+
 sub LaunchSA()
 // Setup the SA_main window here
 	window open SA_across,SA_updown to SA_acrossend, SA_updownend, "SA_MainWindow", "ScriptAssistant"
@@ -1222,7 +1228,8 @@ sub SetProjectPathnames()
 	endif
 	ProjectNewYabfile$ = ProjectBinderPath$ + "/" + ProjectName$ + ".yab"
 	ProjectIcon$ = ProjectPath$ + "/other/" + ProjectName$ + ".icon"
-	SplashProject()	
+	SplashProject()
+	Has_yab4ybd()
 end sub
 
 sub ShowHelp(WhichHelp$, DoWhat$)
@@ -8939,21 +8946,21 @@ data "<h4>1.5.2 Utilities | Open Tracker</h4><p>Open Tracker to your current pro
 data "<h4>1.5.3 Utilities | Calculator</h4><p>Open Deskcalc.Trust me, you will be needing this when laying out your User Interface!</p>"
 data "<h4>1.5.4 Utilities | ScriptAssistant</h4><p>Opens  or closes the ScriptAssistant. See Section 3.</p>"
 data "<h4>1.5.5 Utilities | yabAssistant</h4><p>Opens or closes the yabAssistant. See section 4.</p>"
-data "<h4>1.5.6 Utilities | Yab Interface Builder</h4><p>Opens yib, the Yab Interface Builder, if it is installed. This option will be enabled when yib becomes available. It&rsquo;s a big project (bigger than Yabadabbadoo) and it might be a while.</p>"
-data "<h4>1.5.7 Utilities | System Prefs</h4><p>Opens a Tracker Window with the Haiku System Preferences.</p>"
-data "<h4>1.5.8 Utilities | To-do Manager</h4><p>This will only appear if you have installed the <i>vstm</i> package from the clasqm repo. It gives you a simple interface with which you can list and prioritise all your Yabadabbadoo projects and tasks.</p>"
-data "<h4>1.5.9 Utilities | Restart Tracker</h4><p>Yabadabbadoo should not do anything to disturb Tracker. But accidents can happen. Luckily, Tracker is just another program as far as Haiku is concerned and it can be restarted if it crashes.</p>"
-data "<h4>1.5.10 Utilities | Restart Deskbar</h4><p>As was the case in 1.5.8, so you can restart the Deskbar.</p>"
-data "<h4>1.5.11 Utilities | Create a new Shortcut</h4><p>Create a shortcut (actually a small shell script) on the Desktop that will load the current project into Yabadabbadoo without going through the menus. Shortcuts can be renamed, moved, even into the deskbar menu structures via <i>/boot/home/config/non-packaged/data/deskbar/menu</i>, and be assigned an icon. But if you move your project to a different directory you will need to regenerate the shortcut.</p>"
+//data "<h4>1.5.6 Utilities | Yab Interface Builder</h4><p>Opens yib, the Yab Interface Builder, if it is installed. This option will be enabled when yib becomes available. It&rsquo;s a big project (bigger than Yabadabbadoo) and it might be a while.</p>"
+data "<h4>1.5.6 Utilities | System Prefs</h4><p>Opens a Tracker Window with the Haiku System Preferences.</p>"
+data "<h4>1.5.7 Utilities | To-do Manager</h4><p>This will only appear if you have installed the <i>vstm</i> package from the clasqm repo. It gives you a simple interface with which you can list and prioritise all your Yabadabbadoo projects and tasks.</p>"
+data "<h4>1.5.8 Utilities | Restart Tracker</h4><p>Yabadabbadoo should not do anything to disturb Tracker. But accidents can happen. Luckily, Tracker is just another program as far as Haiku is concerned and it can be restarted if it crashes.</p>"
+data "<h4>1.5.9 Utilities | Restart Deskbar</h4><p>As was the case in 1.5.8, so you can restart the Deskbar.</p>"
+data "<h4>1.5.10 Utilities | Create a new Shortcut</h4><p>Create a shortcut (actually a small shell script) on the Desktop that will load the current project into Yabadabbadoo without going through the menus. Shortcuts can be renamed, moved, even into the deskbar menu structures via <i>/boot/home/config/non-packaged/data/deskbar/menu</i>, and be assigned an icon. But if you move your project to a different directory you will need to regenerate the shortcut.</p>"
 data "<h3>1.6 The Help Menu</h3><h4>1.6.1 Help | Help</h4><p>Show this Help.</p>"
 data "<h4>1.6.2 Help | FAQ</h4><p>Like most &ldquo;Frequently Asked Questions&rdquo;, these are largely made up! Send me some real questions and they will show up here in future releases.</p>"
 data "<h4>1.6.3 Help | Tutorial</h4><p>Show a brief Tutorial in which the basics of creating a program with Yabadabbadoo are explained.</p>"
 data "<h4>1.6.4 Help | Hard Copy</h4><p>Create a HTML files on the Desktop containing the contents of the Help, FAQ and Tutorial systems. These files can then be opened with a browser and printed.</p>"
 data "<h4>1.6.5 Help | Updates</h4><p>Phones home to see if a newer version of the program exists. If it does, you are given an opportunity to visit my website and download it. No information is sent during this process: all that happens is that a small text file containing a version number is retrieved.<p>"
 data "<h4>1.6.6 Help | Get e-book - Programming with yab</h4><p>Launch the Smashwords site of my FREE e-book in your default browser</p>"
-data "<h4>1.6.6 Help | Launch yab discussion forum</h4><p>Launch the yab discussion forum in your default browser. I hang out there at least once a day, so that is the place to complain about Yabadabbadoo!</p>"
-data "<h4>1.6.6 Help | Launch BeSly help database</h4><p>Launch besly.de in your default browser. It is not exclusively yab-oriented, but there are a lot of items usefult to yab programmers.</p>"
-data "<h4>1.6.6 Help | About</h4><p>Show an About box.</p>"
+data "<h4>1.6.7 Help | Launch yab discussion forum</h4><p>Launch the yab discussion forum in your default browser. I hang out there at least once a day, so that is the place to complain about Yabadabbadoo!</p>"
+data "<h4>1.6.8 Help | Launch BeSly help database</h4><p>Launch besly.de in your default browser. It is not exclusively yab-oriented, but there are a lot of items usefult to yab programmers.</p>"
+data "<h4>1.6.9 Help | About</h4><p>Show an About box.</p>"
 data "<h3>1.7 The Subroutine Editing buttons</h3><h4>1.7.1 New sub</h4><p>Create a new subroutine with the opening and closing statements inserted. New subroutines are NOT automatically opened for editing. Your new routine is added to the bottom of the list. You can alphabetize the list with the Refresh button.</p>"
 data "<h4>1.7.2 Edit Sub</h4><p>Open the currently selected subroutine for editing. If another file is currently open, it will be auto-saved first.</p>"
 data "<p><strong>NOTE:</strong> You can also just double-click on a subroutine to open it for editing.</p>"
@@ -8983,12 +8990,12 @@ data "<p>This small button, marked with a checkmark, is used to insert the curre
 data "<h2>3. The ScriptAssistant</h2><p>ScriptAssistant is invoked and hidden using the same item on the Utilities menu. It is used to get information on shell commands for use in SYSTEM and SYSTEM$ statements in yab, Select the first letter of the command, then the command itself and press the GO button.</p>"
 data "<p>ScriptAssistant has two modes. Normal mode contains the commands you are most likely to need while scripting: no programming or networking stuff, and .zip as the only kind of compression. Pro Mode contains absolutely everything I could find on a regulation Haiku setup that I could coax to spit out some help. Over 300 of them and it could have been more if perl was working properly</p>"
 data "<p>Now most of you are going to be macho and work in Pro mode all the time. Fine, but it might be a little slower and take up more screen space.</p>"
-data "<p>But you&rsquo;ve added stuff since you installed Haiku. No problem. Type the name of the command (don&rsquo;t bother typing the &ndash;help parameter) in the textbox at the bottom and click on TRY. ScriptAssistant will attempt to run the command with the &ndash;help parameter and capture and display the results. This can be dangerous: if the command you are investigating is interactive (e.g. a shell) and does not recognise the &ndash;help parameter, it could crash ScriptAssistant and Yabadabbadoo with it. Be sure to save your files before you use the TRY button.</p>"
+data "<p>But you&rsquo;ve added stuff since you installed Haiku. No problem. Type the name of the command (don&rsquo;t bother typing the &ndash;help parameter) in the textbox at the bottom and click on TRY. ScriptAssistant will attempt to run the command with the &ndash;help parameter and capture and display the results. This can be dangerous: if the command you are investigating is interactive (e.g. a shell) and does not recognise the &ndash;help parameter, it could crash ScriptAssistant and Yabadabbadoo with it. Be sure to save your files before you use the TRY button.</p><p>ScriptAssistant is also available as a standalone package.</p>"
 data "<h2>4. The YabAssistant</h2><p>yabAssistant is invoked and hidden using the same item on the Utilities menu. YYou have a row of alphabetical buttons to navigate the commands. You can choose between All (the default), yabasic-only or yab-only commands.</p>"
 data "<p>Or you can enter a search term and click FIND and the program will show only the commands containing that term. For example, if you want to know which commands deal with mimetypes, just type &ldquo;mime&rdquo; in the search box, press FIND (or the ENTER key) and the program will select just those commands that have the term &ldquo;mime&rdquo; contained in their help content. It&rsquo;s a case-insensitive search, by the way, so feel fre to use MIME or mImE.</p>"
 data "<p>Single-clicking on a command will show you a brief summary of its usage at the bottom of the application window. If you know how the command works, you can cut from this textcontrol and paste into your own program, ten substitute your own variables. But be warned: some commands have more than ove variant and I had to guess which one would be more typical and useful.</p>"
 data "<p>Double-clicking on a command will open a window (up to 12 may be open at any time) with more info about it. This material has been shamelessly borrowed from the yabasic and yab documentation contained in the yab distribution, with bits more from the help in the yab IDE.</p>"
-data "<p>yabAssistant does not contain ALL yab commands. yab has a &lsquo;\"graphics mode\" that is is a remnant from its yabasic roots and is not relevant to the likely uses of Yabdabbadoo. These commands have been removed from yabAssistant. They still work as they always have, of course.</p>"
+data "<p>yabAssistant does not contain ALL yab commands. yab has a &lsquo;\"graphics mode\" that is is a remnant from its yabasic roots and is not relevant to the likely uses of Yabdabbadoo. These commands have been removed from yabAssistant. They still work (or not!) as they always have, of course.</p>"
 data "<h2>Appendix 1: Project structure</h2><p>A newly created Yabadabbadoo project contains certain directories and files that combine from commands on the yab menu to form a valid yab program. This program, by itself, does not actually DO anything - it is just there to give you a basis to work from. But it will run.</p>"
 data "<h3>The Project main Directory</h3><p>Contains the following files:<br><em>prologue</em>: North American users must resist the temptation to rename this file to &ldquo;prolog&rdquo;! This file contains data and instructions that the program needs before the main loop runs<br>"
 data "<em>mainloop</em>: the main message-intercepting and interpreting centre of your program, where your program spends most of its time waiting for you to issue a command.<br>"
@@ -9009,7 +9016,7 @@ data "<p><em>Q: Can I compile a yabadabbadoo project in the official yab IDE?</e
 data "<p>A: Yes. Every Yabadabbadoo project has a binder directory. Whenever you use Generate yab file, View yab file, Run or Bind from the yab menu, a yab file is created there from your Yabadabbadoo sources. Load that into the official IDE and you&rsquo;re on your way.</p>"
 data "<p>Note though, that changes made in the official IDE will not be propagated back to Yabadabbadoo.</p>"
 data "<p><em>Q: Can I bind a yabadabbadoo project from Terminal?</em></p>"
-data "<p>A: Yes, of course, as long as you have a yab executable in your PATH. I do it all the time with Yabadabbadoo itself, using the following bash script.</p>"
+data "<p>A: Yes, of course, as long as you have a yab executable in your PATH. Here is an example that binds Yabadabbadoo itself, using a bash script.</p>"
 data "<pre><code>#!/bin/sh"
 data "rm -f /boot/home/Projects/Yabadabbadoo/binder/Yabadabbadoo.yab"
 data "touch /boot/home/Projects/Yabadabbadoo/binder/Yabadabbadoo.yab"
@@ -9024,7 +9031,7 @@ data "yab -bind /boot/home/Desktop/Yabadabbadoo /boot/home/Projects/Yabadabbadoo
 data "chmod  +x /boot/home/Desktop/Yabadabbadoo"
 data "mimeset -f /boot/home/Desktop/Yabadabbadoo"
 data "settype -t application/x-vnd.Yabadabbadoo /boot/home/Desktop/Yabadabbadoo"
-data "</code></pre><p>Just change the directories and filenames to whatever you are using. A search-and-replace changing Yabadabbadoo to the name of your project should do the job. Then just change /boot/home/Projects to wherever you keep your projects.</p>"
+data "</code></pre><p>Just change the directories and filenames to whatever you are using.</p>"
 data "<p>Here&rsquo;s a fun idea: name the shell script &lsquo;make&rsquo; and supply a yab executable yourself in your package, renaming it to something intimidating. That should confuse a few people!</p>"
 data "<p>In case you are wondering, yes, I have used Yabadabbadoo to work on itself, but using Run then throws a second copy on the screen, which gets confusing in a hurry &hellip; I love IDEs. I am writing one. But if you can&rsquo;t get things done with just a terminal and a text editor then you are not programming the computer, the computer is programming YOU!</p>"
 data "<p><em>Q: What is the difference between binding a program and using BuildFactory in the official IDE?</em></p>"
@@ -9032,8 +9039,8 @@ data "<p>A: With a bound program, anyone with a hex editor can get at your sourc
 data "<p><em>Q: I&rsquo;ve created a bunch of subdirectories and now they are all at the bottom of the list! How do I get them in alphabetical order?</em></p>"
 data "<p>A: Click the Refresh button.</p>"
 data "<p><em>Q: What about libraries? Do they still work?</em></p>"
-data "<p>A: Sure they still work. The problem is finding them. At the time of writing, yab looks for libraries in two locations. One is the same directory as the main yab file, which for us is the binder directory. The other is /boot/home/config/lib/yab, which is no longer user-writeable under Package Management.</p>"
-data "<p>Future versions of yab will probably address this issue. The new library location should be /boot/home/config/non-packaged/lib/yab if things are to be consistent. But we are not there yet.</p>"
+data "<p>A: Sure they still work. The problem is finding them. At the time of writing, yab looks for libraries in two locations. One is the same directory as the main yab file, which for us is the binder directory.</p>"
+data "<p>The other library location is /boot/home/config/non-packaged/lib/yab.</p>"
 data "<p>But consider this: if you need to re-use a subroutine, just use Tracker to copy it from one project&rsquo;s sub directory to another. The need for libraries just isn&rsquo;t what it used to be.</p>"
 data "<p><em>Q: will Yabadabbadoo ever automate the creation of hpkg and/or zip containers?</em></p>"
 data "<p>A: No. There are too many intangibles, too many things I can&rsquo;t predict. My  design philosophy is to have a single executable that creates its support files on the fly. But you might prefer to ship your program with lots of support files in hard-coded subdirectories. I think you&rsquo;re wrong, but that&rsquo;s a discussion for another day. But I can&rsquo;t predict what you will put where, so you will just have to do it yourself. Sorry.</p>"
@@ -9222,7 +9229,7 @@ data "<p>Open up the Teditor.yab file in the binder directory in Pe and take a l
 data "<pre><code>#!yab4ybd</code></pre>"
 data "<p>or</p>"
 data "<pre><code>#!yab</code></pre>"
-data "<p>(<em>yab4ybd</em> was the version of yab bundled with Yabadabbadoo prior to beta 3.) This line is a special format in the UNIX world that tells a script file (which is what your program is at this point) where to look for its interpreter. If it is found, the script will look for that executable in the PATH (a standard set of directories: in Haiku they all tend to end with <em>/bin</em>). Yabadabbadoo sets this up for you already.</p>"
+data "<p>(<em>yab4ybd</em> was the version of yab bundled with Yabadabbadoo prior to beta 3. If you see this in your prologue, please change it) This line is a special format in the UNIX world that tells a script file (which is what your program is at this point) where to look for its interpreter. If it is found, the script will look for that executable in the PATH (a standard set of directories: in Haiku they all tend to end with <em>/bin</em>). Yabadabbadoo sets this up for you already.</p>"
 data "<p>The other thing a script needs to be is <em>chmodded</em>: the system needs to be informed that this is a script, not just another piece of text. Again, Yabadabbadoo sets this up for you, but if you edit your  program in another editor, you may need to know how this works. It&rsquo;s easy. In Terminal:</p>"
 data "<pre><code>chmod +x Teditor.yab</code></pre>"
 data "<p>If you run Teditor this way and then another yab app you have written, you will see something odd on the Deskbar: they share a single entry. There is a fix for this: insert a new line 2 in Teditor.yab:</p>"

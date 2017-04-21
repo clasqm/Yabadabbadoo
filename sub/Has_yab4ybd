@@ -1,0 +1,6 @@
+sub Has_yab4ybd()
+	if instr(system$("head -n 1 " + ProjectPrologue$), "#!yab4ybd") then
+		alert "Your project's first line may contain a llink to the deprecated #!yab4ybd.\n\nPlease change it to #!yab", "OK", "warning" 
+	endif
+end sub
+

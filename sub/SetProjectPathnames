@@ -17,6 +17,7 @@ sub SetProjectPathnames()
 	endif
 	ProjectNewYabfile$ = ProjectBinderPath$ + "/" + ProjectName$ + ".yab"
 	ProjectIcon$ = ProjectPath$ + "/other/" + ProjectName$ + ".icon"
-	SplashProject()	
+	SplashProject()
+	Has_yab4ybd()
 end sub
 
