@@ -150,6 +150,36 @@ while(not leavingLoop)
 			case "MainWindow:Project:Search":
 				system("/boot/system/apps/TextSearch '" + ProjectPath$ + "'")
 				break
+			case "MainWindow:Project:Code repositories:BitBucket":
+				LaunchURL("http://bitbucket.org")
+				break
+			case "MainWindow:Project:Code repositories:GitHub":
+				LaunchURL("http://github.com")
+				break
+			case "MainWindow:Project:Code repositories:SourceForge":
+				LaunchURL("http://sourceforge.net")
+				break
+			case "MainWindow:Project:git:Initialize":
+				YECloseWindow()
+				GenerateNewYabfile()
+				DisableButtons(): DisableMenu()
+				system("Terminal ybd_git_init '" + ProjectPath$ +"'")
+				EnableButtons(): EnableMenu()
+				break
+			case "MainWindow:Project:git:Push":
+				YECloseWindow()
+				GenerateNewYabfile()
+				DisableButtons(): DisableMenu()
+				system("Terminal ybd_git_push '" + ProjectPath$ +"'")
+				EnableButtons(): EnableMenu()
+				break
+			case "MainWindow:Project:git:Pull":
+				YECloseWindow()
+				GenerateNewYabfile()
+				DisableButtons(): 	DisableMenu()
+				system("Terminal ybd_git_pull '" + ProjectPath$ +"'")
+				EnableButtons(): EnableMenu()
+				break
 			/////////YAB MENU////////////
 			case "MainWindow:yab:Generate yab file":
 				YESaveFile(YECurrentFile$)
@@ -418,11 +448,7 @@ while(not leavingLoop)
 				endif
 			case "YEMenuView:File:Close"
 			case "YEQuitButton":
-				if window get "YEMainWindow","exists" = 1 then
-					YESaveFile(YECurrentFile$)
-					Window Close "YEMainWindow"
-					YECurrentFile$=""
-				endif
+				YECloseWindow()
 				break
 			case "YEMenuView:Edit:Undo/Redo":
 			case "YEUndoButton"
@@ -581,6 +607,24 @@ sub CheckForYab$()
 	return doesyabexist$
 end sub
 
+sub CheckGitStatus()
+	if  StripLFoffSysCmd$(system$("which ybd_git_init")) <>"" then
+		if FileExists(ProjectPath$ + "/.git") then
+			submenu set "Project","git", "Initialize", "disable", "MainWindow"
+			submenu set "Project","git", "Push", "enable", "MainWindow"
+			submenu set "Project","git", "Pull", "enable", "MainWindow"
+		else
+			submenu set "Project","git", "Initialize", "enable", "MainWindow"
+			submenu set "Project","git", "Push", "disable", "MainWindow"
+			submenu set "Project","git", "Pull", "disable", "MainWindow"
+		endif
+	else
+		submenu set "Project","git", "Initialize", "disable", "MainWindow"
+		submenu set "Project","git", "Push", "disable", "MainWindow"
+		submenu set "Project","git", "Pull", "disable", "MainWindow"
+	endif
+end sub
+
 sub CheckScreenSize()
 	if peek("desktopwidth")<1024 or peek("desktopheight")<768 then
 		alert "For best results, Yabadabbadoo requires a minimum resolution of 1024x768.", "OK", "none"
@@ -648,8 +692,17 @@ end sub
 
 sub DisableMenu()
 // disable parts and yab menus until a project has been opened
+	Menu set "File","New","disable", "MainWindow"
+	Menu set "File","Open","disable", "MainWindow"
 	Menu set "Project","Backup","disable", "MainWindow"
 	Menu set "Project","Stats","disable", "MainWindow"
+	Menu set "Project","Search","disable", "MainWindow"
+	submenu set "Project","Code repositories", "BitBucket", "disable", "MainWindow"
+	submenu set "Project","Code repositories", "GitHub", "disable", "MainWindow"
+	submenu set "Project","Code repositories", "SourceForge", "disable", "MainWindow"
+	submenu set "Project","git", "Initialize", "disable", "MainWindow"
+	submenu set "Project","git", "Push", "disable", "MainWindow"
+	submenu set "Project","git", "Pull", "disable", "MainWindow"
 	Menu set "Parts", "Prologue","disable", "MainWindow"
 	Menu set "Parts", "Main Loop","disable", "MainWindow"
 	Menu set "Parts", "Data","disable", "MainWindow"
@@ -663,12 +716,24 @@ sub DisableMenu()
 	Menu set "yab", "Run & display output","disable", "MainWindow"
 	Menu set "yab", "Bind","disable", "MainWindow"
 	menu set "yab", "Transfer to official IDE","disable", "MainWindow"
+	menu set "Utilities", "Open a Terminal","disable","MainWindow"
+	menu set "Utilities", "OpenTracker","disable","MainWindow"
+	menu set "Utilities", "Calculator","disable","MainWindow"
+	menu set "Utilities", "ScriptAssistant","disable","MainWindow"
+	menu set "Utilities", "YabAssistant","disable","MainWindow"
+	Menu set "Utilities", "Yab Interface Builder", "disable", "MainWindow"
+	menu set "Utilities", "System Prefs","disable","MainWindow"
+	menu set "Utilities", "Restart Tracker","disable","MainWindow"
+	menu set "Utilities", "Restart Deskbar","disable","MainWindow"
+	menu set "Utilities", "Create new Shortcut","disable","MainWindow"
+	menu set "Utilities", "To-do Manager","disable","MainWindow"
 	Menu set "Help", "Help", "disable", "MainWindow"
 	Menu set "Help", "Tutorial", "disable", "MainWindow"
 	Menu set "Help", "FAQ", "disable", "MainWindow"
 	Menu set "Help", "Hard Copy", "disable", "MainWindow"
-	//Menu set "Utilities", "Yab Interface Builder", "disable", "MainWindow"
-	Menu set "Utilities", "Create new shortcut","disable","MainWindow"
+	Menu set "Help", "Get e-book - Programming with yab", "disable", "MainWindow"
+	Menu set "Help", "Launch yab discussion forum", "disable", "MainWindow"
+	Menu set "Help", "Launch BeSly help database", "disable", "MainWindow"
 end sub
 
 sub DisplayStats()
@@ -700,8 +765,15 @@ end sub
 sub EnableMenu()
 // Enable parts and yab menus once a project has been opened
 //also use to indicate functions not yet enabled
+//or that are autodetected if a supplementary package is installed
+	Menu set "File","New","enable", "MainWindow"
+	Menu set "File","Open","enable", "MainWindow"
 	Menu set "Project","Backup","enable", "MainWindow"
 	Menu set "Project","Stats","enable", "MainWindow"
+	Menu set "Project","Search","enable", "MainWindow"
+	submenu set "Project","Code repositories", "BitBucket", "enable", "MainWindow"
+	submenu set "Project","Code repositories", "GitHub", "enable", "MainWindow"
+	submenu set "Project","Code repositories", "SourceForge", "enable", "MainWindow"
 	Menu set "Parts", "Prologue","enable", "MainWindow"
 	Menu set "Parts", "Main Loop","enable", "MainWindow"
 	Menu set "Parts", "Data","enable", "MainWindow"
@@ -715,12 +787,26 @@ sub EnableMenu()
 	Menu set "yab", "Run & display output","enable", "MainWindow"
 	Menu set "yab", "Bind","enable", "MainWindow"
 	menu set "yab", "Transfer to official IDE","enable", "MainWindow"
+	menu set "Utilities", "Open a Terminal","enable","MainWindow"
+	menu set "Utilities", "OpenTracker","enable","MainWindow"
+	menu set "Utilities", "Calculator","enable","MainWindow"
+	menu set "Utilities", "ScriptAssistant","enable","MainWindow"
+	menu set "Utilities", "YabAssistant","enable","MainWindow"
 	//Menu set "Utilities", "Yab Interface Builder", "enable", "MainWindow"
-	Menu set "Utilities", "Create new shortcut","enable","MainWindow"
+	menu set "Utilities", "System Prefs","enable","MainWindow"
+	menu set "Utilities", "Restart Tracker","enable","MainWindow"
+	menu set "Utilities", "Restart Deskbar","enable","MainWindow"
+	menu set "Utilities", "Create new Shortcut","enable","MainWindow"
+	menu set "Utilities", "To-do Manager","enable","MainWindow"
 	Menu set "Help", "Help", "enable", "MainWindow"
-	Menu set "Help", "FAQ", "enable", "MainWindow"
 	Menu set "Help", "Tutorial", "enable", "MainWindow"
+	Menu set "Help", "FAQ", "enable", "MainWindow"
 	Menu set "Help", "Hard Copy", "enable", "MainWindow"
+	Menu set "Help", "Get e-book - Programming with yab", "enable", "MainWindow"
+	Menu set "Help", "Launch yab discussion forum", "enable", "MainWindow"
+	Menu set "Help", "Launch BeSly help database", "enable", "MainWindow"	
+	CheckGitStatus()
+	if FileExists("/boot/system/apps/vstm_GUI") menu set "Utilities", "To-do Manager","enable","MainWindow"
 end sub
 
 sub FillSubBox()
@@ -865,6 +951,13 @@ sub MakeMenu()
 	Menu "Project","Open","O", "MainWindow"
 	Menu "Project","Backup","B", "MainWindow"
 	Menu "Project","Search","S", "MainWindow"
+	Submenu "Project","Code repositories", "BitBucket", "", "MainWindow"
+	Submenu "Project","Code repositories", "GitHub", "", "MainWindow"
+	Submenu "Project","Code repositories", "SourceForge", "", "MainWindow"
+	Submenu "Project","git", "Initialize", "", "MainWindow"
+	Submenu "Project","git", "Push", "", "MainWindow"
+	Submenu "Project","git", "Pull", "", "MainWindow"
+	CheckGitStatus()
 	Menu "Project","Stats","", "MainWindow"
 	Menu "Parts", "Prologue","SP", "MainWindow"
 	Menu "Parts", "Main Loop","SM", "MainWindow"
@@ -884,9 +977,9 @@ sub MakeMenu()
 	Menu "Utilities", "Calculator","CL","MainWindow"
 	Menu "Utilities", "ScriptAssistant","CS","MainWindow": Menu set "Utilities", "ScriptAssistant","plain","MainWindow"
 	Menu "Utilities", "yabAssistant","CY","MainWindow": Menu set "Utilities", "yabAssistant","plain","MainWindow"
-	//Menu "Utilities", "Yab Interface Builder","","MainWindow"
+	Menu "Utilities", "Yab Interface Builder","","MainWindow"
 	Menu "Utilities", "System Prefs","CP","MainWindow"
-	if FileExists("/boot/system/apps/vstm_GUI") Menu "Utilities", "To-do Manager","","MainWindow"
+	Menu "Utilities", "To-do Manager","","MainWindow"
 	Menu "Utilities", "Restart Tracker","","MainWindow"
 	Menu "Utilities", "Restart Deskbar","","MainWindow"
 	Menu "Utilities", "Create new shortcut","","MainWindow"
@@ -951,6 +1044,7 @@ sub OpenProject(fromnew$)
 	FillSubBox()
 	EnableMenu()
 	EnableButtons()
+	CheckGitStatus()
 	ProjectIsOpen=1
 end sub
 
@@ -1506,6 +1600,14 @@ sub YECheckTime()
 			YETheLineNumber$=YETheNewLineNumber$
 		endif
 		YECurrentTime$ = YEtheTime$
+	endif
+end sub
+
+sub YECloseWindow()
+	if window get "YEMainWindow","exists" = 1 then
+		YESaveFile(YECurrentFile$)
+		Window Close "YEMainWindow"
+		YECurrentFile$=""
 	endif
 end sub
 
@@ -8930,8 +9032,14 @@ data "<p>Do not place your project on the Desktop unless you are absolutely sure
 data "<p>The nag alerts about these issues will only show up once in each session.</p>"
 data "<h4>1.2.2 Project | Open</h4><p>Open an existing project. Remember, you are opening a DIRECTORY, not a file. Don&rsquo;t worry, I make that mistake all the time. It won&rsquo;t hurt Yabadabbadoo or your file.Just go back to the menu and open the actual project.</p>"
 data "<h4>1.2.3 Project | Backup</h4><p>Places a time-stamped zipped copy of the current project on the Desktop, from where you can archive it wherever you keep these things. Use this often!</p>"
-data "<h4>1.2.4 Project | Stats</h4><p>Display some statistics about the current project.</p>"
-data "<h4>1.2.5 Project | Search</h4><p>Search the entire project with the TextSearch utlility.</p>"
+data "<h4>1.2.4 Project | Search</h4><p>Search the entire project with the TextSearch utlility.</p>"
+data "<h4>1.2.5 Project | Code repositories | BitBucket</h4><p>Launch Atlassan Bitbucket in your default browser.</p>"
+data "<h4>1.2.6 Project | Code repositories | GitHub</h4><p>Launch GitHub in your default browser.</p>"
+data "<h4>1.2.7 Project | Code repositories | SourceForge</h4><p>Launch SourceForge in your default browser.</p>"
+data "<h4>1.2.8 Project | git | Initialize</h4><p>Set up your project as a local git repository and establish a lnk with an offline repository such as GitHub.</p><p>NOTE: to do this you must already have registered a project with one of the Code repositories. Have the following handy: Your project reference URL, e.g. https://github.com/clasqm/Rondel.git, your login and your password.</p>"
+data "<h4>1.2.9 Project | git | Push</h4><p>Push changes to your online git repository. You should already have initialized the project (see above). Have the following ready: your login and your password. You will also be asked to type a short description of the changes made since the last push.</p>"
+data "<h4>1.2.10 Project | git | Pull</h4><p>Pull changes from your online git repository. Have the following ready: your login and your password</p><p>NOTE: More complex git operations (branching, merging, rebasing) will not be implemented in Yabadabbadoo. Everything goes straight to the master branch. But by all means open a Terminal and have fun!</p>"
+data "<h4>1.2.11 Project | Stats</h4><p>Display some statistics about the current project.</p>"
 data "<p><em>See also Appendix 1: Project structure</em></p><h3>1.3 The Parts menu</h3><h4>1.3.1 Parts | Prologue</h4>"
 data "<p>Edit the part of your program that runs before the main loop. This is normally where you define global variables (yab technically does not require this, but it is good practice to do it anyway, and it give you a handy reference), open your main window and check whether a file was specified on the command line. Yabadabbadoo also uses it to define certain variables that will apear in your program&rsquo;s About box.</p>"
 data "<h4>1.3.2 Parts | Mainloop</h4><p>Edit the main loop of your program. The main loop intercepts messages from the GUI and presents them in a form you can intercept and use to issue commands. the bulk of these commands should be contained in subroutines, keeping the main loop as small as possible. Yabadabbadoo provides one possible way of setting up the main loop (the same one as the official IDE, in fact) that uses a SWITCH decision structure embedded in an infinite WHILE &hellip; WEND loop with a single exit point.</p>"

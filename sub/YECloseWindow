@@ -1,0 +1,8 @@
+sub YECloseWindow()
+	if window get "YEMainWindow","exists" = 1 then
+		YESaveFile(YECurrentFile$)
+		Window Close "YEMainWindow"
+		YECurrentFile$=""
+	endif
+end sub
+

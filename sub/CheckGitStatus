@@ -1,0 +1,18 @@
+sub CheckGitStatus()
+	if  StripLFoffSysCmd$(system$("which ybd_git_init")) <>"" then
+		if FileExists(ProjectPath$ + "/.git") then
+			submenu set "Project","git", "Initialize", "disable", "MainWindow"
+			submenu set "Project","git", "Push", "enable", "MainWindow"
+			submenu set "Project","git", "Pull", "enable", "MainWindow"
+		else
+			submenu set "Project","git", "Initialize", "enable", "MainWindow"
+			submenu set "Project","git", "Push", "disable", "MainWindow"
+			submenu set "Project","git", "Pull", "disable", "MainWindow"
+		endif
+	else
+		submenu set "Project","git", "Initialize", "disable", "MainWindow"
+		submenu set "Project","git", "Push", "disable", "MainWindow"
+		submenu set "Project","git", "Pull", "disable", "MainWindow"
+	endif
+end sub
+

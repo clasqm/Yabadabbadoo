@@ -1,8 +1,15 @@
 sub EnableMenu()
 // Enable parts and yab menus once a project has been opened
 //also use to indicate functions not yet enabled
+//or that are autodetected if a supplementary package is installed
+	Menu set "File","New","enable", "MainWindow"
+	Menu set "File","Open","enable", "MainWindow"
 	Menu set "Project","Backup","enable", "MainWindow"
 	Menu set "Project","Stats","enable", "MainWindow"
+	Menu set "Project","Search","enable", "MainWindow"
+	submenu set "Project","Code repositories", "BitBucket", "enable", "MainWindow"
+	submenu set "Project","Code repositories", "GitHub", "enable", "MainWindow"
+	submenu set "Project","Code repositories", "SourceForge", "enable", "MainWindow"
 	Menu set "Parts", "Prologue","enable", "MainWindow"
 	Menu set "Parts", "Main Loop","enable", "MainWindow"
 	Menu set "Parts", "Data","enable", "MainWindow"
@@ -16,11 +23,25 @@ sub EnableMenu()
 	Menu set "yab", "Run & display output","enable", "MainWindow"
 	Menu set "yab", "Bind","enable", "MainWindow"
 	menu set "yab", "Transfer to official IDE","enable", "MainWindow"
+	menu set "Utilities", "Open a Terminal","enable","MainWindow"
+	menu set "Utilities", "OpenTracker","enable","MainWindow"
+	menu set "Utilities", "Calculator","enable","MainWindow"
+	menu set "Utilities", "ScriptAssistant","enable","MainWindow"
+	menu set "Utilities", "YabAssistant","enable","MainWindow"
 	//Menu set "Utilities", "Yab Interface Builder", "enable", "MainWindow"
-	Menu set "Utilities", "Create new shortcut","enable","MainWindow"
+	menu set "Utilities", "System Prefs","enable","MainWindow"
+	menu set "Utilities", "Restart Tracker","enable","MainWindow"
+	menu set "Utilities", "Restart Deskbar","enable","MainWindow"
+	menu set "Utilities", "Create new Shortcut","enable","MainWindow"
+	menu set "Utilities", "To-do Manager","enable","MainWindow"
 	Menu set "Help", "Help", "enable", "MainWindow"
-	Menu set "Help", "FAQ", "enable", "MainWindow"
 	Menu set "Help", "Tutorial", "enable", "MainWindow"
+	Menu set "Help", "FAQ", "enable", "MainWindow"
 	Menu set "Help", "Hard Copy", "enable", "MainWindow"
+	Menu set "Help", "Get e-book - Programming with yab", "enable", "MainWindow"
+	Menu set "Help", "Launch yab discussion forum", "enable", "MainWindow"
+	Menu set "Help", "Launch BeSly help database", "enable", "MainWindow"	
+	CheckGitStatus()
+	if FileExists("/boot/system/apps/vstm_GUI") menu set "Utilities", "To-do Manager","enable","MainWindow"
 end sub
 

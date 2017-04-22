@@ -29,6 +29,36 @@ while(not leavingLoop)
 			case "MainWindow:Project:Search":
 				system("/boot/system/apps/TextSearch '" + ProjectPath$ + "'")
 				break
+			case "MainWindow:Project:Code repositories:BitBucket":
+				LaunchURL("http://bitbucket.org")
+				break
+			case "MainWindow:Project:Code repositories:GitHub":
+				LaunchURL("http://github.com")
+				break
+			case "MainWindow:Project:Code repositories:SourceForge":
+				LaunchURL("http://sourceforge.net")
+				break
+			case "MainWindow:Project:git:Initialize":
+				YECloseWindow()
+				GenerateNewYabfile()
+				DisableButtons(): DisableMenu()
+				system("Terminal ybd_git_init '" + ProjectPath$ +"'")
+				EnableButtons(): EnableMenu()
+				break
+			case "MainWindow:Project:git:Push":
+				YECloseWindow()
+				GenerateNewYabfile()
+				DisableButtons(): DisableMenu()
+				system("Terminal ybd_git_push '" + ProjectPath$ +"'")
+				EnableButtons(): EnableMenu()
+				break
+			case "MainWindow:Project:git:Pull":
+				YECloseWindow()
+				GenerateNewYabfile()
+				DisableButtons(): 	DisableMenu()
+				system("Terminal ybd_git_pull '" + ProjectPath$ +"'")
+				EnableButtons(): EnableMenu()
+				break
 			/////////YAB MENU////////////
 			case "MainWindow:yab:Generate yab file":
 				YESaveFile(YECurrentFile$)
@@ -297,11 +327,7 @@ while(not leavingLoop)
 				endif
 			case "YEMenuView:File:Close"
 			case "YEQuitButton":
-				if window get "YEMainWindow","exists" = 1 then
-					YESaveFile(YECurrentFile$)
-					Window Close "YEMainWindow"
-					YECurrentFile$=""
-				endif
+				YECloseWindow()
 				break
 			case "YEMenuView:Edit:Undo/Redo":
 			case "YEUndoButton"
