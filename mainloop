@@ -30,6 +30,10 @@ while(not leavingLoop)
 				YECloseWindow()
 				system("/boot/system/apps/TextSearch '" + ProjectPath$ + "' &")
 				break
+			case "MainWindow:Project:Replace":
+				YECloseWindow()
+				GlobalReplace()
+				break
 			case "MainWindow:Project:Code repositories:BitBucket":
 				LaunchURL("http://bitbucket.org")
 				break
@@ -93,7 +97,7 @@ while(not leavingLoop)
 				system("chmod  +x /boot/home/Desktop/" + ProjectName$ + " &")
 				system("mimeset -f /boot/home/Desktop/" + ProjectName$ + " &")
 				system("settype -s application/x-vnd." +ProjectName$ + " " + "/boot/home/Desktop/" + ProjectName$ + " &")
-				alert "A new executable has been created on the Desktop.", "OK", "info"
+				alert "A new bound executable has been created on the Desktop.", "OK", "info"
 				break
 			case "MainWindow:yab:Transfer to official IDE"
 				YESaveFile(YECurrentFile$)
@@ -103,6 +107,9 @@ while(not leavingLoop)
 				system("/boot/system/Tracker " + ProjectBinderPath$ + " &")
 				system("alert 'Yab-IDE does not allow programmatic loading of data at this stage. Open a file from the Menu and drag the Yabadabbadoo file into the dialogue. Any changes you make from then on will NOT transfer back to Yabbbadabbadoo.' OK")
 				leavingLoop = true
+				break
+			case "MainWindow:yab:Compile":
+				CompileApp()	
 				break
 			/////////PARTS MENU//////////
 			case "PrologueButton":

@@ -1,9 +1,7 @@
 sub ShowHelp(WhichHelp$, DoWhat$)
-	local TempfilePath$, File2Write, Helpline$, streamhandle
+	local File2Write, Helpline$, streamhandle
 	DisableMenu():DisableButtons()
-	TempfilePath$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
-	TempfilePath$ = left$(TempfilePath$, len(TempfilePath$)-1) //strip off trailing newline
-	if DoWhat$ = "Display" File2Write$ = TempfilePath$ + "/" + WhichHelp$ + ".html"
+	if DoWhat$ = "Display" File2Write$ = TempDir$() + "/" + WhichHelp$ + ".html"
 	if DoWhat$ = "HardCopy" File2Write$ = "/boot/home/Desktop/" + WhichHelp$ + ".html"
 	if WhichHelp$ = "Help" restore yabadabbadoohelp
 	if WhichHelp$ = "FAQ" restore yabadabbadoofaq

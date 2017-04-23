@@ -1,15 +1,15 @@
 sub CheckForYab$()
 	//This should not really be necessary, since the packaging system
 	//should take care of it. But I'm a belt-and-suspenders kind of guy
+	//Thie result is also used in the stats box
 	local doesyabexist$,getpath$, doesyabexistmsg$
 	static trainingwheels
-	doesyabexist$=system$("which yab")
+	doesyabexist$ = StripLFoffSysCmd$(system$("which yab"))
 	if doesyabexist$ = "" and trainingwheels = 0 then
 		doesyabexistmsg$ = "Although Yabadabbadoo will run on this system, you will need to install yab to run or compile your programs, Any of the following directories will do:\n" + system$("echo $PATH")
 		Alert doesyabexistmsg$, "OK", "warning"
 	endif
 	trainingwheels = trainingwheels + 1
-	doesyabexist$ = StripLFoffSysCmd$(doesyabexist$) //strip trailing newline
 	return doesyabexist$
 end sub
 

@@ -1,9 +1,7 @@
 sub YESaveFile(YESaveFile$)
-	local tempfilepath$, tempfile$, streamhandle
+	local tempfile$, streamhandle
 	if YECurrentFile$ = "" return
-	tempfilepath$ = system$("finddir B_COMMON_TEMP_DIRECTORY")
-	tempfilepath$ = left$(tempfilepath$, len(tempfilepath$ )-1) // strip off trailing newline
-	tempfile$ = tempfilepath$ + "/YEtemp.txt"
+	tempfile$ = TempDir$() + "/YEtemp.txt"
 	system("touch " + tempfile$)
 	if window get "YEMainWindow","exists" = 1 then
 		YEDisableMenu()

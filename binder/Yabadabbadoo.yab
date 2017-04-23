@@ -26,6 +26,7 @@ ScriptAssistant=0
 yabAssistant=0
 yabLocation$=""
 ProjectPath$ = ""
+ProjectBasePath$ = "/boot/home"
 ProjectSubPath$ = ""
 ProjectOtherPath$ = ""
 ProjectBinderPath$ = ""
@@ -151,6 +152,10 @@ while(not leavingLoop)
 				YECloseWindow()
 				system("/boot/system/apps/TextSearch '" + ProjectPath$ + "' &")
 				break
+			case "MainWindow:Project:Replace":
+				YECloseWindow()
+				GlobalReplace()
+				break
 			case "MainWindow:Project:Code repositories:BitBucket":
 				LaunchURL("http://bitbucket.org")
 				break
@@ -214,7 +219,7 @@ while(not leavingLoop)
 				system("chmod  +x /boot/home/Desktop/" + ProjectName$ + " &")
 				system("mimeset -f /boot/home/Desktop/" + ProjectName$ + " &")
 				system("settype -s application/x-vnd." +ProjectName$ + " " + "/boot/home/Desktop/" + ProjectName$ + " &")
-				alert "A new executable has been created on the Desktop.", "OK", "info"
+				alert "A new bound executable has been created on the Desktop.", "OK", "info"
 				break
 			case "MainWindow:yab:Transfer to official IDE"
 				YESaveFile(YECurrentFile$)
@@ -224,6 +229,9 @@ while(not leavingLoop)
 				system("/boot/system/Tracker " + ProjectBinderPath$ + " &")
 				system("alert 'Yab-IDE does not allow programmatic loading of data at this stage. Open a file from the Menu and drag the Yabadabbadoo file into the dialogue. Any changes you make from then on will NOT transfer back to Yabbbadabbadoo.' OK")
 				leavingLoop = true
+				break
+			case "MainWindow:yab:Compile":
+				CompileApp()	
 				break
 			/////////PARTS MENU//////////
 			case "PrologueButton":
@@ -596,15 +604,15 @@ end sub
 sub CheckForYab$()
 	//This should not really be necessary, since the packaging system
 	//should take care of it. But I'm a belt-and-suspenders kind of guy
+	//Thie result is also used in the stats box
 	local doesyabexist$,getpath$, doesyabexistmsg$
 	static trainingwheels
-	doesyabexist$=system$("which yab")
+	doesyabexist$ = StripLFoffSysCmd$(system$("which yab"))
 	if doesyabexist$ = "" and trainingwheels = 0 then
 		doesyabexistmsg$ = "Although Yabadabbadoo will run on this system, you will need to install yab to run or compile your programs, Any of the following directories will do:\n" + system$("echo $PATH")
 		Alert doesyabexistmsg$, "OK", "warning"
 	endif
 	trainingwheels = trainingwheels + 1
-	doesyabexist$ = StripLFoffSysCmd$(doesyabexist$) //strip trailing newline
 	return doesyabexist$
 end sub
 
@@ -646,6 +654,28 @@ end sub
 sub CloseWindow()
 	//Close down the main window
 	window close "MainWindow"
+end sub
+
+sub CompileApp()
+	local BFLocation$, BFExec$, tempfile$, streamhandle, appsig$
+	YESaveFile(YECurrentFile$)
+	GenerateNewYabfile()
+	BFLocation$ = "/boot/home/yab_work/BuildFactory"
+	BFExec$ = BFLocation$ + "/BuildFactory.yab" 
+	tempfile$ = TempDir$() + "/YBcompile.sh"
+	appsig$ = "application/x-vnd." +ProjectName$
+	streamhandle = open(tempfile$, "w")
+	print #streamhandle "#!/bin/sh"
+	print #streamhandle "cd " + BFLocation$
+	print #streamhandle BFExec$ + " '/boot/home/Desktop/" + ProjectName$ + "' '" + ProjectNewYabfile$ + "' " + appsig$
+	print #streamhandle "echo"
+	print #streamhandle "echo \"Press ENTER to Close\""
+	print #streamhandle "read input\n"
+	close streamhandle
+	system("chmod +x " + tempfile$)
+	system("Terminal " + tempfile$)
+	alert "A new compiled executable has been created on the Desktop.", "OK", "info"
+	system("rm- f " + tempfile$)
 end sub
 
 sub CreateNewSub(displayme$)
@@ -698,6 +728,7 @@ sub DisableMenu()
 	Menu set "Project","Backup","disable", "MainWindow"
 	Menu set "Project","Stats","disable", "MainWindow"
 	Menu set "Project","Search","disable", "MainWindow"
+	Menu set "Project","Replace","disable", "MainWindow"
 	submenu set "Project","Code repositories", "BitBucket", "disable", "MainWindow"
 	submenu set "Project","Code repositories", "GitHub", "disable", "MainWindow"
 	submenu set "Project","Code repositories", "SourceForge", "disable", "MainWindow"
@@ -716,6 +747,7 @@ sub DisableMenu()
 	Menu set "yab", "Run in Terminal","disable", "MainWindow"
 	Menu set "yab", "Run & display output","disable", "MainWindow"
 	Menu set "yab", "Bind","disable", "MainWindow"
+	Menu set "yab", "Compile","disable", "MainWindow"
 	menu set "yab", "Transfer to official IDE","disable", "MainWindow"
 	menu set "Utilities", "Open a Terminal","disable","MainWindow"
 	menu set "Utilities", "OpenTracker","disable","MainWindow"
@@ -772,6 +804,7 @@ sub EnableMenu()
 	Menu set "Project","Backup","enable", "MainWindow"
 	Menu set "Project","Stats","enable", "MainWindow"
 	Menu set "Project","Search","enable", "MainWindow"
+	Menu set "Project","Replace","enable", "MainWindow"
 	submenu set "Project","Code repositories", "BitBucket", "enable", "MainWindow"
 	submenu set "Project","Code repositories", "GitHub", "enable", "MainWindow"
 	submenu set "Project","Code repositories", "SourceForge", "enable", "MainWindow"
@@ -808,6 +841,7 @@ sub EnableMenu()
 	Menu set "Help", "Launch BeSly help database", "enable", "MainWindow"	
 	CheckGitStatus()
 	if FileExists("/boot/system/apps/vstm_GUI") menu set "Utilities", "To-do Manager","enable","MainWindow"
+	if instr(system$("getarch"), "x86_gcc2") Menu set "yab", "Compile","enable", "MainWindow"
 end sub
 
 sub FillSubBox()
@@ -837,8 +871,44 @@ end sub
 sub GetProjectDirectory(displayme$)
 	static trainingwheels
 	if trainingwheels = 0 alert displayme$, "OK", "Info"
-	ProjectPath$ = filepanel "Load-Directory", "Project Directory?", "/boot/home"
+	ProjectPath$ = filepanel "Load-Directory", "Project Directory?", ProjectBasePath$
 	trainingwheels = trainingwheels + 1
+end sub
+
+sub GlobalReplace()
+	local wheretoreplace, ReplaceDir$, tempfile$
+	wheretoreplace = alert "Globally replacing text in your product is an IRREVERSIBLE step. There is no Undo, though if you are quick enough you can Globally replace it back again. Your program might not run afterwards. If you are unsure, exit and take backup before you go on.\n\nReplacing text in the subroutines folder only (recommended) will leave things like your README and data section untouched.", "Subroutines only", "Whole Project", "Exit", "warning"
+	switch wheretoreplace
+		case 1
+			ReplaceDir$ = ProjectSubPath$
+			break
+		case 2
+			ReplaceDir$ = ProjectPath$
+			break
+		case 3
+			return
+			break
+	end switch
+	tempfile$ = TempDir$() + "/YBreplace.sh"
+	streamhandle = open(tempfile$, "w")
+	print #streamhandle "#!/bin/sh"
+	print #streamhandle "cd " + ReplaceDir$
+	print #streamhandle "echo 'Yabadabbadoo Global Search-and_Replace'"
+	print #streamhandle "echo"
+	print #streamhandle "echo 'Please type the text to search for:'"
+	print #streamhandle "read input"
+	print #streamhandle "echo"
+	print #streamhandle "echo 'Please type the text to replace it with:'"
+	print #streamhandle "read output"
+	print #streamhandle "echo"
+	print #streamhandle "sustituye --old=$input --new=$output '" + ReplaceDir$ + "'" 
+	print #streamhandle "echo \"Press ENTER to Close\""
+	print #streamhandle "read exiting\n"
+	close streamhandle
+	system("chmod +x " + tempfile$)
+	system("Terminal " + tempfile$)
+	system("rm- f " + tempfile$)
+	system("rm- f " + tempfile$)
 end sub
 
 sub Has_yab4ybd()
@@ -952,6 +1022,7 @@ sub MakeMenu()
 	Menu "Project","Open","O", "MainWindow"
 	Menu "Project","Backup","B", "MainWindow"
 	Menu "Project","Search","S", "MainWindow"
+	Menu "Project","Replace","R", "MainWindow"
 	Submenu "Project","Code repositories", "BitBucket", "", "MainWindow"
 	Submenu "Project","Code repositories", "GitHub", "", "MainWindow"
 	Submenu "Project","Code repositories", "SourceForge", "", "MainWindow"
@@ -973,6 +1044,7 @@ sub MakeMenu()
 	Menu "yab", "Run & display output","", "MainWindow"
 	Menu "yab", "Bind","", "MainWindow"
 	menu "yab", "Transfer to official IDE","", "MainWindow"
+	Menu  "yab", "Compile","", "MainWindow"
 	Menu "Utilities", "Open a Terminal","CT","MainWindow"
 	Menu "Utilities", "Open Tracker","CR","MainWindow"
 	Menu "Utilities", "Calculator","CL","MainWindow"
@@ -1066,8 +1138,7 @@ sub RunAndDisplay(repeater)
 	local streamhandle
 	if window get "RADWindow","exists" = 1 window close "RADWindow"
 	local RADline$, w$(1), x$(1), totallines, RADtempfile$, RADtemplinefile$, wordsinerror, spinmin, spinmax, dothis$, spinsetter
-	RADtempfile$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
-	RADtempfile$ = left$(RADtempfile$, len(RADtempfile$) -1) + "/YBD_output.txt" //strip of trailing newline
+	RADtempfile$ = TempDir$() + "/YBD_output.txt"
 	if repeater = 0 system(yabLocation$ + " " + ProjectNewYabfile$ + " >& " + RADtempfile$)
 	window open 100,100 to 700, 700, "RADWindow", "Output of " + ProjectNewYabfile$
 	Window Set "RADWindow", "Look","floating"
@@ -1106,8 +1177,7 @@ sub RunAndDisplay(repeater)
 	if spinmin < 1 spinmin=1
 	spinmax = spinsetter + 13
 	if spinmax > totallines spinmax = totallines
-	RADtemplinefile$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
-	RADtemplinefile$ = left$(RADtemplinefile$, len(RADtemplinefile$) -1) + "/YBD_lines.txt" //strip of trailing newline
+	RADtemplinefile$ = TempDir$() + "/YBD_lines.txt"
 	dothis$ = "cat -n " + ProjectNewYabfile$ + " | sed -n '" + str$(spinmin) + "," + str$(spinmax) + "p' > " + RADtemplinefile$
 	system(dothis$)
 	textedit 5,175 to 595,585, "RADLines", 2, "RADWindow"
@@ -1326,6 +1396,10 @@ sub SetProjectPathnames()
 		alert "A project on the Desktop will not bind succesfully. Yabadabbadoo will create the project, but consider exiting, then moving it (use Tracker) and reloading it.", "OK", "warning"
 		trainingwheels = trainingwheels + 1
 	endif
+	ProjectBasePath$ = ""
+	for f = 1 to tokens-1
+		ProjectBasePath$ = ProjectBasePath$ + "/" + w$(f)
+	next f
 	ProjectNewYabfile$ = ProjectBinderPath$ + "/" + ProjectName$ + ".yab"
 	ProjectIcon$ = ProjectPath$ + "/other/" + ProjectName$ + ".icon"
 	SplashProject()
@@ -1333,11 +1407,9 @@ sub SetProjectPathnames()
 end sub
 
 sub ShowHelp(WhichHelp$, DoWhat$)
-	local TempfilePath$, File2Write, Helpline$, streamhandle
+	local File2Write, Helpline$, streamhandle
 	DisableMenu():DisableButtons()
-	TempfilePath$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
-	TempfilePath$ = left$(TempfilePath$, len(TempfilePath$)-1) //strip off trailing newline
-	if DoWhat$ = "Display" File2Write$ = TempfilePath$ + "/" + WhichHelp$ + ".html"
+	if DoWhat$ = "Display" File2Write$ = TempDir$() + "/" + WhichHelp$ + ".html"
 	if DoWhat$ = "HardCopy" File2Write$ = "/boot/home/Desktop/" + WhichHelp$ + ".html"
 	if WhichHelp$ = "Help" restore yabadabbadoohelp
 	if WhichHelp$ = "FAQ" restore yabadabbadoofaq
@@ -1806,11 +1878,9 @@ sub YEPasteSnippet()
 end sub
 
 sub YESaveFile(YESaveFile$)
-	local tempfilepath$, tempfile$, streamhandle
+	local tempfile$, streamhandle
 	if YECurrentFile$ = "" return
-	tempfilepath$ = system$("finddir B_COMMON_TEMP_DIRECTORY")
-	tempfilepath$ = left$(tempfilepath$, len(tempfilepath$ )-1) // strip off trailing newline
-	tempfile$ = tempfilepath$ + "/YEtemp.txt"
+	tempfile$ = TempDir$() + "/YEtemp.txt"
 	system("touch " + tempfile$)
 	if window get "YEMainWindow","exists" = 1 then
 		YEDisableMenu()

@@ -15,6 +15,10 @@ sub SetProjectPathnames()
 		alert "A project on the Desktop will not bind succesfully. Yabadabbadoo will create the project, but consider exiting, then moving it (use Tracker) and reloading it.", "OK", "warning"
 		trainingwheels = trainingwheels + 1
 	endif
+	ProjectBasePath$ = ""
+	for f = 1 to tokens-1
+		ProjectBasePath$ = ProjectBasePath$ + "/" + w$(f)
+	next f
 	ProjectNewYabfile$ = ProjectBinderPath$ + "/" + ProjectName$ + ".yab"
 	ProjectIcon$ = ProjectPath$ + "/other/" + ProjectName$ + ".icon"
 	SplashProject()

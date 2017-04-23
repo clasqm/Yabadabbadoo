@@ -2,8 +2,7 @@ sub RunAndDisplay(repeater)
 	local streamhandle
 	if window get "RADWindow","exists" = 1 window close "RADWindow"
 	local RADline$, w$(1), x$(1), totallines, RADtempfile$, RADtemplinefile$, wordsinerror, spinmin, spinmax, dothis$, spinsetter
-	RADtempfile$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
-	RADtempfile$ = left$(RADtempfile$, len(RADtempfile$) -1) + "/YBD_output.txt" //strip of trailing newline
+	RADtempfile$ = TempDir$() + "/YBD_output.txt"
 	if repeater = 0 system(yabLocation$ + " " + ProjectNewYabfile$ + " >& " + RADtempfile$)
 	window open 100,100 to 700, 700, "RADWindow", "Output of " + ProjectNewYabfile$
 	Window Set "RADWindow", "Look","floating"
@@ -42,8 +41,7 @@ sub RunAndDisplay(repeater)
 	if spinmin < 1 spinmin=1
 	spinmax = spinsetter + 13
 	if spinmax > totallines spinmax = totallines
-	RADtemplinefile$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
-	RADtemplinefile$ = left$(RADtemplinefile$, len(RADtemplinefile$) -1) + "/YBD_lines.txt" //strip of trailing newline
+	RADtemplinefile$ = TempDir$() + "/YBD_lines.txt"
 	dothis$ = "cat -n " + ProjectNewYabfile$ + " | sed -n '" + str$(spinmin) + "," + str$(spinmax) + "p' > " + RADtemplinefile$
 	system(dothis$)
 	textedit 5,175 to 595,585, "RADLines", 2, "RADWindow"

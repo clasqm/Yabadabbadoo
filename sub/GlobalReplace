@@ -1,0 +1,35 @@
+sub GlobalReplace()
+	local wheretoreplace, ReplaceDir$, tempfile$
+	wheretoreplace = alert "Globally replacing text in your product is an IRREVERSIBLE step. There is no Undo, though if you are quick enough you can Globally replace it back again. Your program might not run afterwards. If you are unsure, exit and take backup before you go on.\n\nReplacing text in the subroutines folder only (recommended) will leave things like your README and data section untouched.", "Subroutines only", "Whole Project", "Exit", "warning"
+	switch wheretoreplace
+		case 1
+			ReplaceDir$ = ProjectSubPath$
+			break
+		case 2
+			ReplaceDir$ = ProjectPath$
+			break
+		case 3
+			return
+			break
+	end switch
+	tempfile$ = TempDir$() + "/YBreplace.sh"
+	streamhandle = open(tempfile$, "w")
+	print #streamhandle "#!/bin/sh"
+	print #streamhandle "cd " + ReplaceDir$
+	print #streamhandle "echo 'Yabadabbadoo Global Search-and_Replace'"
+	print #streamhandle "echo"
+	print #streamhandle "echo 'Please type the text to search for:'"
+	print #streamhandle "read input"
+	print #streamhandle "echo"
+	print #streamhandle "echo 'Please type the text to replace it with:'"
+	print #streamhandle "read output"
+	print #streamhandle "echo"
+	print #streamhandle "sustituye --old=$input --new=$output '" + ReplaceDir$ + "'" 
+	print #streamhandle "echo \"Press ENTER to Close\""
+	print #streamhandle "read exiting\n"
+	close streamhandle
+	system("chmod +x " + tempfile$)
+	system("Terminal " + tempfile$)
+	system("rm -f " + tempfile$)
+end sub
+

@@ -1,7 +1,7 @@
 sub GetProjectDirectory(displayme$)
 	static trainingwheels
 	if trainingwheels = 0 alert displayme$, "OK", "Info"
-	ProjectPath$ = filepanel "Load-Directory", "Project Directory?", "/boot/home"
+	ProjectPath$ = filepanel "Load-Directory", "Project Directory?", ProjectBasePath$
 	trainingwheels = trainingwheels + 1
 end sub
 

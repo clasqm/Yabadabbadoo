@@ -26,6 +26,7 @@ ScriptAssistant=0
 yabAssistant=0
 yabLocation$=""
 ProjectPath$ = ""
+ProjectBasePath$ = "/boot/home"
 ProjectSubPath$ = ""
 ProjectOtherPath$ = ""
 ProjectBinderPath$ = ""

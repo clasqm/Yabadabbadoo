@@ -1,0 +1,22 @@
+sub CompileApp()
+	local BFLocation$, BFExec$, tempfile$, streamhandle, appsig$
+	YESaveFile(YECurrentFile$)
+	GenerateNewYabfile()
+	BFLocation$ = "/boot/home/yab_work/BuildFactory"
+	BFExec$ = BFLocation$ + "/BuildFactory.yab" 
+	tempfile$ = TempDir$() + "/YBcompile.sh"
+	appsig$ = "application/x-vnd." +ProjectName$
+	streamhandle = open(tempfile$, "w")
+	print #streamhandle "#!/bin/sh"
+	print #streamhandle "cd " + BFLocation$
+	print #streamhandle BFExec$ + " '/boot/home/Desktop/" + ProjectName$ + "' '" + ProjectNewYabfile$ + "' " + appsig$
+	print #streamhandle "echo"
+	print #streamhandle "echo \"Press ENTER to Close\""
+	print #streamhandle "read input\n"
+	close streamhandle
+	system("chmod +x " + tempfile$)
+	system("Terminal " + tempfile$)
+	alert "A new compiled executable has been created on the Desktop.", "OK", "info"
+	system("rm -f " + tempfile$)
+end sub
+

@@ -7,6 +7,7 @@ sub EnableMenu()
 	Menu set "Project","Backup","enable", "MainWindow"
 	Menu set "Project","Stats","enable", "MainWindow"
 	Menu set "Project","Search","enable", "MainWindow"
+	Menu set "Project","Replace","enable", "MainWindow"
 	submenu set "Project","Code repositories", "BitBucket", "enable", "MainWindow"
 	submenu set "Project","Code repositories", "GitHub", "enable", "MainWindow"
 	submenu set "Project","Code repositories", "SourceForge", "enable", "MainWindow"
@@ -43,5 +44,6 @@ sub EnableMenu()
 	Menu set "Help", "Launch BeSly help database", "enable", "MainWindow"	
 	CheckGitStatus()
 	if FileExists("/boot/system/apps/vstm_GUI") menu set "Utilities", "To-do Manager","enable","MainWindow"
+	if instr(system$("getarch"), "x86_gcc2") Menu set "yab", "Compile","enable", "MainWindow"
 end sub
 
