@@ -27,7 +27,8 @@ while(not leavingLoop)
 				DisplayStats()
 				break
 			case "MainWindow:Project:Search":
-				system("/boot/system/apps/TextSearch '" + ProjectPath$ + "'")
+				YECloseWindow()
+				system("/boot/system/apps/TextSearch '" + ProjectPath$ + "' &")
 				break
 			case "MainWindow:Project:Code repositories:BitBucket":
 				LaunchURL("http://bitbucket.org")

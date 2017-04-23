@@ -1,4 +1,5 @@
 sub RunAndDisplay(repeater)
+	local streamhandle
 	if window get "RADWindow","exists" = 1 window close "RADWindow"
 	local RADline$, w$(1), x$(1), totallines, RADtempfile$, RADtemplinefile$, wordsinerror, spinmin, spinmax, dothis$, spinsetter
 	RADtempfile$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
@@ -12,12 +13,12 @@ sub RunAndDisplay(repeater)
 	textedit set "RADOutput", "wordwrap", true
 	textedit set "RADOutput", "tabwidth", 2
 	textedit set "RADOutput", "editable", false
-	open RADtempfile$ for reading as #9
-		while(not(eof(9)))
-		line input #9 RADresult$
+	streamhandle = open(RADtempfile$, "r")
+		while(not(eof(streamhandle)))
+		line input #streamhandle RADresult$
 		textedit add "RADOutput", RADresult$ + "\n"
 		wend
-		close #9
+		close streamhandle
 	totallines = token(system$("wc -l " + ProjectNewYabfile$), w$())
 	totallines = val(w$(1))
 	if repeater = 0 then
@@ -49,11 +50,11 @@ sub RunAndDisplay(repeater)
 	textedit set "RADLines", "wordwrap", false
 	textedit set "RADLines", "tabwidth", 3
 	textedit set "RADLines", "editable", false
-	open RADtemplinefile$ for reading as #9
-		while(not(eof(9)))
-		line input #9 RADresult$
+	streamhandle = open(RADtemplinefile$, "w")
+		while(not(eof(streamhandle)))
+		line input #streamhandle RADresult$
 		textedit add "RADLines", RADresult$	+ "\n"
 		wend
-		close #9
+		close streamhandle
 end sub
 

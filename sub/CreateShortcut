@@ -1,13 +1,13 @@
 sub CreateShortcut()
-	local ShortcutName$,ExecName$
+	local ShortcutName$,ExecName$, streamhandle
 	ShortcutName$ = "/boot/home/Desktop/" + ProjectName$ + "._ybd"
 	ExecName$ = system$("if [ -e /boot/system/apps/Yabadabbadoo.yab ]; then  echo /boot/system/apps/Yabadabbadoo.yab; elif [ -e /boot/home/config/apps/Yabadabbadoo.yab ]; then echo /boot/home/config/apps/Yabadabbadoo.yab; fi")
 	ExecName$ = left$(ExecName$,len(ExecName$)-1) //strip trailing newline
-	Open ShortcutName$ for writing as #9
-		print #9 "#! /bin/bash"
-		print #9 ExecName$ + " " + ProjectPath$
-		print #9
-	close #9
+	streamhandle = Open(ShortcutName$, "w")
+		print #streamhandle "#! /bin/bash"
+		print #streamhandle ExecName$ + " " + ProjectPath$
+		print #streamhandle
+	close streamhandle
 	system("chmod +x " + ShortcutName$)
 	Alert "A shortcut to your project has been placed on the Desktop. You can move or rename it, But you will have to create a new one if you move the project or change its pathname.", "OK", "none"
 end sub

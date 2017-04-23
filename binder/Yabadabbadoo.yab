@@ -148,7 +148,8 @@ while(not leavingLoop)
 				DisplayStats()
 				break
 			case "MainWindow:Project:Search":
-				system("/boot/system/apps/TextSearch '" + ProjectPath$ + "'")
+				YECloseWindow()
+				system("/boot/system/apps/TextSearch '" + ProjectPath$ + "' &")
 				break
 			case "MainWindow:Project:Code repositories:BitBucket":
 				LaunchURL("http://bitbucket.org")
@@ -665,15 +666,15 @@ sub CreateNewSub(displayme$)
 end sub
 
 sub CreateShortcut()
-	local ShortcutName$,ExecName$
+	local ShortcutName$,ExecName$, streamhandle
 	ShortcutName$ = "/boot/home/Desktop/" + ProjectName$ + "._ybd"
 	ExecName$ = system$("if [ -e /boot/system/apps/Yabadabbadoo.yab ]; then  echo /boot/system/apps/Yabadabbadoo.yab; elif [ -e /boot/home/config/apps/Yabadabbadoo.yab ]; then echo /boot/home/config/apps/Yabadabbadoo.yab; fi")
 	ExecName$ = left$(ExecName$,len(ExecName$)-1) //strip trailing newline
-	Open ShortcutName$ for writing as #9
-		print #9 "#! /bin/bash"
-		print #9 ExecName$ + " " + ProjectPath$
-		print #9
-	close #9
+	streamhandle = Open(ShortcutName$, "w")
+		print #streamhandle "#! /bin/bash"
+		print #streamhandle ExecName$ + " " + ProjectPath$
+		print #streamhandle
+	close streamhandle
 	system("chmod +x " + ShortcutName$)
 	Alert "A shortcut to your project has been placed on the Desktop. You can move or rename it, But you will have to create a new one if you move the project or change its pathname.", "OK", "none"
 end sub
@@ -737,14 +738,14 @@ sub DisableMenu()
 end sub
 
 sub DisplayStats()
-	local totallines, klocs$, totalsubs$, tempval$
+	local totallines, klocs$, totalsubs$, tempval$, streamhandle
 	GenerateNewYabfile()
-	open ProjectNewYabfile$ for reading as #9
-	while(not EOF(9))
-		line input #9 tempval$
+	streamhandle = open(ProjectNewYabfile$, "r")
+	while(not EOF(streamhandle))
+		line input #streamhandle tempval$
 		totallines = totallines + 1
 	wend
-	close #9
+	close streamhandle
 	klocs$ = str$(totallines/1000)
 	totalsubs$ = str$(listbox count "SubBox")
 	alert "Using yab executable found at:\n" + yabLocation$ +"\n\nProject: " + ProjectName$ + "\n\n" + "Subroutines: " + totalsubs$ + "\n" + "Lines of code: " + str$(totallines) + "\n" + "(" + klocs$ + " KLOCS)", "OK", "info"
@@ -1062,6 +1063,7 @@ sub OpenWindow()
 end sub
 
 sub RunAndDisplay(repeater)
+	local streamhandle
 	if window get "RADWindow","exists" = 1 window close "RADWindow"
 	local RADline$, w$(1), x$(1), totallines, RADtempfile$, RADtemplinefile$, wordsinerror, spinmin, spinmax, dothis$, spinsetter
 	RADtempfile$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
@@ -1075,12 +1077,12 @@ sub RunAndDisplay(repeater)
 	textedit set "RADOutput", "wordwrap", true
 	textedit set "RADOutput", "tabwidth", 2
 	textedit set "RADOutput", "editable", false
-	open RADtempfile$ for reading as #9
-		while(not(eof(9)))
-		line input #9 RADresult$
+	streamhandle = open(RADtempfile$, "r")
+		while(not(eof(streamhandle)))
+		line input #streamhandle RADresult$
 		textedit add "RADOutput", RADresult$ + "\n"
 		wend
-		close #9
+		close streamhandle
 	totallines = token(system$("wc -l " + ProjectNewYabfile$), w$())
 	totallines = val(w$(1))
 	if repeater = 0 then
@@ -1112,12 +1114,12 @@ sub RunAndDisplay(repeater)
 	textedit set "RADLines", "wordwrap", false
 	textedit set "RADLines", "tabwidth", 3
 	textedit set "RADLines", "editable", false
-	open RADtemplinefile$ for reading as #9
-		while(not(eof(9)))
-		line input #9 RADresult$
+	streamhandle = open(RADtemplinefile$, "w")
+		while(not(eof(streamhandle)))
+		line input #streamhandle RADresult$
 		textedit add "RADLines", RADresult$	+ "\n"
 		wend
-		close #9
+		close streamhandle
 end sub
 
 sub SA_Display(SA_thestring$)
@@ -1288,7 +1290,7 @@ sub SA_ParseTry()
 end sub
 
 sub SA_Preview()
-	local SA_thestring$, SA_aline$
+	local SA_thestring$, SA_aline$, streamhandle
 	//Exceptions
 	if SA_action$ = "less --help" system("/boot/system/apps/Terminal less --help &"): return
 	//less presents its help in a man-like environment - does not come out correctly
@@ -1297,12 +1299,12 @@ sub SA_Preview()
 	if SA_action$ = "timeout 5  --help" return //user pressed TRY on an empty string
 	if SA_displaywins=12 alert "Only twelve Assistant windows\nallowed. Please close one.","OK","Warning": return
 	system(SA_action$ +" &> " + SA_tempfile$)
-	open SA_tempfile$ for reading as #1
-	while(not EOF(1))
-		line input #1 SA_aline$
+	streamhandle = open(SA_tempfile$, "r")
+	while(not EOF(streamhandle))
+		line input #streamhandle SA_aline$
 		SA_thestring$= SA_thestring$ + SA_aline$ + "\n"
 	wend
-	close #1
+	close streamhandle
 	SA_Display(SA_thestring$)
 	SA_KillTemp()
 end sub
@@ -1331,7 +1333,7 @@ sub SetProjectPathnames()
 end sub
 
 sub ShowHelp(WhichHelp$, DoWhat$)
-	local TempfilePath$, File2Write, Helpline$
+	local TempfilePath$, File2Write, Helpline$, streamhandle
 	DisableMenu():DisableButtons()
 	TempfilePath$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
 	TempfilePath$ = left$(TempfilePath$, len(TempfilePath$)-1) //strip off trailing newline
@@ -1340,12 +1342,12 @@ sub ShowHelp(WhichHelp$, DoWhat$)
 	if WhichHelp$ = "Help" restore yabadabbadoohelp
 	if WhichHelp$ = "FAQ" restore yabadabbadoofaq
 	if WhichHelp$ = "Tutorial" restore yabadabbadootutorial
-	Open File2Write$ for writing as #9
+	streamhandle = Open(File2Write$, "w")
 		while(Helpline$ <> "end_of_data")
 		read Helpline$
-		if Helpline$ <> "end_of_data" print #9 Helpline$
+		if Helpline$ <> "end_of_data" print #streamhandle Helpline$
 		wend
-	close #9
+	close streamhandle
 	if DoWhat$ = "Display" launch File2Write$
 	EnableMenu():EnableButtons()
 end sub

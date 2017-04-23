@@ -1,5 +1,5 @@
 sub ShowHelp(WhichHelp$, DoWhat$)
-	local TempfilePath$, File2Write, Helpline$
+	local TempfilePath$, File2Write, Helpline$, streamhandle
 	DisableMenu():DisableButtons()
 	TempfilePath$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
 	TempfilePath$ = left$(TempfilePath$, len(TempfilePath$)-1) //strip off trailing newline
@@ -8,12 +8,12 @@ sub ShowHelp(WhichHelp$, DoWhat$)
 	if WhichHelp$ = "Help" restore yabadabbadoohelp
 	if WhichHelp$ = "FAQ" restore yabadabbadoofaq
 	if WhichHelp$ = "Tutorial" restore yabadabbadootutorial
-	Open File2Write$ for writing as #9
+	streamhandle = Open(File2Write$, "w")
 		while(Helpline$ <> "end_of_data")
 		read Helpline$
-		if Helpline$ <> "end_of_data" print #9 Helpline$
+		if Helpline$ <> "end_of_data" print #streamhandle Helpline$
 		wend
-	close #9
+	close streamhandle
 	if DoWhat$ = "Display" launch File2Write$
 	EnableMenu():EnableButtons()
 end sub
