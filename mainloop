@@ -64,6 +64,10 @@ while(not leavingLoop)
 				system("Terminal ybd_git_pull '" + ProjectPath$ +"'")
 				EnableButtons(): EnableMenu()
 				break
+			case "MainWindow:Project:git:Install git support":
+				InstallGitSupport()
+				submenu set "Project","git", "Install git support", "disable", "MainWindow"
+				break
 			/////////YAB MENU////////////
 			case "MainWindow:yab:Generate yab file":
 				YESaveFile(YECurrentFile$)
@@ -385,6 +389,9 @@ while(not leavingLoop)
 				if YESearchText$ <>"" then
 					YEFindstring(YESearchText$)
 				end if
+				break
+			case "YEMenuView:Edit:Replace":
+				LocalReplace()
 				break
 			case "YEMenuView:Edit:Select All":
 				Textedit set "YEEditBox", "select-all"

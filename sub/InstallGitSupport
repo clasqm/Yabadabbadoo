@@ -1,0 +1,14 @@
+sub InstallGitSupport()
+local ReplaceFile$, tempfile$
+	tempfile$ = TempDir$() + "/YB_git_install.sh"
+	streamhandle = open(tempfile$, "w")
+	print #streamhandle "#!/bin/sh"
+	print #streamhandle "pkgman install yabadabbadoo_github_integration"
+	print #streamhandle "echo \"Press ENTER to Close\""
+	print #streamhandle "read exiting\n"
+	close streamhandle
+	system("chmod +x " + tempfile$)
+	system("Terminal " + tempfile$)
+	system("rm -f " + tempfile$)
+end sub
+

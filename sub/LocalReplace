@@ -1,21 +1,20 @@
-sub GlobalReplace()
-	local wheretoreplace, ReplaceDir$, tempfile$
-	wheretoreplace = alert "Globally replacing text in your project is an IRREVERSIBLE step. There is no Undo, though if you are quick enough you can globally replace it back again. Your program might not run afterwards.\n\nIf you are unsure, exit and make a backup before you go on.\n\nReplacing text in the subroutines folder only (recommended) will leave things like your README, prologue, main loop and data section untouched.", "Subroutines only", "Whole Project", "Exit", "warning"
+sub LocalReplace()
+local wheretoreplace, ReplaceFile$, tempfile$
+	wheretoreplace = alert "Locally replacing text in your file is an IRREVERSIBLE step. There is no Undo, though if you are quick enough you can replace it back again. Your program might not run afterwards. If you are unsure, exit and make a backup before you go on.\n\nIf you need more control, rather transfer your file to Pe and use the superb facilities of that program", "Continue", "", "Exit", "warning"
 	switch wheretoreplace
 		case 1
-			ReplaceDir$ = ProjectSubPath$
-			break
 		case 2
-			ReplaceDir$ = ProjectPath$
+			ReplaceFile$ = YECurrentFile$
 			break
 		case 3
 			return
 			break
 	end switch
+	YECloseWindow()
 	tempfile$ = TempDir$() + "/YBreplace.sh"
 	streamhandle = open(tempfile$, "w")
 	print #streamhandle "#!/bin/sh"
-	print #streamhandle "cd " + ReplaceDir$
+	print #streamhandle "cd " + ReplaceFile$
 	print #streamhandle "echo 'Yabadabbadoo Global Search-and_Replace'"
 	print #streamhandle "echo"
 	print #streamhandle "echo 'Please type the text to search for:'"
@@ -24,12 +23,14 @@ sub GlobalReplace()
 	print #streamhandle "echo 'Please type the text to replace it with:'"
 	print #streamhandle "read output"
 	print #streamhandle "echo"
-	print #streamhandle "sustituye --old=$input --new=$output '" + ReplaceDir$ + "'" 
+	print #streamhandle "sustituye --old=$input --new=$output '" + ReplaceFile$ + "'" 
 	print #streamhandle "echo \"Press ENTER to Close\""
 	print #streamhandle "read exiting\n"
 	close streamhandle
 	system("chmod +x " + tempfile$)
 	system("Terminal " + tempfile$)
 	system("rm -f " + tempfile$)
+	//YEOpenFile(ProjectSubPath$ + "/" + listbox get$ "SubBox", val(SelectedRoutine$))
+	YEOpenFile(ReplaceFile$)
 end sub
 

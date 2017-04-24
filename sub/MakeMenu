@@ -11,6 +11,7 @@ sub MakeMenu()
 	Submenu "Project","git", "Initialize", "", "MainWindow"
 	Submenu "Project","git", "Push", "", "MainWindow"
 	Submenu "Project","git", "Pull", "", "MainWindow"
+	if  StripLFoffSysCmd$(system$("which ybd_git_init")) ="" submenu "Project","git", "Install git support", "", "MainWindow"
 	CheckGitStatus()
 	Menu "Project","Stats","", "MainWindow"
 	Menu "Parts", "Prologue","SP", "MainWindow"

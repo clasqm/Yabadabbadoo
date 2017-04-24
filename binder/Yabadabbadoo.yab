@@ -48,8 +48,7 @@ MainYBottom = 760
 ###############################
 ####Global Variables for ScriptAssistant#####
 ###############################
-SA_tempfile$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
-SA_tempfile$ = left$(SA_tempfile$, len(SA_tempfile$)-1) + "/ScriptAssistant.tmp"
+SA_tempfile$ = TempDir$() + "/ScriptAssistant.tmp"
 SA_displaywins=0
 SA_dispx=50: SA_dispy=50
 SA_promode = 0
@@ -185,6 +184,10 @@ while(not leavingLoop)
 				DisableButtons(): 	DisableMenu()
 				system("Terminal ybd_git_pull '" + ProjectPath$ +"'")
 				EnableButtons(): EnableMenu()
+				break
+			case "MainWindow:Project:git:Install git support":
+				InstallGitSupport()
+				submenu set "Project","git", "Install git support", "disable", "MainWindow"
 				break
 			/////////YAB MENU////////////
 			case "MainWindow:yab:Generate yab file":
@@ -508,6 +511,9 @@ while(not leavingLoop)
 					YEFindstring(YESearchText$)
 				end if
 				break
+			case "YEMenuView:Edit:Replace":
+				LocalReplace()
+				break
 			case "YEMenuView:Edit:Select All":
 				Textedit set "YEEditBox", "select-all"
 				break
@@ -675,7 +681,7 @@ sub CompileApp()
 	system("chmod +x " + tempfile$)
 	system("Terminal " + tempfile$)
 	alert "A new compiled executable has been created on the Desktop.", "OK", "info"
-	system("rm- f " + tempfile$)
+	system("rm -f " + tempfile$)
 end sub
 
 sub CreateNewSub(displayme$)
@@ -877,7 +883,7 @@ end sub
 
 sub GlobalReplace()
 	local wheretoreplace, ReplaceDir$, tempfile$
-	wheretoreplace = alert "Globally replacing text in your product is an IRREVERSIBLE step. There is no Undo, though if you are quick enough you can Globally replace it back again. Your program might not run afterwards. If you are unsure, exit and take backup before you go on.\n\nReplacing text in the subroutines folder only (recommended) will leave things like your README and data section untouched.", "Subroutines only", "Whole Project", "Exit", "warning"
+	wheretoreplace = alert "Globally replacing text in your project is an IRREVERSIBLE step. There is no Undo, though if you are quick enough you can globally replace it back again. Your program might not run afterwards.\n\nIf you are unsure, exit and make a backup before you go on.\n\nReplacing text in the subroutines folder only (recommended) will leave things like your README, prologue, main loop and data section untouched.", "Subroutines only", "Whole Project", "Exit", "warning"
 	switch wheretoreplace
 		case 1
 			ReplaceDir$ = ProjectSubPath$
@@ -907,14 +913,27 @@ sub GlobalReplace()
 	close streamhandle
 	system("chmod +x " + tempfile$)
 	system("Terminal " + tempfile$)
-	system("rm- f " + tempfile$)
-	system("rm- f " + tempfile$)
+	system("rm -f " + tempfile$)
 end sub
 
 sub Has_yab4ybd()
 	if instr(system$("head -n 1 " + ProjectPrologue$), "#!yab4ybd") then
 		alert "Your project's first line may contain a llink to the deprecated #!yab4ybd.\n\nPlease change it to #!yab", "OK", "warning" 
 	endif
+end sub
+
+sub InstallGitSupport()
+local ReplaceFile$, tempfile$
+	tempfile$ = TempDir$() + "/YB_git_install.sh"
+	streamhandle = open(tempfile$, "w")
+	print #streamhandle "#!/bin/sh"
+	print #streamhandle "pkgman install yabadabbadoo_github_integration"
+	print #streamhandle "echo \"Press ENTER to Close\""
+	print #streamhandle "read exiting\n"
+	close streamhandle
+	system("chmod +x " + tempfile$)
+	system("Terminal " + tempfile$)
+	system("rm -f " + tempfile$)
 end sub
 
 sub LaunchSA()
@@ -988,6 +1007,42 @@ sub LaunchYA()
 	YA_Fillerup("all")
 end sub
 
+sub LocalReplace()
+local wheretoreplace, ReplaceFile$, tempfile$
+	wheretoreplace = alert "Locally replacing text in your file is an IRREVERSIBLE step. There is no Undo, though if you are quick enough you can replace it back again. Your program might not run afterwards. If you are unsure, exit and make a backup before you go on.\n\nIf you need more control, rather transfer your file to Pe and use the superb facilities of that program", "Continue", "", "Exit", "warning"
+	switch wheretoreplace
+		case 1
+		case 2
+			ReplaceFile$ = YECurrentFile$
+			break
+		case 3
+			return
+			break
+	end switch
+	YECloseWindow()
+	tempfile$ = TempDir$() + "/YBreplace.sh"
+	streamhandle = open(tempfile$, "w")
+	print #streamhandle "#!/bin/sh"
+	print #streamhandle "cd " + ReplaceFile$
+	print #streamhandle "echo 'Yabadabbadoo Global Search-and_Replace'"
+	print #streamhandle "echo"
+	print #streamhandle "echo 'Please type the text to search for:'"
+	print #streamhandle "read input"
+	print #streamhandle "echo"
+	print #streamhandle "echo 'Please type the text to replace it with:'"
+	print #streamhandle "read output"
+	print #streamhandle "echo"
+	print #streamhandle "sustituye --old=$input --new=$output '" + ReplaceFile$ + "'" 
+	print #streamhandle "echo \"Press ENTER to Close\""
+	print #streamhandle "read exiting\n"
+	close streamhandle
+	system("chmod +x " + tempfile$)
+	system("Terminal " + tempfile$)
+	system("rm -f " + tempfile$)
+	//YEOpenFile(ProjectSubPath$ + "/" + listbox get$ "SubBox", val(SelectedRoutine$))
+	YEOpenFile(ReplaceFile$)
+end sub
+
 sub MakeButtons()
 	//top buttons
 	Button 10,65 to 141,90, "PrologueButton", "Edit Prologue", "MainWindow"
@@ -1029,6 +1084,7 @@ sub MakeMenu()
 	Submenu "Project","git", "Initialize", "", "MainWindow"
 	Submenu "Project","git", "Push", "", "MainWindow"
 	Submenu "Project","git", "Pull", "", "MainWindow"
+	if  StripLFoffSysCmd$(system$("which ybd_git_init")) ="" submenu "Project","git", "Install git support", "", "MainWindow"
 	CheckGitStatus()
 	Menu "Project","Stats","", "MainWindow"
 	Menu "Parts", "Prologue","SP", "MainWindow"
@@ -1435,6 +1491,14 @@ sub SplashProject()
 	draw text 111,57, SplashName$,"MainWindow"
 end sub
 
+sub testing()
+
+label abc
+
+label 789
+
+end sub
+
 Sub Wizard()
 	local whattodo, fileexist$
 	fileexist$=system$("if test -e /boot/home/config/settings/Yabadabbadoo.1st; then echo yes; else echo no;fi")
@@ -1830,6 +1894,7 @@ sub YEOpenWindow()
 	menu "Edit", "Clear All", "", "YEMenuView"
 	menu "Edit", "Find", "F", "YEMenuView"
 	menu "Edit", "Find Again", "G", "YEMenuView"
+	menu "Edit", "Replace", "", "YEMenuView"
 	menu "Edit", "Select All", "A", "YEMenuView"
 	YEDisableMenu()
 	/////BUTTONBAR/////
@@ -1865,7 +1930,7 @@ sub YEOpenWindow()
 	textedit set "YEEditBox", "autoindent", true 
 	dropbox clear "YESnippetDropBox"
 	for f = 1 to 15
-		if YESnippets$ (f) <> "" dropbox add "YESnippetDropBox", YESnippets$(f)
+		if YESnippets$(f) <> "" dropbox add "YESnippetDropBox", YESnippets$(f)
 	next f
 end sub
 
@@ -1905,7 +1970,8 @@ end sub
 sub YETextFileCheck(YEFileToOpen$)
 	//check if requested file is some kind of text file - Trying to load binaries WILL crash the editor!
 	local YEtempval
-	if (left$(system$("catattr -d BEOS:TYPE '" + YEFileToOpen$ + "'"), 5)) <> "text/" then 
+	if not(instr((attribute get$ "BEOS:TYPE", YEFileToOpen$), "text/")) then
+	//if (left$(system$("catattr -d BEOS:TYPE '" + YEFileToOpen$ + "'"), 5)) <> "text/" then 
 		alert YEFileToOpen$ + "\n does not look like a text file! Please check and fix in Tracker", "OK", "warning"
 		return 1 
 	end if
@@ -9105,12 +9171,14 @@ data "<p>The nag alerts about these issues will only show up once in each sessio
 data "<h4>1.2.2 Project | Open</h4><p>Open an existing project. Remember, you are opening a DIRECTORY, not a file. Don&rsquo;t worry, I make that mistake all the time. It won&rsquo;t hurt Yabadabbadoo or your file.Just go back to the menu and open the actual project.</p>"
 data "<h4>1.2.3 Project | Backup</h4><p>Places a time-stamped zipped copy of the current project on the Desktop, from where you can archive it wherever you keep these things. Use this often!</p>"
 data "<h4>1.2.4 Project | Search</h4><p>Search the entire project with the TextSearch utlility.</p>"
+data "<h4>1.2.5 Project | Replace</h4><p>Replace one string with another across the project. You will be given a choice to do this in the subroutines folder only (recommended) or across the  entire project. BAKCUP before you do this!</p>"
 data "<h4>1.2.5 Project | Code repositories | BitBucket</h4><p>Launch Atlassan Bitbucket in your default browser.</p>"
 data "<h4>1.2.6 Project | Code repositories | GitHub</h4><p>Launch GitHub in your default browser.</p>"
 data "<h4>1.2.7 Project | Code repositories | SourceForge</h4><p>Launch SourceForge in your default browser.</p>"
-data "<h4>1.2.8 Project | git | Initialize</h4><p>Set up your project as a local git repository and establish a lnk with an offline repository such as GitHub.</p><p>NOTE: to do this you must already have registered a project with one of the Code repositories. Have the following handy: Your project reference URL, e.g. https://github.com/clasqm/Rondel.git, your login and your password.</p>"
+data "<h4>1.2.8 Project | git | Initialize</h4><p>Set up your project as a local git repository and establish a link with an offline repository such as GitHub.</p><p>NOTE: to do this you must already have registered a project with one of the Code repositories. Have the following handy: Your project reference URL, e.g. https://github.com/clasqm/Rondel.git, your login and your password.</p>"
 data "<h4>1.2.9 Project | git | Push</h4><p>Push changes to your online git repository. You should already have initialized the project (see above). Have the following ready: your login and your password. You will also be asked to type a short description of the changes made since the last push.</p>"
 data "<h4>1.2.10 Project | git | Pull</h4><p>Pull changes from your online git repository. Have the following ready: your login and your password</p><p>NOTE: More complex git operations (branching, merging, rebasing) will not be implemented in Yabadabbadoo. Everything goes straight to the master branch. But by all means open a Terminal and have fun!</p>"
+data "<h4>1.2.11 Project | git | Install git support</h4> Install the package required to activate git support. You will need to have the appropriate clasqm repository set up first. See http://clasquin-johnson.co.za/michel/haiku/repo/index.html for instructions.</p>"
 data "<h4>1.2.11 Project | Stats</h4><p>Display some statistics about the current project.</p>"
 data "<p><em>See also Appendix 1: Project structure</em></p><h3>1.3 The Parts menu</h3><h4>1.3.1 Parts | Prologue</h4>"
 data "<p>Edit the part of your program that runs before the main loop. This is normally where you define global variables (yab technically does not require this, but it is good practice to do it anyway, and it give you a handy reference), open your main window and check whether a file was specified on the command line. Yabadabbadoo also uses it to define certain variables that will apear in your program&rsquo;s About box.</p>"
@@ -9126,6 +9194,7 @@ data "<h4>1.4.4 yab | Run in Terminal</h4><p>Run your program from a Terminal. U
 data "<h4>1.4.4 yab | Run & Display</h4><p>EXPERIMENTAL AND UNSTABLE! Run your program until it exits or crashes, then display the log output and a best guess of the offending lines in the case of a crash. If there was no crash, the first 13 lines will be displayed. Please refer to the Tutorial for more on this function.</p>"
 data "<h4>1.4.6 yab | Bind</h4><p>Generate Generate a yab file as above, and bind it to the yab executable to create a standalone program that will run without the need for yab to be present (you will still need yablib.so). The resulting file is placed on the Desktop for testing purposes.</p>"
 data "<h4>1,4,7. Transfer to official IDE</h4><p>Generate a yab file and open the Official yab IDE so that you can use the BuildFactory. The current version of the official IDe does not allow me to open the yab file automatically, so this opens the IDE and a Tracker window holding the yab file. Yabadabbadoo shuts down and changes made in the official IDE will NOT propagate back to Yabadabbadoo.</p>"
+data "<h4>1,4,8 yab | Compile</h4><p>Like binding (see above), but using the BuildFactory in a command-line environment. This method makes certain assumptions about your application (for example, the app-signature), so if you want more control, go the long way round through the Official IDE instead.</p>"
 data "<h3>1.5 The Utilities menu</h3><h4>1.5.1 Utilities | Open a Terminal</h4><p>Open a Terminal</p>"
 data "<h4>1.5.2 Utilities | Open Tracker</h4><p>Open Tracker to your current project directory.</p>"
 data "<h4>1.5.3 Utilities | Calculator</h4><p>Open Deskcalc.Trust me, you will be needing this when laying out your User Interface!</p>"
@@ -9168,7 +9237,8 @@ data "<h4>2.2.6 Clear Selection</h4><p>Delete the currently selected text from t
 data "<h4>2.2.7 Clear All</h4><p>Delete ALL text from the editing area. Don&rsquo;t worry, there&rsquo;s always Undo! Oh, did you make a backup recently?</p>"
 data "<h4>2.2.8 Find</h4><p>Find the text in the search term field at the bottom of the editor.</p>"
 data "<h4>2.2.9 Find Again</h4><p>Find it again.</p>"
-data "<h4>2.2.10 Select All</h4><p>Select ALL text in the editor.</p>"
+data "<h4>2.2.10 Replace</h4><p>Much like the Global Replace found in the Main Project Window, but in this case works ONLY on the file currently being edited.</p>"
+data "<h4>2.2.11 Select All</h4><p>Select ALL text in the editor.</p>"
 data "<h3>2.3 The Editor status line</h3><h4>2.3.1 The search term field</h4><p>This is where you type text you wish to search for.</p>"
 data "<h4>2.3.2 The snippets dropdown</h4><p>Select the snippet of text you want to insert into your text.</p><h4>2.3.3 The Snippet Insert button</h4>"
 data "<p>This small button, marked with a checkmark, is used to insert the currently selected snippet into your text.</p>"

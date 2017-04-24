@@ -48,8 +48,7 @@ MainYBottom = 760
 ###############################
 ####Global Variables for ScriptAssistant#####
 ###############################
-SA_tempfile$ = system$("finddir B_COMMON_TEMP_DIRECTORY") 
-SA_tempfile$ = left$(SA_tempfile$, len(SA_tempfile$)-1) + "/ScriptAssistant.tmp"
+SA_tempfile$ = TempDir$() + "/ScriptAssistant.tmp"
 SA_displaywins=0
 SA_dispx=50: SA_dispy=50
 SA_promode = 0

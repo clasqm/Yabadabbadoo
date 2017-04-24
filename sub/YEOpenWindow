@@ -37,6 +37,7 @@ sub YEOpenWindow()
 	menu "Edit", "Clear All", "", "YEMenuView"
 	menu "Edit", "Find", "F", "YEMenuView"
 	menu "Edit", "Find Again", "G", "YEMenuView"
+	menu "Edit", "Replace", "", "YEMenuView"
 	menu "Edit", "Select All", "A", "YEMenuView"
 	YEDisableMenu()
 	/////BUTTONBAR/////
@@ -72,7 +73,7 @@ sub YEOpenWindow()
 	textedit set "YEEditBox", "autoindent", true 
 	dropbox clear "YESnippetDropBox"
 	for f = 1 to 15
-		if YESnippets$ (f) <> "" dropbox add "YESnippetDropBox", YESnippets$(f)
+		if YESnippets$(f) <> "" dropbox add "YESnippetDropBox", YESnippets$(f)
 	next f
 end sub
 
