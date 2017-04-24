@@ -1,8 +1,8 @@
 sub YETextFileCheck(YEFileToOpen$)
 	//check if requested file is some kind of text file - Trying to load binaries WILL crash the editor!
 	local YEtempval
-	if not(instr((attribute get$ "BEOS:TYPE", YEFileToOpen$), "text/")) then
-	//if (left$(system$("catattr -d BEOS:TYPE '" + YEFileToOpen$ + "'"), 5)) <> "text/" then 
+	//if not(instr((attribute get$ "BEOS:TYPE", YEFileToOpen$), "text/")) then
+	if (left$(system$("catattr -d BEOS:TYPE '" + YEFileToOpen$ + "'"), 5)) <> "text/" then 
 		alert YEFileToOpen$ + "\n does not look like a text file! Please check and fix in Tracker", "OK", "warning"
 		return 1 
 	end if
