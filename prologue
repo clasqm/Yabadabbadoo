@@ -5,7 +5,7 @@
 #########################################
 ProgramName$ ="Yabadabbadoo"
 AuthorName$ = "Michel Clasquin-Johnson"
-ProgramVersion$ = "v0.3 beta"
+ProgramVersion$ = "v0.4 beta"
 ProgramBriefDescription$ = "An alternative IDE for Jan Bungeroth's yab programming language."
 ProgramLicense$ = "Public Domain"
 ProgramAcknowledgements$ ="With thanks to Lelldorin for his help on the Find function, and to Rene Gollent, bbjimmy and Humdinger for help with identifying file types."

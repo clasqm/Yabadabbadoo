@@ -16,7 +16,6 @@ Beta 4 brings in the following features:
 * Updates to the YabAssistant help data, shameslessly stolen from the Official yab IDE
 * Integration with the vstm-gui todo manager (if installed) to let you keep track of your Yabadabbadoo projects.
 * Integration with more text editors (if installed) in the Send 'to ...'. menus.
-* Integration with the Snapshot backup utlity (if installed).
 * Global search using the TextSearch utility.
 * Global replace in the subs folder using sustituye.
 * Now remembers your project folder and does not default to /boot/home every time you open a new project.
