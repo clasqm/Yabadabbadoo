@@ -65,7 +65,7 @@ while(not leavingLoop)
 				EnableButtons(): EnableMenu()
 				break
 			case "MainWindow:Project:git:Install git support":
-				InstallGitSupport()
+				InstallSupport("yabadabbadoo_github_integration")
 				submenu set "Project","git", "Install git support", "disable", "MainWindow"
 				break
 			/////////YAB MENU////////////
@@ -155,6 +155,11 @@ while(not leavingLoop)
 				break
 			case "MainWindow:Utilities:To-do Manager" 
 				system("/boot/system/apps/vstm_GUI &")
+				break
+			case "MainWindow:Utilities:Install To-do Manager" 
+				InstallSupport("vstm")
+				Menu set "Utilities", "Install To-do Manager","disable","MainWindow"
+				menu set "Utilities", "To-do Manager","enable","MainWindow"
 				break
 			case "MainWindow:Utilities:Calculator"
 				system("open application/x-vnd.Haiku-DeskCalc &")

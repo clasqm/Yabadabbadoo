@@ -34,7 +34,6 @@ sub EnableMenu()
 	menu set "Utilities", "Restart Tracker","enable","MainWindow"
 	menu set "Utilities", "Restart Deskbar","enable","MainWindow"
 	menu set "Utilities", "Create new Shortcut","enable","MainWindow"
-	menu set "Utilities", "To-do Manager","enable","MainWindow"
 	Menu set "Help", "Help", "enable", "MainWindow"
 	Menu set "Help", "Tutorial", "enable", "MainWindow"
 	Menu set "Help", "FAQ", "enable", "MainWindow"
@@ -43,7 +42,11 @@ sub EnableMenu()
 	Menu set "Help", "Launch yab discussion forum", "enable", "MainWindow"
 	Menu set "Help", "Launch BeSly help database", "enable", "MainWindow"	
 	CheckGitStatus()
-	if FileExists("/boot/system/apps/vstm_GUI") menu set "Utilities", "To-do Manager","enable","MainWindow"
+	if FileExists("/boot/system/apps/vstm_GUI") then 
+		menu set "Utilities", "To-do Manager","enable","MainWindow"
+	else
+		menu set "Utilities", "To-do Manager","disable","MainWindow"
+	endif
 	if instr(system$("getarch"), "x86_gcc2") Menu set "yab", "Compile","enable", "MainWindow"
 end sub
 
