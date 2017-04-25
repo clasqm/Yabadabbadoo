@@ -36,7 +36,7 @@ sub MakeMenu()
 	Menu "Utilities", "Yab Interface Builder","","MainWindow"
 	Menu "Utilities", "System Prefs","CP","MainWindow"
 	Menu "Utilities", "To-do Manager","","MainWindow"
-	if FileExists("/boot/system/apps/vstm_GUI") = 0 Menu "Utilities", "Install To-do Manager","","MainWindow"
+	if FileExists("/boot/system/apps/vstm_GUI") = 0 and instr(system$("getarch"), "x86_gcc2")	Menu "Utilities", "Install To-do Manager","","MainWindow"
 	Menu "Utilities", "Restart Tracker","","MainWindow"
 	Menu "Utilities", "Restart Deskbar","","MainWindow"
 	Menu "Utilities", "Create new shortcut","","MainWindow"

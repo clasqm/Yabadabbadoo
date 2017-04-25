@@ -23,8 +23,7 @@ sub EnableMenu()
 	Menu set "yab", "Run in Terminal","enable", "MainWindow"
 	Menu set "yab", "Run & display output","enable", "MainWindow"
 	Menu set "yab", "Bind","enable", "MainWindow"
-	menu set "yab", "Transfer to official IDE","enable", "MainWindow"
-	menu set "Utilities", "Open a Terminal","enable","MainWindow"
+		menu set "Utilities", "Open a Terminal","enable","MainWindow"
 	menu set "Utilities", "OpenTracker","enable","MainWindow"
 	menu set "Utilities", "Calculator","enable","MainWindow"
 	menu set "Utilities", "ScriptAssistant","enable","MainWindow"
@@ -47,6 +46,9 @@ sub EnableMenu()
 	else
 		menu set "Utilities", "To-do Manager","disable","MainWindow"
 	endif
-	if instr(system$("getarch"), "x86_gcc2") Menu set "yab", "Compile","enable", "MainWindow"
+	if instr(system$("getarch"), "x86_gcc2")
+		menu set "yab", "Compile","enable", "MainWindow"
+		menu set "yab", "Transfer to official IDE","enable", "MainWindow"
+	endif
 end sub
 

@@ -67,6 +67,8 @@ while(not leavingLoop)
 			case "MainWindow:Project:git:Install git support":
 				InstallSupport("yabadabbadoo_github_integration")
 				submenu set "Project","git", "Install git support", "disable", "MainWindow"
+				pause 1
+				CheckGitSupport()
 				break
 			/////////YAB MENU////////////
 			case "MainWindow:yab:Generate yab file":
