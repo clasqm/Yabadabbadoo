@@ -421,35 +421,36 @@ while(not leavingLoop)
 		//####Commands that don't fit well in the switch loop######
 		//#######################################
 		//##########more main window commands##########
-		if left$(msg$(everyCommand),15) ="SubBox:_Select:" SelectedRoutine$ = mid$(msg$(everyCommand),16)
-		if left$(msg$(everyCommand),15) ="SubBox:_Invoke:" then
+		if instr(msg$(everyCommand), "SubBox:_Select:") SelectedRoutine$ = mid$(msg$(everyCommand),16)
+		if instr(msg$(everyCommand), "SubBox:_Invoke:") then
 			SelectedRoutine$ = mid$(msg$(everyCommand),16)
 			YEOpenFile(ProjectSubPath$ + "/" + listbox get$ "SubBox", val(SelectedRoutine$))
 		endif
 		
 		//#####More ScriptAssistant commands####
-		if left$(msg$(everyCommand),7) ="SA_CLI:" SA_action$ = mid$(msg$(everyCommand),8)
-
-		if left$(msg$(everyCommand),7) = "SA_ABC:" SA_Generate(right$(msg$(everyCommand),1))
+		if instr(msg$(everyCommand),"SA_CLI:") SA_action$ = mid$(msg$(everyCommand),8)
+		if instr(msg$(everyCommand), "SA_ABC:") SA_Generate(right$(msg$(everyCommand),1))
 
 		//if left$(msg$(everyCommand),11) ="SA_TryText:" SA_action$ = mid$(msg$(everyCommand),9): SA_ParseTry():SA_Preview()
 		//Would let the user type text then ENTER in the SA_CLI textbox
 		//but it also activates when the user switches to a different widget - 
 		//can't have windows opening when they feel like it
 		//try to fix it later
-
+		
+		//don't change this to INSTR = XB is not sufficiently unique
 		if left$(msg$(everyCommand),2) = "XB" Window Close "W" + mid$(msg$(everyCommand),3): SA_displaywins = SA_displaywins -1
 
 		//#####More YabAssistant commands####
 		if instr(msg$(everyCommand),"YA_KeyWordList:_Select") YA_BriefDisplay(val(mid$(msg$(everyCommand),24)))
 		if instr(msg$(everyCommand),"YA_KeyWordList:_Invoke") YA_FullDisplay(val(mid$(msg$(everyCommand),24)))
+		//don't change this to INSTR = X8 is not sufficiently unique
 		if left$(msg$(everyCommand),2)="X8" Window Close "W" + mid$(msg$(everyCommand),3): YA_displaywins=YA_displaywins -1
 		if (len(msg$(everyCommand))=10 and mid$(msg$(everyCommand),5)="Button") YA_Navigate(left$(msg$(everyCommand),1))
-		if left$(msg$(everyCommand),10)="YA_SearchTxt:" YA_Fillerup("find")
+		if instr(msg$(everyCommand), "YA_SearchTxt:") YA_Fillerup("find")
 
 		//#####More YabEditor Commands######
 		//Check if user pressed ENTER in the search field
-		if left$(msg$(everyCommand), 14) = "YESearchField:" then
+		if instr(msg$(everyCommand), "YESearchField:") then
 			YESearchText$ = trim$(mid$(msg$(everyCommand),15))
 			if YESearchText$ <>"" then
 				Textcontrol set "YESearchField", ""
@@ -461,7 +462,7 @@ while(not leavingLoop)
 			end if
 		end if
 		//check if user selected a snippet
-		if left$(msg$(everyCommand), 17) = "YESnippetDropBox:" YESnippet$ = mid$(msg$(everyCommand), 18)
+		if instr(msg$(everyCommand), "YESnippetDropBox:") YESnippet$ = mid$(msg$(everyCommand), 18)
 	next everyCommand
 	YECheckTime()
 wend

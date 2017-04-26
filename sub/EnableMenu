@@ -46,7 +46,7 @@ sub EnableMenu()
 	else
 		menu set "Utilities", "To-do Manager","disable","MainWindow"
 	endif
-	if instr(system$("getarch"), "x86_gcc2")
+	if instr(system$("getarch"), "x86_gcc2") then
 		menu set "yab", "Compile","enable", "MainWindow"
 		menu set "yab", "Transfer to official IDE","enable", "MainWindow"
 	endif
