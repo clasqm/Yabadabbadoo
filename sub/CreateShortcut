@@ -1,8 +1,11 @@
 sub CreateShortcut()
 	local ShortcutName$,ExecName$, streamhandle
 	ShortcutName$ = "/boot/home/Desktop/" + ProjectName$ + "._ybd"
-	ExecName$ = system$("if [ -e /boot/system/apps/Yabadabbadoo.yab ]; then  echo /boot/system/apps/Yabadabbadoo.yab; elif [ -e /boot/home/config/apps/Yabadabbadoo.yab ]; then echo /boot/home/config/apps/Yabadabbadoo.yab; fi")
-	ExecName$ = left$(ExecName$,len(ExecName$)-1) //strip trailing newline
+	if FileExists("/boot/system/apps/Yabadabbadoo/Yabadabbadoo.yab") then
+		ExecName$ = "/boot/system/apps/Yabadabbadoo/Yabadabbadoo.yab"
+	elseif FileExists("/boot/home/config/apps/Yabadabbadoo/Yabadabbadoo.yab") then
+		ExecName$ = "/boot/home/config/apps/Yabadabbadoo/Yabadabbadoo.yab"
+	endif
 	streamhandle = Open(ShortcutName$, "w")
 		print #streamhandle "#! /bin/bash"
 		print #streamhandle ExecName$ + " " + ProjectPath$
