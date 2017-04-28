@@ -1,0 +1,6 @@
+sub NewProjectFromTemplate()
+	
+	system("yab " + ProgramDir$ + "/yabTemplatePicker.yab " + ProjectPath$)
+	if OpenProject("fromtemplate")
+end sub
+

@@ -1,5 +1,6 @@
 sub CloseWindow()
 	//Close down the main window
-	window close "MainWindow"
+	if window get "MainWindow", "exists" window close "MainWindow"
+	exit
 end sub
 

@@ -9,6 +9,7 @@ sub WriteNewPreface()
 	print #streamhandle, "//Yabadabbadoo notification"
 	print #streamhandle, "########DO NOT RENAME THIS FILE!########"
 	print #streamhandle, "//Yabadabbadoo needs it to function."
+	print #streamhandle, "//Of course, this does not apply if you are editing in the official yab IDE."
 	print #streamhandle, " "
 	print #streamhandle, "##Fill in these fields with your own particulars."
 	print #streamhandle, "##The variables will be used in the About Box and in naming the program."

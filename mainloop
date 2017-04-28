@@ -466,5 +466,5 @@ while(not leavingLoop)
 	next everyCommand
 	YECheckTime()
 wend
-exit
+CloseWindow()
 

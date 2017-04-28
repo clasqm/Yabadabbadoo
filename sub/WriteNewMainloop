@@ -6,6 +6,7 @@ sub WriteNewMainloop()
 	print #streamhandle, "//Yabadabbadoo notification"
 	print #streamhandle, "########DO NOT RENAME THIS FILE!########"
 	print #streamhandle, "//Yabadabbadoo needs it to function."
+	print #streamhandle, "//Of course, this does not apply if you are editing in the official yab IDE."
 	print #streamhandle, ""
 	for f = 1 to 24
 		read writethis$

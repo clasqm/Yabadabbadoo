@@ -1,8 +1,7 @@
 Sub Wizard()
-	local whattodo, fileexist$
-	fileexist$=system$("if test -e /boot/home/config/settings/Yabadabbadoo.1st; then echo yes; else echo no;fi")
-	//if the file does not exist, program has not run before
-	if left$(fileexist$,2)= "no" then
+	local whattodo
+		//if the file does not exist, program has not run before
+		if not(FileExists("/boot/home/config/settings/Yabadabbadoo.1st")) then
 		whattodo = alert "Looks like this is the first time Yabadabbadoo has run on this Haiku installation. Would you like to view the Help and Tutorial?", "Yes", "No", "", "none" 
 		if whattodo = 1 then
 			ShowHelp("Tutorial", "Display")
@@ -14,12 +13,12 @@ Sub Wizard()
 	switch whattodo
 		case 1:
 			MakeNewProject()
-		break
+			break
 		case 2:
 			OpenProject("")
 		break
 		case 3:
-			exit
+			CloseWindow()
 		break
 	end switch
 end sub

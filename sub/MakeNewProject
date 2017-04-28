@@ -1,5 +1,5 @@
 sub MakeNewProject()
-	local makeshortcut
+	local makeshortcut,whattodo
 	ProjectPath$=""
 	GetProjectDirectory("Create a directory in which to keep your project. This is really going to work better if the path to your project does not contain spaces or special characters.")
 	while(ProjectPath$ = "")
@@ -7,8 +7,21 @@ sub MakeNewProject()
 	wend
 	if CheckForProjectFiles() = 1 then 
 		Alert "THAT IS AN EXISTING YABADABBADOO DIRECTORY YOU WERE GOING TO OVERWRITE!\nYOU ARE TOO TIRED TO BE PROGRAMMING.\n\n ABORTING PROGRAM.", "OK", "warning"
-		exit
+		CloseWindow()
 	endif
+	whattodo = alert "How would you like to start this new project?", "Pick a template", "Start from scratch", "Exit this program", "none" 
+	switch whattodo
+		case 1
+			NewProjectFromTemplate()
+			return
+			break
+		case 2
+			//just continue
+			break
+		case 3
+			CloseWindow()
+			break
+	end switch
 	SetProjectPathnames()
 	system("mkdir -p " + ProjectSubPath$)
 	system("mkdir -p " + ProjectOtherPath$)

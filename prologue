@@ -43,7 +43,7 @@ MainXLeft = 217
 MainYTop = 5
 MainXRight = 510
 MainYBottom = 760
-
+ProgramDir$=WhereAmI$()
  
 ###############################
 ####Global Variables for ScriptAssistant#####
@@ -98,7 +98,6 @@ yabLocation$ = CheckForYab$()
 
 OpenWindow()
 
-//YEOpenWindow():YEDisableButtons()
 LaunchSA(): window set "SA_MainWindow", "minimize"
 LaunchYA(): window set "YA_MainWindow", "minimize"
 if peek("argument") > 0 then
@@ -112,7 +111,7 @@ if peek("argument") > 0 then
 		print " "
 		exit
 	else
-		SetProjectPathnames()
+		//SetProjectPathnames()
 		OpenProject("fromstart")
 	endif
 else

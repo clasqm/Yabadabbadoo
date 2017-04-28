@@ -43,7 +43,7 @@ MainXLeft = 217
 MainYTop = 5
 MainXRight = 510
 MainYBottom = 760
-
+ProgramDir$=WhereAmI$()
  
 ###############################
 ####Global Variables for ScriptAssistant#####
@@ -98,7 +98,6 @@ yabLocation$ = CheckForYab$()
 
 OpenWindow()
 
-//YEOpenWindow():YEDisableButtons()
 LaunchSA(): window set "SA_MainWindow", "minimize"
 LaunchYA(): window set "YA_MainWindow", "minimize"
 if peek("argument") > 0 then
@@ -112,7 +111,7 @@ if peek("argument") > 0 then
 		print " "
 		exit
 	else
-		SetProjectPathnames()
+		//SetProjectPathnames()
 		OpenProject("fromstart")
 	endif
 else
@@ -587,7 +586,7 @@ while(not leavingLoop)
 	next everyCommand
 	YECheckTime()
 wend
-exit
+CloseWindow()
 
 sub BackupProject()
 	local ZipFile$
@@ -667,7 +666,8 @@ end sub
 
 sub CloseWindow()
 	//Close down the main window
-	window close "MainWindow"
+	if window get "MainWindow", "exists" window close "MainWindow"
+	exit
 end sub
 
 sub CompileApp()
@@ -1141,7 +1141,7 @@ sub MakeMenu()
 end sub
 
 sub MakeNewProject()
-	local makeshortcut
+	local makeshortcut,whattodo
 	ProjectPath$=""
 	GetProjectDirectory("Create a directory in which to keep your project. This is really going to work better if the path to your project does not contain spaces or special characters.")
 	while(ProjectPath$ = "")
@@ -1149,8 +1149,21 @@ sub MakeNewProject()
 	wend
 	if CheckForProjectFiles() = 1 then 
 		Alert "THAT IS AN EXISTING YABADABBADOO DIRECTORY YOU WERE GOING TO OVERWRITE!\nYOU ARE TOO TIRED TO BE PROGRAMMING.\n\n ABORTING PROGRAM.", "OK", "warning"
-		exit
+		CloseWindow()
 	endif
+	whattodo = alert "How would you like to start this new project?", "Pick a template", "Start from scratch", "Exit this program", "none" 
+	switch whattodo
+		case 1
+			NewProjectFromTemplate()
+			return
+			break
+		case 2
+			//just continue
+			break
+		case 3
+			CloseWindow()
+			break
+	end switch
 	SetProjectPathnames()
 	system("mkdir -p " + ProjectSubPath$)
 	system("mkdir -p " + ProjectOtherPath$)
@@ -1174,19 +1187,29 @@ sub MakeNewProject()
 	OpenProject("fromnew")
 end sub
 
+sub NewProjectFromTemplate()
+	
+	system("yab " + ProgramDir$ + "/yabTemplatePicker.yab " + ProjectPath$)
+	if OpenProject("fromtemplate")
+end sub
+
 sub OpenProject(fromnew$)
 	local IsAProjectDir
 	if ProjectIsOpen = 1 CloseProject()
 	If fromnew$ = "" then
 		GetProjectDirectory("Navigate to your project DIRECTORY (not a file!) and select it. Please note that the error-checking is minimal at this point. If your subroutine box fills up with nonsense, just re-open the right project.")
 		SetProjectPathnames()
+	elseif fromnew$ = "fromtemplate" then
+		SetProjectPathnames()
+	else
+		IsAProjectDir = CheckForProjectFiles()
+		if IsAProjectDir = 0 then
+			alert ProjectPath$ + " does not appear to be a Yabadabbadoo project!", "OK", "warning"
+			ProjectDirectory$ = ""
+			return
+		end if
+		Has_yab4ybd()
 	endif
-	IsAProjectDir = CheckForProjectFiles()
-	if IsAProjectDir = 0 then
-		alert ProjectPath$ + " does not appear to be a Yabadabbadoo project!", "OK", "warning"
-		ProjectDirectory$ = ""
-		return
-	end if
 	FillSubBox()
 	EnableMenu()
 	EnableButtons()
@@ -1476,7 +1499,7 @@ sub SetProjectPathnames()
 	ProjectNewYabfile$ = ProjectBinderPath$ + "/" + ProjectName$ + ".yab"
 	ProjectIcon$ = ProjectPath$ + "/other/" + ProjectName$ + ".icon"
 	SplashProject()
-	Has_yab4ybd()
+	//Has_yab4ybd()
 end sub
 
 sub ShowHelp(WhichHelp$, DoWhat$)
@@ -1517,10 +1540,9 @@ label 789
 end sub
 
 Sub Wizard()
-	local whattodo, fileexist$
-	fileexist$=system$("if test -e /boot/home/config/settings/Yabadabbadoo.1st; then echo yes; else echo no;fi")
-	//if the file does not exist, program has not run before
-	if left$(fileexist$,2)= "no" then
+	local whattodo
+		//if the file does not exist, program has not run before
+		if not(FileExists("/boot/home/config/settings/Yabadabbadoo.1st")) then
 		whattodo = alert "Looks like this is the first time Yabadabbadoo has run on this Haiku installation. Would you like to view the Help and Tutorial?", "Yes", "No", "", "none" 
 		if whattodo = 1 then
 			ShowHelp("Tutorial", "Display")
@@ -1532,12 +1554,12 @@ Sub Wizard()
 	switch whattodo
 		case 1:
 			MakeNewProject()
-		break
+			break
 		case 2:
 			OpenProject("")
 		break
 		case 3:
-			exit
+			CloseWindow()
 		break
 	end switch
 end sub
@@ -1562,6 +1584,7 @@ sub WriteNewMainloop()
 	print #streamhandle, "//Yabadabbadoo notification"
 	print #streamhandle, "########DO NOT RENAME THIS FILE!########"
 	print #streamhandle, "//Yabadabbadoo needs it to function."
+	print #streamhandle, "//Of course, this does not apply if you are editing in the official yab IDE."
 	print #streamhandle, ""
 	for f = 1 to 24
 		read writethis$
@@ -1595,6 +1618,7 @@ sub WriteNewPreface()
 	print #streamhandle, "//Yabadabbadoo notification"
 	print #streamhandle, "########DO NOT RENAME THIS FILE!########"
 	print #streamhandle, "//Yabadabbadoo needs it to function."
+	print #streamhandle, "//Of course, this does not apply if you are editing in the official yab IDE."
 	print #streamhandle, " "
 	print #streamhandle, "##Fill in these fields with your own particulars."
 	print #streamhandle, "##The variables will be used in the About Box and in naming the program."

@@ -4,13 +4,17 @@ sub OpenProject(fromnew$)
 	If fromnew$ = "" then
 		GetProjectDirectory("Navigate to your project DIRECTORY (not a file!) and select it. Please note that the error-checking is minimal at this point. If your subroutine box fills up with nonsense, just re-open the right project.")
 		SetProjectPathnames()
+	elseif fromnew$ = "fromtemplate" then
+		SetProjectPathnames()
+	else
+		IsAProjectDir = CheckForProjectFiles()
+		if IsAProjectDir = 0 then
+			alert ProjectPath$ + " does not appear to be a Yabadabbadoo project!", "OK", "warning"
+			ProjectDirectory$ = ""
+			return
+		end if
+		Has_yab4ybd()
 	endif
-	IsAProjectDir = CheckForProjectFiles()
-	if IsAProjectDir = 0 then
-		alert ProjectPath$ + " does not appear to be a Yabadabbadoo project!", "OK", "warning"
-		ProjectDirectory$ = ""
-		return
-	end if
 	FillSubBox()
 	EnableMenu()
 	EnableButtons()
