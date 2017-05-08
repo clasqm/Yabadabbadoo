@@ -43,7 +43,8 @@ MainXLeft = 217
 MainYTop = 5
 MainXRight = 510
 MainYBottom = 760
-ProgramDir$=WhereAmI$()
+ProgramDir$=OldWhereAmI$()
+print ProgramDir$
  
 ###############################
 ####Global Variables for ScriptAssistant#####
@@ -1188,9 +1189,14 @@ sub MakeNewProject()
 end sub
 
 sub NewProjectFromTemplate()
-	
-	system("yab " + ProgramDir$ + "/yabTemplatePicker.yab " + ProjectPath$)
-	if OpenProject("fromtemplate")
+	local dothis$, cance$
+	dothis$ = "yab " + ProgramDir$ + "/yabTemplatePicker.yab " + ProjectPath$
+	cancel$ = system$(dothis$)
+	if cancel$="cancelled" then 
+		MakenewProject()
+	else
+		OpenProject("fromtemplate")
+	endif
 end sub
 
 sub OpenProject(fromnew$)

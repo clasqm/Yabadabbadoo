@@ -1,6 +1,11 @@
 sub NewProjectFromTemplate()
-	
-	system("yab " + ProgramDir$ + "/yabTemplatePicker.yab " + ProjectPath$)
-	if OpenProject("fromtemplate")
+	local dothis$, cance$
+	dothis$ = "yab " + ProgramDir$ + "/yabTemplatePicker.yab " + ProjectPath$
+	cancel$ = system$(dothis$)
+	if cancel$="cancelled" then 
+		MakenewProject()
+	else
+		OpenProject("fromtemplate")
+	endif
 end sub
 
