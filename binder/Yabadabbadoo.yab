@@ -44,7 +44,6 @@ MainYTop = 5
 MainXRight = 510
 MainYBottom = 760
 ProgramDir$=OldWhereAmI$()
-print ProgramDir$
  
 ###############################
 ####Global Variables for ScriptAssistant#####
@@ -698,7 +697,9 @@ sub CreateNewSub(displayme$)
 	if TrainingMode = 1 alert displayme$, "OK", "Info"
 	while(NameOfSub$ = "") 
 		NameOfSub$ = filepanel "Save-file", "Name of the new subroutine?", ProjectSubPath$
-		if FileExists(NameOfSub$) then
+		if NameOfSub$ = "" then
+			return
+		elseif FileExists(NameOfSub$) then
 			alert "A subroutine with that name already exists!", "OK", "warning"
 			NameOfSub$ = ""
 		endif
@@ -1213,6 +1214,8 @@ sub OpenProject(fromnew$)
 			alert ProjectPath$ + " does not appear to be a Yabadabbadoo project!", "OK", "warning"
 			ProjectDirectory$ = ""
 			return
+		else
+			SetProjectPathnames()
 		end if
 		Has_yab4ybd()
 	endif

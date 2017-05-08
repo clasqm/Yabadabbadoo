@@ -3,7 +3,9 @@ sub CreateNewSub(displayme$)
 	if TrainingMode = 1 alert displayme$, "OK", "Info"
 	while(NameOfSub$ = "") 
 		NameOfSub$ = filepanel "Save-file", "Name of the new subroutine?", ProjectSubPath$
-		if FileExists(NameOfSub$) then
+		if NameOfSub$ = "" then
+			return
+		elseif FileExists(NameOfSub$) then
 			alert "A subroutine with that name already exists!", "OK", "warning"
 			NameOfSub$ = ""
 		endif
