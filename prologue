@@ -111,7 +111,6 @@ if peek("argument") > 0 then
 		print " "
 		exit
 	else
-		//SetProjectPathnames()
 		OpenProject("fromstart")
 	endif
 else
