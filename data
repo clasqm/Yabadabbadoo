@@ -939,7 +939,6 @@ Delete the attribute Name$ from file Filename$."
 
 //==============================
 
-
 data "ATTRIBUTE GET$", "BSC", "Value$ = ATTRIBUTE GET$ Name$, Filename$", "retrieve an attribute
 
 Value$ = ATTRIBUTE GET$ Name$, Filename$
@@ -7220,12 +7219,13 @@ data "<h4>1.5.2 Utilities | Open Tracker</h4><p>Open Tracker to your current pro
 data "<h4>1.5.3 Utilities | Calculator</h4><p>Open Deskcalc.Trust me, you will be needing this when laying out your User Interface!</p>"
 data "<h4>1.5.4 Utilities | ScriptAssistant</h4><p>Opens  or closes the ScriptAssistant. See Section 3.</p>"
 data "<h4>1.5.5 Utilities | yabAssistant</h4><p>Opens or closes the yabAssistant. See section 4.</p>"
-//data "<h4>1.5.6 Utilities | Yab Interface Builder</h4><p>Opens yib, the Yab Interface Builder, if it is installed. This option will be enabled when yib becomes available. It&rsquo;s a big project (bigger than Yabadabbadoo) and it might be a while.</p>"
-data "<h4>1.5.6 Utilities | System Prefs</h4><p>Opens a Tracker Window with the Haiku System Preferences.</p>"
-data "<h4>1.5.7 Utilities | To-do Manager</h4><p>This will only appear if you have installed the <i>vstm</i> package from the clasqm repo. It gives you a simple interface with which you can list and prioritise all your Yabadabbadoo projects and tasks.</p>"
-data "<h4>1.5.8 Utilities | Restart Tracker</h4><p>Yabadabbadoo should not do anything to disturb Tracker. But accidents can happen. Luckily, Tracker is just another program as far as Haiku is concerned and it can be restarted if it crashes.</p>"
-data "<h4>1.5.9 Utilities | Restart Deskbar</h4><p>As was the case in 1.5.8, so you can restart the Deskbar.</p>"
-data "<h4>1.5.10 Utilities | Create a new Shortcut</h4><p>Create a shortcut (actually a small shell script) on the Desktop that will load the current project into Yabadabbadoo without going through the menus. Shortcuts can be renamed, moved, even into the deskbar menu structures via <i>/boot/home/config/non-packaged/data/deskbar/menu</i>, and be assigned an icon. But if you move your project to a different directory you will need to regenerate the shortcut.</p>"
+data "<h4>1.5.5 Utilities | Templates</h4><p>Opens The separate Templates utility. Once you have created a new project with this utility, you can open it with the normal Project | Open file item. The Utility is also available from the Deskbar.</p>"
+data "<h4>1.5.6 Utilities | Yab Interface Builder</h4><p>Opens yib, the Yab Interface Builder, if it is installed. This option will be enabled when yib becomes available. It&rsquo;s a big project (bigger than Yabadabbadoo) and it might be a while.</p>"
+data "<h4>1.5.7 Utilities | System Prefs</h4><p>Opens a Tracker Window with the Haiku System Preferences.</p>"
+data "<h4>1.5.8 Utilities | To-do Manager</h4><p>This will only appear if you have installed the <i>vstm</i> package from the clasqm repo. It gives you a simple interface with which you can list and prioritise all your Yabadabbadoo projects and tasks.</p>"
+data "<h4>1.5.9 Utilities | Restart Tracker</h4><p>Yabadabbadoo should not do anything to disturb Tracker. But accidents can happen. Luckily, Tracker is just another program as far as Haiku is concerned and it can be restarted if it crashes.</p>"
+data "<h4>1.5.10 Utilities | Restart Deskbar</h4><p>As was the case in 1.5.8, so you can restart the Deskbar.</p>"
+data "<h4>1.5.11 Utilities | Create a new Shortcut</h4><p>Create a shortcut (actually a small shell script) on the Desktop that will load the current project into Yabadabbadoo without going through the menus. Shortcuts can be renamed, moved, even into the deskbar menu structures via <i>/boot/home/config/non-packaged/data/deskbar/menu</i>, and be assigned an icon. But if you move your project to a different directory you will need to regenerate the shortcut.</p>"
 data "<h3>1.6 The Help Menu</h3><h4>1.6.1 Help | Help</h4><p>Show this Help.</p>"
 data "<h4>1.6.2 Help | FAQ</h4><p>Like most &ldquo;Frequently Asked Questions&rdquo;, these are largely made up! Send me some real questions and they will show up here in future releases.</p>"
 data "<h4>1.6.3 Help | Tutorial</h4><p>Show a brief Tutorial in which the basics of creating a program with Yabadabbadoo are explained.</p>"
@@ -7324,7 +7324,6 @@ data "<p><em>Q: Will you create a framework to make Yabadabbadoo available in ot
 data "<p>A: No. But This is Public Domain software. If you really want a Serbo-Croatian version, go ahead and make one. You  have about 10 KLOCS of DATA statements to translate and one quotation mark out of place will crash the program. Good luck. Don&rsquo;t forget to escape quotation marks and real backslashes.</p>"
 data "<p><em>Q: Can I use your &hellip; routine?</em></p><p>A: Which part of Public Domain did you not understand? :-) An acknowledgment in your About box would be nice.</p></body></html>"
 data "end_of_data"
-
 
 label yabadabbadootutorial
 

@@ -7,6 +7,7 @@ Yabadabbadoo is an alternative IDE for the yab programming language. It structur
 
 Beta 4 brings in the following features:
 
+* Select from a variety of templates to create your new project.
 * Links to yab resources in the Help menu.
 * Removed obsolete Update feature. We have package management now.
 * Limited Github integration - Yabadabbadoo will autodetect if you have installed the separate package 'yabadabbadoo_github_integration'. This is limited to initialising, pushing new changes to and pulling changes from Github. No merges or branching, this is just a way to backup your files, really. To create a new Github project you will have to launch the website.
