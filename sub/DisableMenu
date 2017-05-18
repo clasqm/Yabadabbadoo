@@ -31,6 +31,7 @@ sub DisableMenu()
 	menu set "Utilities", "Calculator","disable","MainWindow"
 	menu set "Utilities", "ScriptAssistant","disable","MainWindow"
 	menu set "Utilities", "YabAssistant","disable","MainWindow"
+	menu set "Utilities", "Templates","disable","MainWindow"
 	Menu set "Utilities", "Yab Interface Builder", "disable", "MainWindow"
 	menu set "Utilities", "System Prefs","disable","MainWindow"
 	menu set "Utilities", "Restart Tracker","disable","MainWindow"

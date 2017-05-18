@@ -15,7 +15,7 @@ Sub Wizard()
 			MakeNewProject()
 			break
 		case 2:
-			OpenProject("")
+			OpenProject("fromwizard")
 		break
 		case 3:
 			CloseWindow()

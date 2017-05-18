@@ -1,22 +1,18 @@
-sub OpenProject(fromnew$)
-	local IsAProjectDir
+sub OpenProject(from$)
 	if ProjectIsOpen = 1 CloseProject()
-	If fromnew$ = "" then
+	if from$ = "fromopen" or from$ = "fromwizard" then
 		GetProjectDirectory("Navigate to your project DIRECTORY (not a file!) and select it. Please note that the error-checking is minimal at this point. If your subroutine box fills up with nonsense, just re-open the right project.")
 		SetProjectPathnames()
-	elseif fromnew$ = "fromtemplate" then
-		SetProjectPathnames()
-	else
-		IsAProjectDir = CheckForProjectFiles()
-		if IsAProjectDir = 0 then
+	elseif from$ = "fromstart" or from$ = "fromnew" 
+		if CheckForProjectFiles() = 0 then
 			alert ProjectPath$ + " does not appear to be a Yabadabbadoo project!", "OK", "warning"
 			ProjectDirectory$ = ""
 			return
 		else
 			SetProjectPathnames()
 		end if
-		Has_yab4ybd()
 	endif
+	Has_yab4ybd()
 	FillSubBox()
 	EnableMenu()
 	EnableButtons()

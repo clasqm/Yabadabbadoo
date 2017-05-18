@@ -18,7 +18,7 @@ while(not leavingLoop)
 				MakeNewProject()
 				break
 			case "MainWindow:Project:Open":
-				OpenProject("")
+				OpenProject("fromopen")
 				break
 			case "MainWindow:Project:Backup":
 				BackupProject()
@@ -176,6 +176,9 @@ while(not leavingLoop)
 					Menu set "Utilities", "ScriptAssistant","Plain","MainWindow"
 					ScriptAssistant=0
 				endif
+				break
+			case"MainWindow:Utilities:Templates":
+				launch "/boot/system/apps/Yabadabbadoo/yabTemplatePicker.yab"
 				break
 			case"MainWindow:Utilities:yabAssistant":
 				if yabAssistant=0 then

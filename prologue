@@ -43,7 +43,7 @@ MainXLeft = 217
 MainYTop = 5
 MainXRight = 510
 MainYBottom = 760
-ProgramDir$=OldWhereAmI$()
+ProgramDir$=WhereAmI$()
  
 ###############################
 ####Global Variables for ScriptAssistant#####
